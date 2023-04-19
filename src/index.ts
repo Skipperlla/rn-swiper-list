@@ -1,3 +1,6 @@
+import { ViewStyle } from 'react-native';
+import { StyleProp } from 'react-native';
+
 export { default as TinderCard } from './CardItem';
 
 export type TinderCardOptions = {
@@ -38,4 +41,9 @@ export type TinderCardOptions = {
   disableRightSwipe: boolean;
   disableLeftSwipe: boolean;
   disableTopSwipe: boolean;
+
+  /**
+   * The card of the style.
+   */
+  cardStyle: StyleProp<ViewStyle>;
 };

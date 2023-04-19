@@ -28,6 +28,7 @@ const CardItem = ({
   disableLeftSwipe,
   inputRotationRange,
   outputRotationRange,
+  cardStyle,
 }: TinderCardOptions) => {
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
@@ -100,6 +101,7 @@ const CardItem = ({
     <PanGestureHandler onGestureEvent={gestureHandler}>
       <Animated.View
         style={[
+          cardStyle,
           {
             width: cardWidth,
             height: cardHeight,
@@ -127,6 +129,8 @@ CardItem.defaultProps = {
   disableRightSwipe: false,
   disableLeftSwipe: false,
   disableTopSwipe: false,
+
+  cardStyle: {},
 
   // onSwipedRight: (cardIndex: number) => {
   //   return cardIndex;
