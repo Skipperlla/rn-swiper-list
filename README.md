@@ -1,6 +1,6 @@
 # rn-tinder-card
 
-Like tinder card for react-native
+⚡ Lightning fast and customizable tinder-like swipe card for React Native
 
 ## Installation
 

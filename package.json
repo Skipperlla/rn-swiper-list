@@ -40,13 +40,13 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/Skipperlla/rn-tinder-card",
+  "repository": "https://github.com/Sinematch/rn-tinder-card",
   "author": "Skipperlla <oesmer437@gmail.com> (https://github.com/Skipperlla)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Skipperlla/rn-tinder-card/issues"
+    "url": "https://github.com/Sinematch/rn-tinder-card/issues"
   },
-  "homepage": "https://github.com/Skipperlla/rn-tinder-card#readme",
+  "homepage": "https://github.com/Sinematch/rn-tinder-card#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
@@ -66,9 +66,9 @@
     "jest": "^28.1.1",
     "pod-install": "^0.1.0",
     "prettier": "^2.0.5",
-    "react": "18.1.0",
-    "react-native": "0.70.5",
-    "react-native-builder-bob": "^0.20.3",
+    "react": "18.2.0",
+    "react-native": "0.71.6",
+    "react-native-builder-bob": "^0.20.0",
     "release-it": "^15.0.0",
     "typescript": "^4.5.2"
   },
