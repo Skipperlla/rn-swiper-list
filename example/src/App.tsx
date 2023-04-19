@@ -6,7 +6,7 @@ import { TinderCard } from 'rn-tinder-card';
 export default function App() {
   return (
     <View style={styles.container}>
-      <TinderCard />
+      <TinderCard cardWidth={380} cardHeight={636} />
     </View>
   );
 }
