@@ -1,17 +1,9 @@
-import { ViewStyle } from 'react-native';
-import { StyleProp } from 'react-native';
+import { PropsWithChildren } from 'react';
+import { ViewStyle, StyleProp } from 'react-native';
 
 export { default as TinderCard } from './CardItem';
 
-export type TinderCardOptions = {
-  // Event Callbacks
-  //   onSwipedRight: (index: number) => void;
-  //   onSwipedLeft: (index: number) => void;
-  //   onSwipedTop: (index: number) => void;
-  //   Swipe animation props
-
-  //   Rotation animation props
-
+export type TinderCardOptions = PropsWithChildren<{
   /**
    * The card of the width.
    */
@@ -46,4 +38,11 @@ export type TinderCardOptions = {
    * The card of the style.
    */
   cardStyle: StyleProp<ViewStyle>;
-};
+
+  /**
+   * The card of the callbacks.
+   */
+  onSwipedRight: () => void;
+  onSwipedLeft: () => void;
+  onSwipedTop: () => void;
+}>;

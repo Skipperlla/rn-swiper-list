@@ -1,5 +1,5 @@
 import { Dimensions } from 'react-native';
-import Animated, { withSpring } from 'react-native-reanimated';
+import Animated, { runOnJS, withSpring } from 'react-native-reanimated';
 
 const { width } = Dimensions.get('screen');
 
@@ -28,19 +28,23 @@ function updatePosition(
   cardWidth: number,
   velocityX: number,
   disableLeftSwipe: boolean,
-  translateY: Animated.SharedValue<number>
+  translateY: Animated.SharedValue<number>,
+  onSwipedRight: () => void,
+  onSwipedLeft: () => void
 ) {
   'worklet';
 
-  if (Math.sign(destX) === 1 && !disableRightSwipe)
+  if (Math.sign(destX) === 1 && !disableRightSwipe) {
     translateX.value = withSpring(width + cardWidth + 50, {
       velocity: velocityX,
     });
-  else if (Math.sign(destX) === -1 && !disableLeftSwipe)
+    runOnJS(onSwipedRight)();
+  } else if (Math.sign(destX) === -1 && !disableLeftSwipe) {
     translateX.value = withSpring(-width - cardWidth - 50, {
       velocity: velocityX,
     });
-  else resetPosition(translateX, translateY);
+    runOnJS(onSwipedLeft)();
+  } else resetPosition(translateX, translateY);
 }
 
 const snapPoint = (

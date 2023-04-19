@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import Animated, {
   useSharedValue,
@@ -6,6 +7,7 @@ import Animated, {
   useAnimatedGestureHandler,
   interpolate,
   Extrapolation,
+  runOnJS,
 } from 'react-native-reanimated';
 import {
   PanGestureHandler,
@@ -15,7 +17,6 @@ import { Dimensions } from 'react-native';
 import { TinderCardOptions } from 'rn-tinder-card';
 
 import { resetPosition, updatePosition, snapPoint } from './utils';
-
 const { width: windowWidth, height: windowHeight } = Dimensions.get('screen');
 
 const CardItem = ({
@@ -29,6 +30,10 @@ const CardItem = ({
   inputRotationRange,
   outputRotationRange,
   cardStyle,
+  onSwipedRight,
+  onSwipedLeft,
+  onSwipedTop,
+  children,
 }: TinderCardOptions) => {
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
@@ -56,11 +61,17 @@ const CardItem = ({
       const destY = snapPoint(translateY.value, velocityY, translateYRange);
 
       if (!destX && !destY) resetPosition(translateX, translateY);
-      else if (positiveY > positiveX && destY && !disableTopSwipe)
+      else if (
+        positiveY > positiveX &&
+        destY &&
+        !disableTopSwipe &&
+        Math.sign(translationY) === -1
+      ) {
         translateY.value = withSpring(-windowHeight, {
           velocity: velocityY,
         });
-      else
+        runOnJS(onSwipedTop)();
+      } else
         updatePosition(
           destX,
           disableRightSwipe,
@@ -68,7 +79,9 @@ const CardItem = ({
           cardWidth,
           velocityX,
           disableLeftSwipe,
-          translateY
+          translateY,
+          onSwipedRight,
+          onSwipedLeft
         );
     },
   });
@@ -97,6 +110,7 @@ const CardItem = ({
       ],
     };
   });
+
   return (
     <PanGestureHandler onGestureEvent={gestureHandler}>
       <Animated.View
@@ -109,7 +123,9 @@ const CardItem = ({
           },
           animatedStyle,
         ]}
-      />
+      >
+        {children}
+      </Animated.View>
     </PanGestureHandler>
   );
 };
@@ -132,13 +148,7 @@ CardItem.defaultProps = {
 
   cardStyle: {},
 
-  // onSwipedRight: (cardIndex: number) => {
-  //   return cardIndex;
-  // },
-  // onSwipedLeft: (cardIndex: number) => {
-  //   return cardIndex;
-  // },
-  // onSwipedTop: (cardIndex: number) => {
-  //   return cardIndex;
-  // },
+  onSwipedRight: () => {},
+  onSwipedLeft: () => {},
+  onSwipedTop: () => {},
 };
