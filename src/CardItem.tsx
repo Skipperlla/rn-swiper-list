@@ -4,24 +4,34 @@ import Animated, {
   withSpring,
   useAnimatedStyle,
   useAnimatedGestureHandler,
+  interpolate,
+  Extrapolation,
 } from 'react-native-reanimated';
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
 } from 'react-native-gesture-handler';
 import { Dimensions } from 'react-native';
-import { snapPoint } from 'react-native-redash';
+import { TinderCardOptions } from 'rn-tinder-card';
+
+import { resetPosition, updatePosition, snapPoint } from './utils';
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get('screen');
 
-// (windowWidth + cardWidth + 50)/2
-const CardItem = ({ cardWidth = windowWidth, cardHeight = windowHeight }) => {
-  const x = useSharedValue(0);
-  const y = useSharedValue(0);
+const CardItem = ({
+  cardWidth,
+  cardHeight,
+  translateXRange,
+  translateYRange,
+  disableRightSwipe,
+  disableTopSwipe,
+  disableLeftSwipe,
+  inputRotationRange,
+  outputRotationRange,
+}: TinderCardOptions) => {
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0);
 
-  const side = (windowWidth + cardWidth + 50) / 2;
-  const SNAP_POINTS = [-windowWidth / 2, 0, windowWidth / 2];
-  console.log('side', side);
   const gestureHandler = useAnimatedGestureHandler<
     PanGestureHandlerGestureEvent,
     {
@@ -30,37 +40,58 @@ const CardItem = ({ cardWidth = windowWidth, cardHeight = windowHeight }) => {
     }
   >({
     onStart: (_, ctx) => {
-      ctx.startX = x.value;
-      ctx.startY = y.value;
+      ctx.startX = translateX.value;
+      ctx.startY = translateY.value;
     },
     onActive: ({ translationX, translationY }, ctx) => {
-      x.value = translationX + ctx.startX;
-      y.value = translationY + ctx.startY;
+      translateX.value = translationX + ctx.startX;
+      translateY.value = translationY + ctx.startY;
     },
-    onEnd: ({ velocityX, velocityY }) => {
-      // x.value = withSpring(0);
-      // console.log(ctx);
-      const dest = snapPoint(x.value, velocityX, SNAP_POINTS);
-      console.log('dest', dest);
-      if (dest > 0) {
-        x.value = withSpring(windowWidth, { velocity: velocityX });
-      } else if (dest === windowWidth / 2) {
-        x.value = withSpring(-windowWidth, { velocity: velocityX });
-      }
+    onEnd: ({ velocityX, velocityY, translationX, translationY }) => {
+      const positiveX = Math.abs(translationX);
+      const positiveY = Math.abs(translationY);
 
-      y.value = withSpring(0, { velocity: velocityY });
-      // x.value = dest;
+      const destX = snapPoint(translateX.value, velocityX, translateXRange);
+      const destY = snapPoint(translateY.value, velocityY, translateYRange);
+
+      if (!destX && !destY) resetPosition(translateX, translateY);
+      else if (positiveY > positiveX && destY && !disableTopSwipe)
+        translateY.value = withSpring(-windowHeight, {
+          velocity: velocityY,
+        });
+      else
+        updatePosition(
+          destX,
+          disableRightSwipe,
+          translateX,
+          cardWidth,
+          velocityX,
+          disableLeftSwipe,
+          translateY
+        );
     },
   });
 
   const animatedStyle = useAnimatedStyle(() => {
+    const translationX = interpolate(
+      translateX.value,
+      inputRotationRange,
+      outputRotationRange,
+      {
+        extrapolateRight: Extrapolation.CLAMP,
+      }
+    );
+
     return {
       transform: [
         {
-          translateX: x.value,
+          translateX: translateX.value,
         },
         {
-          translateY: y.value,
+          translateY: translateY.value,
+        },
+        {
+          rotate: `${translationX}deg`,
         },
       ],
     };
@@ -82,3 +113,28 @@ const CardItem = ({ cardWidth = windowWidth, cardHeight = windowHeight }) => {
 };
 
 export default CardItem;
+
+CardItem.defaultProps = {
+  cardWidth: windowWidth,
+  cardHeight: windowHeight,
+
+  translateXRange: [-windowWidth, 0, windowWidth],
+  translateYRange: [-windowHeight, 0, windowHeight],
+
+  inputRotationRange: [-windowWidth, 0, windowWidth],
+  outputRotationRange: [-10, 0, 10],
+
+  disableRightSwipe: false,
+  disableLeftSwipe: false,
+  disableTopSwipe: false,
+
+  // onSwipedRight: (cardIndex: number) => {
+  //   return cardIndex;
+  // },
+  // onSwipedLeft: (cardIndex: number) => {
+  //   return cardIndex;
+  // },
+  // onSwipedTop: (cardIndex: number) => {
+  //   return cardIndex;
+  // },
+};

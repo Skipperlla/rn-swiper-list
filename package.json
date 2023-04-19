@@ -160,7 +160,6 @@
   },
   "dependencies": {
     "react-native-gesture-handler": "*",
-    "react-native-reanimated": "*",
-    "react-native-redash": "^18.1.0"
+    "react-native-reanimated": "*"
   }
 }
