@@ -1,12 +1,13 @@
-import { View, Text } from 'react-native';
-import React from 'react';
+export type TinderCardOptions = {
+  /**
+   * The card of the Width.
+   */
+  width: string | number;
 
-const Index = () => {
-  return (
-    <View>
-      <Text>Index</Text>
-    </View>
-  );
+  /**
+   * The card of the height.
+   */
+  height: string | number;
 };
 
-export default Index;
+export { default as TinderCard } from './CardItem';
