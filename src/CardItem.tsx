@@ -40,7 +40,9 @@ const CardItem = ({
   onSwipedTop,
   children,
   scaleValue,
-}: TinderCardOptions) => {
+}: // inputOpacityRange,
+// outputOpacityRange,
+TinderCardOptions) => {
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
   const scale = useSharedValue(1);
@@ -128,6 +130,17 @@ const CardItem = ({
     };
   });
 
+  // const overlayLabelAnimatedStyle = useAnimatedStyle(() => {
+  //   return {
+  //     opacity: interpolate(
+  //       translateX.value,
+  //       inputOpacityRange,
+  //       outputOpacityRange,
+  //       Extrapolation.CLAMP
+  //     ),
+  //   };
+  // });
+
   return (
     <PanGestureHandler onGestureEvent={gestureHandler}>
       <Animated.View
@@ -157,6 +170,9 @@ CardItem.defaultProps = {
 
   inputRotationRange: [-windowWidth, 0, windowWidth],
   outputRotationRange: [-10, 0, 10],
+
+  inputOpacityRange: [-windowWidth, 0, windowWidth],
+  outputOpacityRange: [1, 0, 1],
 
   disableRightSwipe: false,
   disableLeftSwipe: false,

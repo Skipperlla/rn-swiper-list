@@ -28,6 +28,12 @@ export type TinderCardOptions = PropsWithChildren<{
   outputRotationRange: number[];
 
   /**
+   * The card of the input and output swipe direction opacity range.
+   */
+  inputOpacityRange: number[];
+  outputOpacityRange: number[];
+
+  /**
    * Disable Right,Left and Top Swipe
    */
   disableRightSwipe: boolean;
