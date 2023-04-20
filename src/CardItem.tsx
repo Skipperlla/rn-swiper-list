@@ -24,7 +24,6 @@ import {
   windowHeight,
 } from './utils';
 import OverlayLabel from './components/OverlayLabel';
-// import { StyleSheet } from 'react-native';
 
 const CardItem = ({
   cardWidth,
@@ -66,7 +65,8 @@ const CardItem = ({
     onStart: (_, ctx) => {
       ctx.startX = translateX.value;
       ctx.startY = translateY.value;
-      if (scale.value !== 1)
+
+      if (scaleValue !== 1)
         scale.value = withTiming(scaleValue, {
           easing: Easing.inOut(Easing.ease),
         });
@@ -105,9 +105,11 @@ const CardItem = ({
           onSwipedRight,
           onSwipedLeft
         );
-      scale.value = withTiming(1, {
-        easing: Easing.inOut(Easing.ease),
-      });
+
+      if (scaleValue !== 1)
+        scale.value = withTiming(1, {
+          easing: Easing.inOut(Easing.ease),
+        });
     },
   });
 
