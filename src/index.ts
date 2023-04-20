@@ -45,4 +45,9 @@ export type TinderCardOptions = PropsWithChildren<{
   onSwipedRight: () => void;
   onSwipedLeft: () => void;
   onSwipedTop: () => void;
+
+  /**
+   * The card of the animation scale value.
+   */
+  scaleValue: number;
 }>;

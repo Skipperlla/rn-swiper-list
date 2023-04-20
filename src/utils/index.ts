@@ -1,15 +1,15 @@
 import { Dimensions } from 'react-native';
 import Animated, { runOnJS, withSpring } from 'react-native-reanimated';
 
-const { width } = Dimensions.get('screen');
+const { width: windowWidth, height: windowHeight } = Dimensions.get('screen');
 
 const userConfig = {
-  damping: 15, // Controls the speed of the animation
-  stiffness: 120, // Controls the bounciness of the animation
-  mass: 1, // Represents the mass of the object being animated
-  overshootClamping: false, // Prevents the spring from overshooting its target value
-  restDisplacementThreshold: 0.001, // Controls when the spring is considered to be at rest
-  restSpeedThreshold: 0.001, // Controls the speed at which the spring is considered to be at rest
+  damping: 15,
+  stiffness: 120,
+  mass: 1,
+  overshootClamping: false,
+  restDisplacementThreshold: 0.001,
+  restSpeedThreshold: 0.001,
 };
 
 function resetPosition(
@@ -35,12 +35,12 @@ function updatePosition(
   'worklet';
 
   if (Math.sign(destX) === 1 && !disableRightSwipe) {
-    translateX.value = withSpring(width + cardWidth + 50, {
+    translateX.value = withSpring(windowWidth + cardWidth + 50, {
       velocity: velocityX,
     });
     runOnJS(onSwipedRight)();
   } else if (Math.sign(destX) === -1 && !disableLeftSwipe) {
-    translateX.value = withSpring(-width - cardWidth - 50, {
+    translateX.value = withSpring(-windowWidth - cardWidth - 50, {
       velocity: velocityX,
     });
     runOnJS(onSwipedLeft)();
@@ -58,4 +58,11 @@ const snapPoint = (
   const minDelta = Math.min.apply(null, deltas);
   return Number(points.filter((p) => Math.abs(point - p) === minDelta)[0]);
 };
-export { resetPosition, updatePosition, snapPoint };
+export {
+  resetPosition,
+  updatePosition,
+  snapPoint,
+  userConfig,
+  windowWidth,
+  windowHeight,
+};

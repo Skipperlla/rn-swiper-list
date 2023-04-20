@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import Animated, {
   useSharedValue,
@@ -8,16 +7,22 @@ import Animated, {
   interpolate,
   Extrapolation,
   runOnJS,
+  withTiming,
+  Easing,
 } from 'react-native-reanimated';
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
 } from 'react-native-gesture-handler';
-import { Dimensions } from 'react-native';
 import { TinderCardOptions } from 'rn-tinder-card';
 
-import { resetPosition, updatePosition, snapPoint } from './utils';
-const { width: windowWidth, height: windowHeight } = Dimensions.get('screen');
+import {
+  resetPosition,
+  updatePosition,
+  snapPoint,
+  windowWidth,
+  windowHeight,
+} from './utils';
 
 const CardItem = ({
   cardWidth,
@@ -34,9 +39,11 @@ const CardItem = ({
   onSwipedLeft,
   onSwipedTop,
   children,
+  scaleValue,
 }: TinderCardOptions) => {
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
+  const scale = useSharedValue(1);
 
   const gestureHandler = useAnimatedGestureHandler<
     PanGestureHandlerGestureEvent,
@@ -48,6 +55,10 @@ const CardItem = ({
     onStart: (_, ctx) => {
       ctx.startX = translateX.value;
       ctx.startY = translateY.value;
+      if (scale.value !== 1)
+        scale.value = withTiming(scaleValue, {
+          easing: Easing.inOut(Easing.ease),
+        });
     },
     onActive: ({ translationX, translationY }, ctx) => {
       translateX.value = translationX + ctx.startX;
@@ -83,6 +94,9 @@ const CardItem = ({
           onSwipedRight,
           onSwipedLeft
         );
+      scale.value = withTiming(1, {
+        easing: Easing.inOut(Easing.ease),
+      });
     },
   });
 
@@ -107,6 +121,9 @@ const CardItem = ({
         {
           rotate: `${translationX}deg`,
         },
+        {
+          scale: scale.value,
+        },
       ],
     };
   });
@@ -119,7 +136,6 @@ const CardItem = ({
           {
             width: cardWidth,
             height: cardHeight,
-            backgroundColor: 'red',
           },
           animatedStyle,
         ]}
@@ -151,4 +167,6 @@ CardItem.defaultProps = {
   onSwipedRight: () => {},
   onSwipedLeft: () => {},
   onSwipedTop: () => {},
+
+  scaleValue: 1,
 };
