@@ -1,3 +1,5 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react/no-unstable-nested-components */
 import * as React from 'react';
 import { Alert, Image, StyleSheet, Text, View } from 'react-native';
 import { TinderCard } from 'rn-tinder-card';
@@ -12,81 +14,42 @@ export default function App() {
   const OverlayRight = () => {
     return (
       <View
-        style={{
-          backgroundColor: 'green',
-          // width: 100k,
-          width: '100%',
-          height: '100%',
-          borderRadius: 48,
-          justifyContent: 'center',
-          alignItems: 'center',
-
-          // zIndex: 12,
-        }}
+        style={[
+          styles.overlayLabelContainer,
+          {
+            backgroundColor: 'green',
+          },
+        ]}
       >
-        <Text
-          style={{
-            color: 'white',
-            fontSize: 32,
-            fontWeight: 'bold',
-          }}
-        >
-          Like
-        </Text>
+        <Text style={styles.overlayLabelText}>Like</Text>
       </View>
     );
   };
   const OverlayLeft = () => {
     return (
       <View
-        style={{
-          backgroundColor: 'red',
-          // width: 100k,
-          width: '100%',
-          height: '100%',
-          borderRadius: 48,
-          justifyContent: 'center',
-          alignItems: 'center',
-
-          // zIndex: 12,
-        }}
+        style={[
+          styles.overlayLabelContainer,
+          {
+            backgroundColor: 'red',
+          },
+        ]}
       >
-        <Text
-          style={{
-            color: 'white',
-            fontSize: 32,
-            fontWeight: 'bold',
-          }}
-        >
-          Disslike
-        </Text>
+        <Text style={styles.overlayLabelText}>Nope</Text>
       </View>
     );
   };
   const OverlayTop = () => {
     return (
       <View
-        style={{
-          backgroundColor: 'blue',
-          // width: 100k,
-          width: '100%',
-          height: '100%',
-          borderRadius: 48,
-          justifyContent: 'center',
-          alignItems: 'center',
-
-          // zIndex: 12,
-        }}
+        style={[
+          styles.overlayLabelContainer,
+          {
+            backgroundColor: 'blue',
+          },
+        ]}
       >
-        <Text
-          style={{
-            color: 'white',
-            fontSize: 32,
-            fontWeight: 'bold',
-          }}
-        >
-          Superlike
-        </Text>
+        <Text style={styles.overlayLabelText}>Super Like</Text>
       </View>
     );
   };
@@ -143,4 +106,12 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 48,
   },
+  overlayLabelContainer: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 48,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  overlayLabelText: { color: 'white', fontSize: 32, fontWeight: 'bold' },
 });
