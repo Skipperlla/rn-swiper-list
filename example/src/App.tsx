@@ -9,6 +9,61 @@ const data = [
 ];
 
 export default function App() {
+  // const OverlayRight = () => {
+  //   return (
+  //     <View
+  //       style={{
+  //         backgroundColor: 'green',
+  //         // width: 100k,
+  //         width: '100%',
+  //         height: '100%',
+  //         borderRadius: 48,
+  //         justifyContent: 'center',
+  //         alignItems: 'center',
+
+  //         // zIndex: 12,
+  //       }}
+  //     >
+  //       <Text
+  //         style={{
+  //           color: 'white',
+  //           fontSize: 32,
+  //           fontWeight: 'bold',
+  //         }}
+  //       >
+  //         Like
+  //       </Text>
+  //     </View>
+  //   );
+  // };
+  // const OverlayLeft = () => {
+  //   return (
+  //     <View
+  //       style={{
+  //         backgroundColor: 'red',
+  //         // width: 100k,
+  //         width: '100%',
+  //         height: '100%',
+  //         borderRadius: 48,
+  //         justifyContent: 'center',
+  //         alignItems: 'center',
+
+  //         // zIndex: 12,
+  //       }}
+  //     >
+  //       <Text
+  //         style={{
+  //           color: 'white',
+  //           fontSize: 32,
+  //           fontWeight: 'bold',
+  //         }}
+  //       >
+  //         Disslike
+  //       </Text>
+  //     </View>
+  //   );
+  // };
+
   return (
     <View style={styles.wrapper}>
       {data.map((item, index) => {
@@ -21,6 +76,8 @@ export default function App() {
             <TinderCard
               cardWidth={380}
               cardHeight={730}
+              // OverlayRight={OverlayRight}
+              // OverlayLeft={OverlayLeft}
               cardStyle={styles.card}
               onSwipedRight={() => {
                 Alert.alert('Swiped right');

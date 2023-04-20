@@ -23,6 +23,7 @@ import {
   windowWidth,
   windowHeight,
 } from './utils';
+// import { StyleSheet } from 'react-native';
 
 const CardItem = ({
   cardWidth,
@@ -40,8 +41,12 @@ const CardItem = ({
   onSwipedTop,
   children,
   scaleValue,
-}: // inputOpacityRange,
-// outputOpacityRange,
+}: // inputOverlayLabelRightOpacityRange,
+// outputOverlayLabelRightOpacityRange,
+// inputOverlayLabelLeftOpacityRange,
+// outputOverlayLabelLeftOpacityRange,
+// inputOverlayLabelTopOpacityRange,
+// outputOverlayLabelTopOpacityRange,
 TinderCardOptions) => {
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
@@ -130,14 +135,26 @@ TinderCardOptions) => {
     };
   });
 
-  // const overlayLabelAnimatedStyle = useAnimatedStyle(() => {
+  // const overlayLabelRightAnimatedStyle = useAnimatedStyle(() => {
   //   return {
   //     opacity: interpolate(
   //       translateX.value,
-  //       inputOpacityRange,
-  //       outputOpacityRange,
+  //       inputOverlayLabelOpacityRangeX,
+  //       outputOverlayLabelOpacityRangeX,
   //       Extrapolation.CLAMP
   //     ),
+  //     zIndex: 100,
+  //   };
+  // });
+  // const overlayLabelLeftAnimatedStyle = useAnimatedStyle(() => {
+  //   return {
+  //     opacity: interpolate(
+  //       translateX.value,
+  //       inputOverlayLabelOpacityRangeY,
+  //       outputOverlayLabelOpacityRangeY,
+  //       Extrapolation.CLAMP
+  //     ),
+  //     zIndex: 100,
   //   };
   // });
 
@@ -153,7 +170,20 @@ TinderCardOptions) => {
           animatedStyle,
         ]}
       >
+        {/* <Animated.View
+          style={[StyleSheet.absoluteFillObject, overlayLabelLeftAnimatedStyle]}
+        >
+          <OverlayLeft />
+        </Animated.View> */}
         {children}
+        {/* <Animated.View
+          style={[
+            StyleSheet.absoluteFillObject,
+            overlayLabelRightAnimatedStyle,
+          ]}
+        >
+          <OverlayRight />
+        </Animated.View> */}
       </Animated.View>
     </PanGestureHandler>
   );
@@ -173,6 +203,15 @@ CardItem.defaultProps = {
 
   inputOpacityRange: [-windowWidth, 0, windowWidth],
   outputOpacityRange: [1, 0, 1],
+
+  inputOverlayLabelRightOpacityRange: [0, windowWidth / 2],
+  outputOverlayLabelRightOpacityRange: [0, 1],
+
+  inputOverlayLabelLeftOpacityRange: [0, -windowWidth / 2],
+  outputOverlayLabelLeftOpacityRange: [0, 1],
+
+  inputOverlayLabelTopOpacityRange: [0, -windowHeight / 2],
+  outputOverlayLabelTopOpacityRange: [0, 1],
 
   disableRightSwipe: false,
   disableLeftSwipe: false,
