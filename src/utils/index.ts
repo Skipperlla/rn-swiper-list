@@ -6,7 +6,7 @@ const { width: windowWidth, height: windowHeight } = Dimensions.get('screen');
 const userConfig = {
   damping: 15,
   stiffness: 120,
-  mass: 1,
+  mass: 0.5,
   overshootClamping: false,
   restDisplacementThreshold: 0.001,
   restSpeedThreshold: 0.001,
