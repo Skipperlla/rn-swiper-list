@@ -62,4 +62,11 @@ export type TinderCardOptions = PropsWithChildren<{
    * The card of the animation scale value.
    */
   scaleValue: number;
+
+  /**
+   * The card of the swipe direction overlay label.
+   */
+  OverlayLabelRight?: () => JSX.Element;
+  OverlayLabelLeft?: () => JSX.Element;
+  OverlayLabelTop?: () => JSX.Element;
 }>;

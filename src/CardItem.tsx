@@ -23,6 +23,7 @@ import {
   windowWidth,
   windowHeight,
 } from './utils';
+import OverlayLabel from './components/OverlayLabel';
 // import { StyleSheet } from 'react-native';
 
 const CardItem = ({
@@ -41,13 +42,16 @@ const CardItem = ({
   onSwipedTop,
   children,
   scaleValue,
-}: // inputOverlayLabelRightOpacityRange,
-// outputOverlayLabelRightOpacityRange,
-// inputOverlayLabelLeftOpacityRange,
-// outputOverlayLabelLeftOpacityRange,
-// inputOverlayLabelTopOpacityRange,
-// outputOverlayLabelTopOpacityRange,
-TinderCardOptions) => {
+  inputOverlayLabelRightOpacityRange,
+  outputOverlayLabelRightOpacityRange,
+  inputOverlayLabelLeftOpacityRange,
+  outputOverlayLabelLeftOpacityRange,
+  inputOverlayLabelTopOpacityRange,
+  outputOverlayLabelTopOpacityRange,
+  OverlayLabelRight,
+  OverlayLabelLeft,
+  OverlayLabelTop,
+}: TinderCardOptions) => {
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
   const scale = useSharedValue(1);
@@ -135,29 +139,6 @@ TinderCardOptions) => {
     };
   });
 
-  // const overlayLabelRightAnimatedStyle = useAnimatedStyle(() => {
-  //   return {
-  //     opacity: interpolate(
-  //       translateX.value,
-  //       inputOverlayLabelOpacityRangeX,
-  //       outputOverlayLabelOpacityRangeX,
-  //       Extrapolation.CLAMP
-  //     ),
-  //     zIndex: 100,
-  //   };
-  // });
-  // const overlayLabelLeftAnimatedStyle = useAnimatedStyle(() => {
-  //   return {
-  //     opacity: interpolate(
-  //       translateX.value,
-  //       inputOverlayLabelOpacityRangeY,
-  //       outputOverlayLabelOpacityRangeY,
-  //       Extrapolation.CLAMP
-  //     ),
-  //     zIndex: 100,
-  //   };
-  // });
-
   return (
     <PanGestureHandler onGestureEvent={gestureHandler}>
       <Animated.View
@@ -170,20 +151,35 @@ TinderCardOptions) => {
           animatedStyle,
         ]}
       >
-        {/* <Animated.View
-          style={[StyleSheet.absoluteFillObject, overlayLabelLeftAnimatedStyle]}
-        >
-          <OverlayLeft />
-        </Animated.View> */}
+        {/* //? OverlayLeft */}
+        {OverlayLabelLeft && (
+          <OverlayLabel
+            inputRange={inputOverlayLabelLeftOpacityRange}
+            outputRange={outputOverlayLabelLeftOpacityRange}
+            x={translateX}
+            Component={OverlayLabelLeft}
+          />
+        )}
+        {/* //? Overlay Right */}
+        {OverlayLabelRight && (
+          <OverlayLabel
+            inputRange={inputOverlayLabelRightOpacityRange}
+            outputRange={outputOverlayLabelRightOpacityRange}
+            x={translateX}
+            Component={OverlayLabelRight}
+          />
+        )}
+        {/* //? OverlayTop */}
+        {OverlayLabelTop && (
+          <OverlayLabel
+            inputRange={inputOverlayLabelTopOpacityRange}
+            outputRange={outputOverlayLabelTopOpacityRange}
+            x={translateY}
+            Component={OverlayLabelTop}
+          />
+        )}
+
         {children}
-        {/* <Animated.View
-          style={[
-            StyleSheet.absoluteFillObject,
-            overlayLabelRightAnimatedStyle,
-          ]}
-        >
-          <OverlayRight />
-        </Animated.View> */}
       </Animated.View>
     </PanGestureHandler>
   );

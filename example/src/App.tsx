@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Alert, Image, StyleSheet, View } from 'react-native';
+import { Alert, Image, StyleSheet, Text, View } from 'react-native';
 import { TinderCard } from 'rn-tinder-card';
 
 const data = [
@@ -9,60 +9,87 @@ const data = [
 ];
 
 export default function App() {
-  // const OverlayRight = () => {
-  //   return (
-  //     <View
-  //       style={{
-  //         backgroundColor: 'green',
-  //         // width: 100k,
-  //         width: '100%',
-  //         height: '100%',
-  //         borderRadius: 48,
-  //         justifyContent: 'center',
-  //         alignItems: 'center',
+  const OverlayRight = () => {
+    return (
+      <View
+        style={{
+          backgroundColor: 'green',
+          // width: 100k,
+          width: '100%',
+          height: '100%',
+          borderRadius: 48,
+          justifyContent: 'center',
+          alignItems: 'center',
 
-  //         // zIndex: 12,
-  //       }}
-  //     >
-  //       <Text
-  //         style={{
-  //           color: 'white',
-  //           fontSize: 32,
-  //           fontWeight: 'bold',
-  //         }}
-  //       >
-  //         Like
-  //       </Text>
-  //     </View>
-  //   );
-  // };
-  // const OverlayLeft = () => {
-  //   return (
-  //     <View
-  //       style={{
-  //         backgroundColor: 'red',
-  //         // width: 100k,
-  //         width: '100%',
-  //         height: '100%',
-  //         borderRadius: 48,
-  //         justifyContent: 'center',
-  //         alignItems: 'center',
+          // zIndex: 12,
+        }}
+      >
+        <Text
+          style={{
+            color: 'white',
+            fontSize: 32,
+            fontWeight: 'bold',
+          }}
+        >
+          Like
+        </Text>
+      </View>
+    );
+  };
+  const OverlayLeft = () => {
+    return (
+      <View
+        style={{
+          backgroundColor: 'red',
+          // width: 100k,
+          width: '100%',
+          height: '100%',
+          borderRadius: 48,
+          justifyContent: 'center',
+          alignItems: 'center',
 
-  //         // zIndex: 12,
-  //       }}
-  //     >
-  //       <Text
-  //         style={{
-  //           color: 'white',
-  //           fontSize: 32,
-  //           fontWeight: 'bold',
-  //         }}
-  //       >
-  //         Disslike
-  //       </Text>
-  //     </View>
-  //   );
-  // };
+          // zIndex: 12,
+        }}
+      >
+        <Text
+          style={{
+            color: 'white',
+            fontSize: 32,
+            fontWeight: 'bold',
+          }}
+        >
+          Disslike
+        </Text>
+      </View>
+    );
+  };
+  const OverlayTop = () => {
+    return (
+      <View
+        style={{
+          backgroundColor: 'blue',
+          // width: 100k,
+          width: '100%',
+          height: '100%',
+          borderRadius: 48,
+          justifyContent: 'center',
+          alignItems: 'center',
+
+          // zIndex: 12,
+        }}
+      >
+        <Text
+          style={{
+            color: 'white',
+            fontSize: 32,
+            fontWeight: 'bold',
+          }}
+        >
+          Superlike
+        </Text>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.wrapper}>
@@ -76,8 +103,9 @@ export default function App() {
             <TinderCard
               cardWidth={380}
               cardHeight={730}
-              // OverlayRight={OverlayRight}
-              // OverlayLeft={OverlayLeft}
+              OverlayLabelRight={OverlayRight}
+              OverlayLabelLeft={OverlayLeft}
+              OverlayLabelTop={OverlayTop}
               cardStyle={styles.card}
               onSwipedRight={() => {
                 Alert.alert('Swiped right');
