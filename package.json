@@ -38,15 +38,40 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "react native cards",
+    "react native tinder cards",
+    "react native tinder card",
+    "react native tinder card swipe",
+    "react native tinder card swipe animation",
+    "react native tinder card swipe animation react native",
+    "react native tinder card swipe react native",
+    "react native component",
+    "react native tinder",
+    "react native card",
+    "react native swipe",
+    "react native deck",
+    "react native animation",
+    "tinder-cards",
+    "tinder-card",
+    "tinder-card-swipe",
+    "tinder-card-swipe-animation",
+    "tinder-card-swipe-animation-react-native",
+    "tinder-card-swipe-react-native",
+    "tinder",
+    "cards",
+    "card",
+    "swipe",
+    "deck",
+    "animation"
   ],
-  "repository": "https://github.com/Sinematch/rn-tinder-card",
+  "repository": "https://github.com/Skipperlla/rn-tinder-card",
   "author": "Skipperlla <oesmer437@gmail.com> (https://github.com/Skipperlla)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Sinematch/rn-tinder-card/issues"
+    "url": "https://github.com/Skipperlla/rn-tinder-card/issues"
   },
-  "homepage": "https://github.com/Sinematch/rn-tinder-card#readme",
+  "homepage": "https://github.com/Skipperlla/rn-tinder-card#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
