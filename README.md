@@ -27,7 +27,7 @@ yarn add react-native-reanimated react-native-gesture-handler
 - [x] Swipe event callbacks
 - [x] Scale animation
 - [x] Overlay labels
-- [ ] Swipe back to previous card with a custom animation
+- [x] Swipe back to previous card with a custom animation
 - [ ] More swipe events callbacks
 
 # Props ✏️
@@ -80,6 +80,12 @@ yarn add react-native-reanimated react-native-gesture-handler
 | OverlayRight                        | () => JSX.Element | Component for the right swipe overlay label                |                        |
 | OverlayLeft                         | () => JSX.Element | Component for the left swipe overlay label                 |                        |
 | OverlayTop                          | () => JSX.Element | Component for the top swipe overlay label                  |                        |
+
+## Swipe back method
+
+| props     | type     | description                                  |
+| :-------- | :------- | :------------------------------------------- |
+| swipeBack | callback | Resets the card position after a swipe event |
 
 ## Usage 🧑‍💻
 
@@ -206,67 +212,72 @@ For more examples check out the [example](https://github.com/Skipperlla/rn-tinde
 ## Types 🏷️
 
 ```ts
+export type CardItemHandle = {
+  swipeBack: () => void;
+};
+
 export type TinderCardOptions = PropsWithChildren<{
   /*
   The width of the card.
   */
-  cardWidth: number;
+  cardWidth?: number;
 
   /*
   The width of the card.
   */
-  cardHeight: number;
+  cardHeight?: number;
 
   /* 
   The x coordinate range for card translation.
   */
-  translateXRange: number[];
+  translateXRange?: number[];
 
   /*
   The y coordinate range for card translation.
   */
-  translateYRange: number[];
+  translateYRange?: number[];
 
   /*
   The input and output ranges for card rotation.
   */
-  inputRotationRange: number[];
-  outputRotationRange: number[];
+  inputRotationRange?: number[];
+  outputRotationRange?: number[];
 
   /*
   The input and output ranges for swipe direction overlay label opacity.
   */
 
-  inputOverlayLabelRightOpacityRange: number[];
-  outputOverlayLabelRightOpacityRange: number[];
-  inputOverlayLabelLeftOpacityRange: number[];
-  outputOverlayLabelLeftOpacityRange: number[];
+  inputOverlayLabelRightOpacityRange?: number[];
+  outputOverlayLabelRightOpacityRange?: number[];
 
-  inputOverlayLabelTopOpacityRange: number[];
-  outputOverlayLabelTopOpacityRange: number[];
+  inputOverlayLabelLeftOpacityRange?: number[];
+  outputOverlayLabelLeftOpacityRange?: number[];
+
+  inputOverlayLabelTopOpacityRange?: number[];
+  outputOverlayLabelTopOpacityRange?: number[];
 
   /*
   Disable right, left, and top swipes.
   */
-  disableRightSwipe: boolean;
-  disableLeftSwipe: boolean;
-  disableTopSwipe: boolean;
+  disableRightSwipe?: boolean;
+  disableLeftSwipe?: boolean;
+  disableTopSwipe?: boolean;
 
   /*
   The style of the card.
   */
-  cardStyle: StyleProp<ViewStyle>;
+  cardStyle?: StyleProp<ViewStyle>;
   /*
   Callbacks for swipe events.
   */
-  onSwipedRight: () => void;
-  onSwipedLeft: () => void;
-  onSwipedTop: () => void;
+  onSwipedRight?: () => void;
+  onSwipedLeft?: () => void;
+  onSwipedTop?: () => void;
 
   /*
   The scale value for card animation.
   */
-  scaleValue: number;
+  scaleValue?: number;
 
   /*  
   Swipe direction overlay label components.
