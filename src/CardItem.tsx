@@ -30,26 +30,26 @@ const CardItem = ({
   cardHeight,
   translateXRange,
   translateYRange,
+  cardStyle,
+  scaleValue,
+  onSwipedLeft,
+  onSwipedRight,
+  onSwipedTop,
   disableRightSwipe,
   disableTopSwipe,
   disableLeftSwipe,
   inputRotationRange,
   outputRotationRange,
-  cardStyle,
-  onSwipedRight,
-  onSwipedLeft,
-  onSwipedTop,
-  children,
-  scaleValue,
-  OverlayLabelRight,
-  OverlayLabelLeft,
-  OverlayLabelTop,
   inputOverlayLabelRightOpacityRange,
   outputOverlayLabelRightOpacityRange,
   inputOverlayLabelLeftOpacityRange,
   outputOverlayLabelLeftOpacityRange,
   inputOverlayLabelTopOpacityRange,
   outputOverlayLabelTopOpacityRange,
+  OverlayLabelRight,
+  OverlayLabelLeft,
+  OverlayLabelTop,
+  children,
 }: TinderCardOptions) => {
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
@@ -187,15 +187,25 @@ const CardItem = ({
 export default CardItem;
 
 CardItem.defaultProps = {
+  //* Card Props
   cardWidth: windowWidth,
   cardHeight: windowHeight,
-
   translateXRange: [-windowWidth / 2, 0, windowWidth / 2],
   translateYRange: [-windowHeight / 2, 0, windowHeight / 2],
-
+  cardStyle: {},
+  scaleValue: 1,
+  //* Event callbacks
+  onSwipedRight: () => {},
+  onSwipedLeft: () => {},
+  onSwipedTop: () => {},
+  //* Swipe Animation Props
+  disableRightSwipe: false,
+  disableLeftSwipe: false,
+  disableTopSwipe: false,
+  //* Rotation Animation Props
   inputRotationRange: [-windowWidth, 0, windowWidth],
   outputRotationRange: [-10, 0, 10],
-
+  //* Overlay Labels Animation Props
   inputOverlayLabelRightOpacityRange: [0, windowWidth / 2],
   outputOverlayLabelRightOpacityRange: [0, 1],
 
@@ -204,16 +214,4 @@ CardItem.defaultProps = {
 
   inputOverlayLabelTopOpacityRange: [0, -windowHeight / 2],
   outputOverlayLabelTopOpacityRange: [0, 1],
-
-  disableRightSwipe: false,
-  disableLeftSwipe: false,
-  disableTopSwipe: false,
-
-  cardStyle: {},
-
-  onSwipedRight: () => {},
-  onSwipedLeft: () => {},
-  onSwipedTop: () => {},
-
-  scaleValue: 1,
 };

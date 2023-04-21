@@ -4,32 +4,36 @@ import { ViewStyle, StyleProp } from 'react-native';
 export { default as TinderCard } from './CardItem';
 
 export type TinderCardOptions = PropsWithChildren<{
-  /**
-   * The card of the width.
-   */
+  /*
+  The width of the card.
+  */
   cardWidth: number;
-  /**
-   * The card of the height.
-   */
+
+  /*
+  The width of the card.
+  */
   cardHeight: number;
-  /**
-   * The card of the x coordinate.
-   */
+
+  /* 
+  The x coordinate range for card translation.
+  */
   translateXRange: number[];
-  /**
-   * The card of the y coordinate.
-   */
+
+  /*
+  The y coordinate range for card translation.
+  */
   translateYRange: number[];
 
-  /**
-   * The card of the input and output rotation range.
-   */
+  /*
+  The input and output ranges for card rotation.
+  */
   inputRotationRange: number[];
   outputRotationRange: number[];
 
-  /**
-   * The card of the input and output swipe direction opacity range.
-   */
+  /*
+  The input and output ranges for swipe direction overlay label opacity.
+  */
+
   inputOverlayLabelRightOpacityRange: number[];
   outputOverlayLabelRightOpacityRange: number[];
 
@@ -39,33 +43,32 @@ export type TinderCardOptions = PropsWithChildren<{
   inputOverlayLabelTopOpacityRange: number[];
   outputOverlayLabelTopOpacityRange: number[];
 
-  /**
-   * Disable Right,Left and Top Swipe
-   */
+  /*
+  Disable right, left, and top swipes.
+  */
   disableRightSwipe: boolean;
   disableLeftSwipe: boolean;
   disableTopSwipe: boolean;
 
-  /**
-   * The card of the style.
-   */
+  /*
+  The style of the card.
+  */
   cardStyle: StyleProp<ViewStyle>;
-
-  /**
-   * The card of the callbacks.
-   */
+  /*
+  Callbacks for swipe events.
+  */
   onSwipedRight: () => void;
   onSwipedLeft: () => void;
   onSwipedTop: () => void;
 
-  /**
-   * The card of the animation scale value.
-   */
+  /*
+  The scale value for card animation.
+  */
   scaleValue: number;
 
-  /**
-   * The card of the swipe direction overlay label.
-   */
+  /*  
+  Swipe direction overlay label components.
+  */
   OverlayLabelRight?: () => JSX.Element;
   OverlayLabelLeft?: () => JSX.Element;
   OverlayLabelTop?: () => JSX.Element;
