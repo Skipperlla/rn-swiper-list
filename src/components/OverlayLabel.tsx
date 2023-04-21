@@ -7,17 +7,22 @@ import Animated, {
 } from 'react-native-reanimated';
 
 type Props = PropsWithChildren<{
-  x: Animated.SharedValue<number>;
   inputRange: number[];
   outputRange: number[];
   Component: () => JSX.Element;
+  opacityValue: Animated.SharedValue<number>;
 }>;
 
-const OverlayLabel = ({ x, inputRange, outputRange, Component }: Props) => {
+const OverlayLabel = ({
+  inputRange,
+  outputRange,
+  Component,
+  opacityValue,
+}: Props) => {
   const animatedStyle = useAnimatedStyle(() => {
     return {
       opacity: interpolate(
-        x.value,
+        opacityValue.value,
         inputRange,
         outputRange,
         Extrapolation.CLAMP

@@ -41,15 +41,15 @@ const CardItem = ({
   onSwipedTop,
   children,
   scaleValue,
+  OverlayLabelRight,
+  OverlayLabelLeft,
+  OverlayLabelTop,
   inputOverlayLabelRightOpacityRange,
   outputOverlayLabelRightOpacityRange,
   inputOverlayLabelLeftOpacityRange,
   outputOverlayLabelLeftOpacityRange,
   inputOverlayLabelTopOpacityRange,
   outputOverlayLabelTopOpacityRange,
-  OverlayLabelRight,
-  OverlayLabelLeft,
-  OverlayLabelTop,
 }: TinderCardOptions) => {
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
@@ -158,8 +158,8 @@ const CardItem = ({
           <OverlayLabel
             inputRange={inputOverlayLabelLeftOpacityRange}
             outputRange={outputOverlayLabelLeftOpacityRange}
-            x={translateX}
             Component={OverlayLabelLeft}
+            opacityValue={translateX}
           />
         )}
         {/* //? Overlay Right */}
@@ -167,8 +167,8 @@ const CardItem = ({
           <OverlayLabel
             inputRange={inputOverlayLabelRightOpacityRange}
             outputRange={outputOverlayLabelRightOpacityRange}
-            x={translateX}
             Component={OverlayLabelRight}
+            opacityValue={translateX}
           />
         )}
         {/* //? OverlayTop */}
@@ -176,8 +176,8 @@ const CardItem = ({
           <OverlayLabel
             inputRange={inputOverlayLabelTopOpacityRange}
             outputRange={outputOverlayLabelTopOpacityRange}
-            x={translateY}
             Component={OverlayLabelTop}
+            opacityValue={translateY}
           />
         )}
 
@@ -193,23 +193,20 @@ CardItem.defaultProps = {
   cardWidth: windowWidth,
   cardHeight: windowHeight,
 
-  translateXRange: [-windowWidth, 0, windowWidth],
-  translateYRange: [-windowHeight, 0, windowHeight],
+  translateXRange: [-windowWidth / 2, 0, windowWidth / 2],
+  translateYRange: [-windowHeight / 2, 0, windowHeight / 2],
 
   inputRotationRange: [-windowWidth, 0, windowWidth],
   outputRotationRange: [-10, 0, 10],
 
-  inputOpacityRange: [-windowWidth, 0, windowWidth],
-  outputOpacityRange: [1, 0, 1],
+  inputOverlayLabelRightOpacityRange: [-windowWidth / 2, 0, windowWidth / 2],
+  outputOverlayLabelRightOpacityRange: [0, 0, 1],
 
-  inputOverlayLabelRightOpacityRange: [0, windowWidth / 2],
-  outputOverlayLabelRightOpacityRange: [0, 1],
+  inputOverlayLabelLeftOpacityRange: [-windowWidth / 2, 0, windowWidth / 2],
+  outputOverlayLabelLeftOpacityRange: [1, 0, 0],
 
-  inputOverlayLabelLeftOpacityRange: [0, -windowWidth / 2],
-  outputOverlayLabelLeftOpacityRange: [0, 1],
-
-  inputOverlayLabelTopOpacityRange: [0, -windowHeight / 2],
-  outputOverlayLabelTopOpacityRange: [0, 1],
+  inputOverlayLabelTopOpacityRange: [windowHeight, 0, -windowHeight],
+  outputOverlayLabelTopOpacityRange: [0, 0, 1],
 
   disableRightSwipe: false,
   disableLeftSwipe: false,
