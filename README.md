@@ -87,6 +87,30 @@ yarn add react-native-reanimated react-native-gesture-handler
 | :-------- | :------- | :------------------------------------------- |
 | swipeBack | callback | Resets the card position after a swipe event |
 
+### How to use swipe back 🔨
+
+```typescript
+import React, { useRef } from 'react';
+import { Text, TouchableOpacity } from 'react-native';
+import { TinderCard, CardItemHandle } from 'rn-tinder-card';
+
+export default function App() {
+  const cardRef = useRef<CardItemHandle>(null);
+  const handleSwipeBack = useCallback(() => cardRef.current?.swipeBack(), []);
+
+  return (
+    <>
+      <TinderCard ref={cardRef} {...otherProps}>
+        {/* Card content */}
+      </TinderCard>
+      <TouchableOpacity onPress={handleSwipeBack}>
+        <Text>Reset Card</Text>
+      </TouchableOpacity>
+    </>
+  );
+}
+```
+
 ## Usage 🧑‍💻
 
 ```typescript
