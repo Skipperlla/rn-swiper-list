@@ -153,7 +153,6 @@ const CardItem = ({
           animatedStyle,
         ]}
       >
-        {/* //? OverlayLeft */}
         {OverlayLabelLeft && (
           <OverlayLabel
             inputRange={inputOverlayLabelLeftOpacityRange}
@@ -162,7 +161,6 @@ const CardItem = ({
             opacityValue={translateX}
           />
         )}
-        {/* //? Overlay Right */}
         {OverlayLabelRight && (
           <OverlayLabel
             inputRange={inputOverlayLabelRightOpacityRange}
@@ -171,7 +169,6 @@ const CardItem = ({
             opacityValue={translateX}
           />
         )}
-        {/* //? OverlayTop */}
         {OverlayLabelTop && (
           <OverlayLabel
             inputRange={inputOverlayLabelTopOpacityRange}
@@ -199,14 +196,14 @@ CardItem.defaultProps = {
   inputRotationRange: [-windowWidth, 0, windowWidth],
   outputRotationRange: [-10, 0, 10],
 
-  inputOverlayLabelRightOpacityRange: [-windowWidth / 2, 0, windowWidth / 2],
-  outputOverlayLabelRightOpacityRange: [0, 0, 1],
+  inputOverlayLabelRightOpacityRange: [0, windowWidth / 2],
+  outputOverlayLabelRightOpacityRange: [0, 1],
 
-  inputOverlayLabelLeftOpacityRange: [-windowWidth / 2, 0, windowWidth / 2],
-  outputOverlayLabelLeftOpacityRange: [1, 0, 0],
+  inputOverlayLabelLeftOpacityRange: [0, -windowWidth / 2],
+  outputOverlayLabelLeftOpacityRange: [0, 1],
 
-  inputOverlayLabelTopOpacityRange: [windowHeight, 0, -windowHeight],
-  outputOverlayLabelTopOpacityRange: [0, 0, 1],
+  inputOverlayLabelTopOpacityRange: [0, -windowHeight / 2],
+  outputOverlayLabelTopOpacityRange: [0, 1],
 
   disableRightSwipe: false,
   disableLeftSwipe: false,

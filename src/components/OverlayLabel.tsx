@@ -27,7 +27,7 @@ const OverlayLabel = ({
         outputRange,
         Extrapolation.CLAMP
       ),
-      zIndex: 100,
+      zIndex: 2,
     };
   });
 
