@@ -1,6 +1,6 @@
 # rn-tinder-card ⚡️
 
-https://user-images.githubusercontent.com/68515357/233240945-7719e99a-490c-4738-8e9b-1ce9071bc106.mp4
+https://user-images.githubusercontent.com/68515357/233647214-47fbf6fc-3c66-478d-8ce8-d4e3ea08ad9a.mp4
 
 ⚡ Lightning fast and customizable tinder-like swipe card for React Native
 
