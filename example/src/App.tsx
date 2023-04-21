@@ -70,15 +70,9 @@ export default function App() {
               OverlayLabelLeft={OverlayLeft}
               OverlayLabelTop={OverlayTop}
               cardStyle={styles.card}
-              onSwipedRight={() => {
-                Alert.alert('Swiped right');
-              }}
-              onSwipedTop={() => {
-                Alert.alert('Swiped Top');
-              }}
-              onSwipedLeft={() => {
-                Alert.alert('Swiped left');
-              }}
+              onSwipedRight={() => Alert.alert('Swiped right')}
+              onSwipedTop={() => Alert.alert('Swiped Top')}
+              onSwipedLeft={() => Alert.alert('Swiped left')}
             >
               <Image source={{ uri: item }} style={styles.image} />
             </TinderCard>

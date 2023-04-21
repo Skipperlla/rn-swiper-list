@@ -23,27 +23,30 @@ function resetPosition(
 
 function updatePosition(
   destX: number,
-  disableRightSwipe: boolean,
   translateX: Animated.SharedValue<number>,
-  cardWidth: number,
-  velocityX: number,
-  disableLeftSwipe: boolean,
   translateY: Animated.SharedValue<number>,
-  onSwipedRight: () => void,
-  onSwipedLeft: () => void
+  cardWidth?: number,
+  velocityX?: number,
+  disableRightSwipe?: boolean,
+  disableLeftSwipe?: boolean,
+  onSwipedRight?: () => void,
+  onSwipedLeft?: () => void
 ) {
   'worklet';
 
+  // If 'cardWidth' is undefined, windowWidth will be used.
+  const targetWidth = cardWidth ?? windowWidth;
+
   if (Math.sign(destX) === 1 && !disableRightSwipe) {
-    translateX.value = withSpring(windowWidth + cardWidth + 50, {
+    translateX.value = withSpring(Number(windowWidth + targetWidth + 50), {
       velocity: velocityX,
     });
-    runOnJS(onSwipedRight)();
+    onSwipedRight && runOnJS(onSwipedRight)();
   } else if (Math.sign(destX) === -1 && !disableLeftSwipe) {
-    translateX.value = withSpring(-windowWidth - cardWidth - 50, {
+    translateX.value = withSpring(-windowWidth - targetWidth - 50, {
       velocity: velocityX,
     });
-    runOnJS(onSwipedLeft)();
+    onSwipedLeft && runOnJS(onSwipedLeft)();
   } else resetPosition(translateX, translateY);
 }
 

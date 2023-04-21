@@ -7,8 +7,8 @@ import Animated, {
 } from 'react-native-reanimated';
 
 type Props = PropsWithChildren<{
-  inputRange: number[];
-  outputRange: number[];
+  inputRange?: number[];
+  outputRange?: number[];
   Component: () => JSX.Element;
   opacityValue: Animated.SharedValue<number>;
 }>;
@@ -23,8 +23,8 @@ const OverlayLabel = ({
     return {
       opacity: interpolate(
         opacityValue.value,
-        inputRange,
-        outputRange,
+        inputRange ?? [],
+        outputRange ?? [],
         Extrapolation.CLAMP
       ),
       zIndex: 2,
