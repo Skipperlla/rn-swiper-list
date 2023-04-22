@@ -29,6 +29,7 @@ yarn add react-native-reanimated react-native-gesture-handler
 - [x] Overlay labels
 - [x] Swipe back to previous card with a custom animation
 - [ ] More swipe events callbacks
+- [ ] Integrating and using a single card with flatlist (coming soon) 
 
 # Props ✏️
 
