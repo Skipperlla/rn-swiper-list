@@ -82,11 +82,14 @@ yarn add react-native-reanimated react-native-gesture-handler
 | OverlayLeft                         | () => JSX.Element | Component for the left swipe overlay label                 |                        |
 | OverlayTop                          | () => JSX.Element | Component for the top swipe overlay label                  |                        |
 
-## Swipe back method
+## Swipe methods
 
 | props     | type     | description                                  |
 | :-------- | :------- | :------------------------------------------- |
 | swipeBack | callback | Resets the card position after a swipe event |
+| swipeRight | callback | Animates the card to fling to the right and calls onSwipeRight |
+| swipeLeft | callback | Animates the card to fling to the left and calls onSwipeLeft |
+| swipeTop | callback | Animates the card to fling to the top and calls onSwipeTop |
 
 ## Usage 🧑‍💻
 

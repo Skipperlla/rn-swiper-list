@@ -5,6 +5,9 @@ export { default as TinderCard } from './CardItem';
 
 export type CardItemHandle = {
   swipeBack: () => void;
+  swipeLeft: () => void;
+  swipeRight: () => void;
+  swipeTop: () => void;
 };
 
 export type TinderCardOptions = PropsWithChildren<{

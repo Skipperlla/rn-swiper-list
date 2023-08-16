@@ -165,9 +165,70 @@ const CardItem = forwardRef<CardItemHandle, PropsWithRef<TinderCardOptions>>(
       translateX.value = withSpring(0, userConfig);
     }, [translateY, translateX]);
 
+    const swipeRight = useCallback(() => {
+      translateY.value = withSpring(0, userConfig);
+      const destX = snapPoint(windowWidth, 100, translateXRange ?? []);
+
+      updatePosition(
+        destX,
+        translateX,
+        translateY,
+        cardWidth,
+        100,
+        disableRightSwipe,
+        disableLeftSwipe,
+        onSwipedRight,
+        onSwipedLeft
+      );
+    }, [
+      translateY,
+      translateX,
+      translateXRange,
+      cardWidth,
+      disableRightSwipe,
+      disableLeftSwipe,
+      onSwipedRight,
+      onSwipedLeft,
+    ]);
+
+    const swipeLeft = useCallback(() => {
+      translateY.value = withSpring(0, userConfig);
+      const destX = snapPoint(-windowWidth, -100, translateXRange ?? []);
+
+      updatePosition(
+        destX,
+        translateX,
+        translateY,
+        cardWidth,
+
+        -100,
+        disableRightSwipe,
+        disableLeftSwipe,
+        onSwipedRight,
+        onSwipedLeft
+      );
+    }, [
+      translateY,
+      translateX,
+      translateXRange,
+      cardWidth,
+      disableRightSwipe,
+      disableLeftSwipe,
+      onSwipedRight,
+      onSwipedLeft,
+    ]);
+
+    const swipeTop = useCallback(() => {
+      translateY.value = withSpring(-windowHeight, userConfig);
+      onSwipedTop && runOnJS(onSwipedTop)();
+    }, [translateY, onSwipedTop]);
+
     // Expose the swipeBack method using useImperativeHandle
     useImperativeHandle(ref, () => ({
       swipeBack: () => swipeBack(),
+      swipeRight: () => swipeRight(),
+      swipeLeft: () => swipeLeft(),
+      swipeTop: () => swipeTop(),
     }));
 
     return (
