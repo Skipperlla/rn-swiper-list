@@ -1,8 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/no-unstable-nested-components */
 import * as React from 'react';
-import { Alert, Image, StyleSheet, Text, View } from 'react-native';
-import { TinderCard } from 'rn-tinder-card';
+import { Alert, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { CardItemHandle, TinderCard } from 'rn-tinder-card';
 
 const data = [
   'https://images.unsplash.com/photo-1681896616404-6568bf13b022?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1335&q=80',
@@ -10,7 +10,9 @@ const data = [
   'https://images.unsplash.com/photo-1681238091934-10fbb34b497a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1282&q=80',
 ];
 
-export default function App() {
+const App = () => {
+  const tinderCardsRef = React.useRef<Array<CardItemHandle | null>>([]);
+
   const OverlayRight = () => {
     return (
       <View
@@ -64,6 +66,7 @@ export default function App() {
             key={index}
           >
             <TinderCard
+              ref={(el) => (tinderCardsRef.current[index] = el)}
               cardWidth={380}
               cardHeight={730}
               OverlayLabelRight={OverlayRight}
@@ -75,13 +78,38 @@ export default function App() {
               onSwipedLeft={() => Alert.alert('Swiped left')}
             >
               <Image source={{ uri: item }} style={styles.image} />
+              <View style={styles.buttonContainer}>
+                <Pressable
+                  onPress={() => {
+                    tinderCardsRef.current?.[index]?.swipeLeft();
+                  }}
+                >
+                  <Text style={styles.buttonLabelText}>Nope</Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    tinderCardsRef.current?.[index]?.swipeTop();
+                  }}
+                >
+                  <Text style={styles.buttonLabelText}>Super</Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    tinderCardsRef.current?.[index]?.swipeRight();
+                  }}
+                >
+                  <Text style={styles.buttonLabelText}>Yes</Text>
+                </Pressable>
+              </View>
             </TinderCard>
           </View>
         );
       })}
     </View>
   );
-}
+};
+
+export default App;
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -92,8 +120,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  buttonContainer: {
+    bottom: 64,
+    left: 0,
+    width: '100%',
+
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    zIndex: 100,
+  },
   card: {
     borderRadius: 48,
+    position: 'relative',
   },
   image: {
     width: '100%',
@@ -108,4 +147,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   overlayLabelText: { color: 'white', fontSize: 32, fontWeight: 'bold' },
+  buttonLabelText: { color: 'black', fontSize: 32, fontWeight: 'bold' },
+  button: {
+    borderRadius: 80,
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
