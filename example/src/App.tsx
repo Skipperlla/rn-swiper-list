@@ -56,6 +56,21 @@ const App = () => {
     );
   };
 
+  const OverlayBottom = () => {
+    return (
+      <View
+        style={[
+          styles.overlayLabelContainer,
+          {
+            backgroundColor: 'red',
+          },
+        ]}
+      >
+        <Text style={styles.overlayLabelText}>Super Dislike</Text>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.wrapper}>
       {data.map((item, index) => {
@@ -72,10 +87,12 @@ const App = () => {
               OverlayLabelRight={OverlayRight}
               OverlayLabelLeft={OverlayLeft}
               OverlayLabelTop={OverlayTop}
+              OverlayLabelBottom={OverlayBottom}
               cardStyle={styles.card}
               onSwipedRight={() => Alert.alert('Swiped right')}
               onSwipedTop={() => Alert.alert('Swiped Top')}
               onSwipedLeft={() => Alert.alert('Swiped left')}
+              onSwipedBottom={() => Alert.alert('Swiped bottom')}
             >
               <Image source={{ uri: item }} style={styles.image} />
               <View style={styles.buttonContainer}>
