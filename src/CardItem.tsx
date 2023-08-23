@@ -43,9 +43,11 @@ const CardItem = forwardRef<CardItemHandle, PropsWithRef<TinderCardOptions>>(
       onSwipedLeft,
       onSwipedRight,
       onSwipedTop,
+      onSwipedBottom,
       disableRightSwipe,
       disableTopSwipe,
       disableLeftSwipe,
+      disableBottomSwipe,
       inputRotationRange,
       outputRotationRange,
       inputOverlayLabelRightOpacityRange,
@@ -54,9 +56,12 @@ const CardItem = forwardRef<CardItemHandle, PropsWithRef<TinderCardOptions>>(
       outputOverlayLabelLeftOpacityRange,
       inputOverlayLabelTopOpacityRange,
       outputOverlayLabelTopOpacityRange,
+      inputOverlayLabelBottomOpacityRange,
+      outputOverlayLabelBottomOpacityRange,
       OverlayLabelRight,
       OverlayLabelLeft,
       OverlayLabelTop,
+      OverlayLabelBottom,
       children,
     },
     ref
@@ -111,6 +116,16 @@ const CardItem = forwardRef<CardItemHandle, PropsWithRef<TinderCardOptions>>(
             velocity: velocityY,
           });
           onSwipedTop && runOnJS(onSwipedTop)();
+        } else if (
+          positiveY > positiveX &&
+          destY &&
+          !disableBottomSwipe &&
+          Math.sign(translationY) === 1
+        ) {
+          translateY.value = withSpring(windowHeight, {
+            velocity: velocityY,
+          });
+          onSwipedBottom && runOnJS(onSwipedBottom)();
         } else
           updatePosition(
             destX,
@@ -223,12 +238,18 @@ const CardItem = forwardRef<CardItemHandle, PropsWithRef<TinderCardOptions>>(
       onSwipedTop && runOnJS(onSwipedTop)();
     }, [translateY, onSwipedTop]);
 
+    const swipeBottom = useCallback(() => {
+      translateY.value = withSpring(windowHeight, userConfig);
+      onSwipedBottom && runOnJS(onSwipedBottom)();
+    }, [translateY, onSwipedBottom]);
+
     // Expose the swipeBack method using useImperativeHandle
     useImperativeHandle(ref, () => ({
       swipeBack: () => swipeBack(),
       swipeRight: () => swipeRight(),
       swipeLeft: () => swipeLeft(),
       swipeTop: () => swipeTop(),
+      swipeBottom: () => swipeBottom(),
     }));
 
     return (
@@ -267,6 +288,14 @@ const CardItem = forwardRef<CardItemHandle, PropsWithRef<TinderCardOptions>>(
               opacityValue={translateY}
             />
           )}
+          {OverlayLabelBottom && (
+            <OverlayLabel
+              inputRange={inputOverlayLabelBottomOpacityRange}
+              outputRange={outputOverlayLabelBottomOpacityRange}
+              Component={OverlayLabelBottom}
+              opacityValue={translateY}
+            />
+          )}
 
           {children}
         </Animated.View>
@@ -289,11 +318,13 @@ CardItem.defaultProps = {
   onSwipedRight: () => {},
   onSwipedLeft: () => {},
   onSwipedTop: () => {},
+  onSwipedBottom: () => {},
 
   //* Swipe Animation Props
   disableRightSwipe: false,
   disableLeftSwipe: false,
   disableTopSwipe: false,
+  disableBottomSwipe: false,
   //* Rotation Animation Props
   inputRotationRange: [-windowWidth, 0, windowWidth],
   outputRotationRange: [-10, 0, 10],
@@ -306,4 +337,7 @@ CardItem.defaultProps = {
 
   inputOverlayLabelTopOpacityRange: [0, -windowHeight / 2],
   outputOverlayLabelTopOpacityRange: [0, 1],
+
+  inputOverlayLabelBottomOpacityRange: [0, windowHeight / 2],
+  outputOverlayLabelBottomOpacityRange: [0, 1],
 };

@@ -21,7 +21,7 @@ export type TinderCardOptions = PropsWithChildren<{
   */
   cardHeight?: number;
 
-  /* 
+  /*
   The x coordinate range for card translation.
   */
   translateXRange?: number[];
@@ -50,12 +50,16 @@ export type TinderCardOptions = PropsWithChildren<{
   inputOverlayLabelTopOpacityRange?: number[];
   outputOverlayLabelTopOpacityRange?: number[];
 
+  inputOverlayLabelBottomOpacityRange?: number[];
+  outputOverlayLabelBottomOpacityRange?: number[];
+
   /*
-  Disable right, left, and top swipes.
+  Disable right, left, top and bottom swipes.
   */
   disableRightSwipe?: boolean;
   disableLeftSwipe?: boolean;
   disableTopSwipe?: boolean;
+  disableBottomSwipe?: boolean;
 
   /*
   The style of the card.
@@ -67,16 +71,18 @@ export type TinderCardOptions = PropsWithChildren<{
   onSwipedRight?: () => void;
   onSwipedLeft?: () => void;
   onSwipedTop?: () => void;
+  onSwipedBottom?: () => void;
 
   /*
   The scale value for card animation.
   */
   scaleValue?: number;
 
-  /*  
+  /*
   Swipe direction overlay label components.
   */
   OverlayLabelRight?: () => JSX.Element;
   OverlayLabelLeft?: () => JSX.Element;
   OverlayLabelTop?: () => JSX.Element;
+  OverlayLabelBottom?: () => JSX.Element;
 }>;
