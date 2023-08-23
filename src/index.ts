@@ -8,6 +8,7 @@ export type CardItemHandle = {
   swipeLeft: () => void;
   swipeRight: () => void;
   swipeTop: () => void;
+  swipeBottom: () => void;
 };
 
 export type TinderCardOptions = PropsWithChildren<{
