@@ -32,7 +32,7 @@ const OverlayLabel = ({
   });
 
   return (
-    <Animated.View style={[StyleSheet.absoluteFillObject, animatedStyle]}>
+    <Animated.View style={[StyleSheet.absoluteFillObject, animatedStyle]} pointerEvents="none">
       <Component />
     </Animated.View>
   );
