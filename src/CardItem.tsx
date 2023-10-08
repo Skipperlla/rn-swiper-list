@@ -174,12 +174,6 @@ const CardItem = forwardRef<CardItemHandle, PropsWithRef<TinderCardOptions>>(
       };
     });
 
-    // Add the swipeBack method
-    const swipeBack = useCallback(() => {
-      translateY.value = withSpring(0, userConfig);
-      translateX.value = withSpring(0, userConfig);
-    }, [translateY, translateX]);
-
     const swipeRight = useCallback(() => {
       translateY.value = withSpring(0, userConfig);
       const destX = snapPoint(windowWidth, 100, translateXRange ?? []);
@@ -242,6 +236,11 @@ const CardItem = forwardRef<CardItemHandle, PropsWithRef<TinderCardOptions>>(
       translateY.value = withSpring(windowHeight, userConfig);
       onSwipedBottom && runOnJS(onSwipedBottom)();
     }, [translateY, onSwipedBottom]);
+
+    const swipeBack = useCallback(() => {
+      translateY.value = withSpring(0, userConfig);
+      translateX.value = withSpring(0, userConfig);
+    }, [translateY, translateX]);
 
     // Expose the swipeBack method using useImperativeHandle
     useImperativeHandle(ref, () => ({
