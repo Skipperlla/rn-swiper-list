@@ -1,6 +1,6 @@
 {
   "name": "rn-swiper-list",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "⚡ Lightning fast and customizable tinder-like swipe card for React Native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
