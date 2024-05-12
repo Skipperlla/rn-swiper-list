@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "expo": "~50.0.17",
+    "expo-crypto": "~12.8.1",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
