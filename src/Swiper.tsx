@@ -1,7 +1,7 @@
 import React, { useImperativeHandle, type ForwardedRef } from 'react';
 import { runOnJS, useAnimatedReaction } from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
-import type { SwiperCardRefType, SwiperOptions } from 'rn-tinder-swiper';
+import type { SwiperCardRefType, SwiperOptions } from 'rn-swiper-list';
 
 import useSwipeControls from './hooks/useSwipeControls';
 import SwiperCard from './SwiperCard';

@@ -1,5 +1,5 @@
 {
-  "name": "rn-tinder-swiper",
+  "name": "rn-swiper-list",
   "version": "2.0.0",
   "description": "⚡ Lightning fast and customizable tinder-like swipe card for React Native",
   "main": "lib/commonjs/index",
@@ -26,7 +26,7 @@
     "!**/.*"
   ],
   "scripts": {
-    "example": "yarn workspace rn-tinder-swiper-example",
+    "example": "yarn workspace rn-swiper-list-example",
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",

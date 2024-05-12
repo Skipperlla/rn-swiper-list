@@ -2,7 +2,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "paths": {
-      "rn-tinder-swiper": ["./src/index"]
+      "rn-swiper-list": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,

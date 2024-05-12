@@ -15548,28 +15548,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rn-tinder-swiper-example@workspace:example":
+"rn-swiper-list@workspace:.":
   version: 0.0.0-use.local
-  resolution: "rn-tinder-swiper-example@workspace:example"
-  dependencies:
-    "@babel/core": ^7.20.0
-    "@expo/webpack-config": ^18.0.1
-    babel-loader: ^8.1.0
-    babel-plugin-module-resolver: ^5.0.0
-    expo: ~50.0.17
-    expo-status-bar: ~1.11.1
-    react: 18.2.0
-    react-dom: 18.2.0
-    react-native: 0.73.6
-    react-native-gesture-handler: ~2.14.0
-    react-native-reanimated: ~3.6.2
-    react-native-web: ~0.19.6
-  languageName: unknown
-  linkType: soft
-
-"rn-tinder-swiper@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "rn-tinder-swiper@workspace:."
+  resolution: "rn-swiper-list@workspace:."
   dependencies:
     "@commitlint/config-conventional": ^17.0.2
     "@evilmartians/lefthook": ^1.5.0
@@ -15596,6 +15577,25 @@ __metadata:
     react-native: "*"
     react-native-gesture-handler: "*"
     react-native-reanimated: "*"
+  languageName: unknown
+  linkType: soft
+
+"rn-tinder-swiper-example@workspace:example":
+  version: 0.0.0-use.local
+  resolution: "rn-tinder-swiper-example@workspace:example"
+  dependencies:
+    "@babel/core": ^7.20.0
+    "@expo/webpack-config": ^18.0.1
+    babel-loader: ^8.1.0
+    babel-plugin-module-resolver: ^5.0.0
+    expo: ~50.0.17
+    expo-status-bar: ~1.11.1
+    react: 18.2.0
+    react-dom: 18.2.0
+    react-native: 0.73.6
+    react-native-gesture-handler: ~2.14.0
+    react-native-reanimated: ~3.6.2
+    react-native-web: ~0.19.6
   languageName: unknown
   linkType: soft
 

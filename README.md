@@ -2,7 +2,6 @@
 
 https://github.com/Skipperlla/rn-tinder-swiper/assets/68515357/149b7418-cc2f-489b-9133-e6ba7120b277
 
-
 ⚡ Lightning fast and customizable tinder-like swiper for React Native
 
 ## Installation ⚙️
@@ -21,8 +20,6 @@ yarn add react-native-reanimated react-native-gesture-handler
 
 - [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation)
 - [react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/docs/installation)
-
-> **_NOTE:_** I will change the name of the repository to rn-tinder-swiper via npm as soon as possible 📌
 
 ## Overview
 
@@ -110,7 +107,7 @@ import {
 } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
-import { Swiper, type SwiperCardRefType } from 'rn-tinder-swiper';
+import { Swiper, type SwiperCardRefType } from 'rn-swiper-list';
 
 import { ActionButton } from '../components';
 

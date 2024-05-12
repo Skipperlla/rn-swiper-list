@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
-import { Swiper, type SwiperCardRefType } from 'rn-tinder-swiper';
+import { Swiper, type SwiperCardRefType } from 'rn-swiper-list';
 
 import { ActionButton } from '../components';
 

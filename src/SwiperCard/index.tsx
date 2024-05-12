@@ -17,7 +17,7 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import type { SwiperCardOptions, SwiperCardRefType } from 'rn-tinder-swiper';
+import type { SwiperCardOptions, SwiperCardRefType } from 'rn-swiper-list';
 
 import OverlayLabel from './OverlayLabel';
 
