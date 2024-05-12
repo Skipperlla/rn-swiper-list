@@ -24,21 +24,17 @@ const IMAGES: ImageSourcePropType[] = [
 const App = () => {
   const ref = useRef<SwiperCardRefType>();
 
-  const renderCard = useCallback(
-    (image: ImageSourcePropType, index: number) => {
-      console.log('index', index);
-      return (
-        <View style={styles.renderCardContainer}>
-          <Image
-            source={image}
-            style={styles.renderCardImage}
-            resizeMode="cover"
-          />
-        </View>
-      );
-    },
-    []
-  );
+  const renderCard = useCallback((image: ImageSourcePropType) => {
+    return (
+      <View style={styles.renderCardContainer}>
+        <Image
+          source={image}
+          style={styles.renderCardImage}
+          resizeMode="cover"
+        />
+      </View>
+    );
+  }, []);
   const OverlayLabelRight = useCallback(() => {
     return (
       <View

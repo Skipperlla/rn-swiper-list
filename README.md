@@ -124,8 +124,7 @@ const App = () => {
   const ref = useRef<SwiperCardRefType>();
 
   const renderCard = useCallback(
-    (image: ImageSourcePropType, index: number) => {
-      console.log('index', index);
+    (image: ImageSourcePropType) => {
       return (
         <View style={styles.renderCardContainer}>
           <Image
