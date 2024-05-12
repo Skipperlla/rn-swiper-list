@@ -1,4 +1,4 @@
-# rn-tinder-card ⚡️
+# rn-swiper-list ⚡️
 
 https://github.com/Skipperlla/rn-tinder-swiper/assets/68515357/149b7418-cc2f-489b-9133-e6ba7120b277
 
@@ -7,10 +7,10 @@ https://github.com/Skipperlla/rn-tinder-swiper/assets/68515357/149b7418-cc2f-489
 ## Installation ⚙️
 
 ```sh
-yarn add rn-tinder-card
+yarn add rn-swiper-list
 ```
 
-`rn-tinder-card` needs `react-native-reanimated` and `react-native-gesture-handler` package 💎
+`rn-swiper-list` needs `react-native-reanimated` and `react-native-gesture-handler` package 💎
 
 ```sh
 yarn add react-native-reanimated react-native-gesture-handler
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
 
 ```
 
-For more examples check out the [example](https://github.com/Skipperlla/rn-tinder-card/blob/main/example/src/App.tsx) folder 📂
+For more examples check out the [example](https://github.com/Skipperlla/rn-swiper-list/blob/main/example/src/App.tsx) folder 📂
 
 ## Types 🏷️
 
