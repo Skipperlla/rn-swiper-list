@@ -2,7 +2,7 @@
 
 https://user-images.githubusercontent.com/68515357/233647214-47fbf6fc-3c66-478d-8ce8-d4e3ea08ad9a.mp4
 
-⚡ Lightning fast and customizable tinder-like swipe card for React Native
+⚡ Lightning fast and customizable tinder-like swiper for React Native
 
 ## Installation ⚙️
 
@@ -21,6 +21,8 @@ yarn add react-native-reanimated react-native-gesture-handler
 - [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation)
 - [react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/docs/installation)
 
+> **_NOTE:_** I will change the name of the repository to rn-tinder-swiper via npm as soon as possible 📌
+
 ## Overview
 
 - [x] Rotation animation
@@ -29,83 +31,116 @@ yarn add react-native-reanimated react-native-gesture-handler
 - [x] Overlay labels
 - [x] Swipe back to previous card with a custom animation
 - [x] More swipe events callbacks
-- [ ] Integrating and using a single card with flatlist (coming soon) 
+- [x] Integrating and using a single card with flatlist
 
 # Props ✏️
 
 ## Card Props
 
-| Props           | type            | description                                     | default                                  |
-| :-------------- | :-------------- | :---------------------------------------------- | :--------------------------------------- |
-| cardWidth       | number          | The width of the card                           | windowWidth                              |
-| cardHeight      | number          | The height of the card                          | windowHeight                             |
-| translateXRange | array           | The range for card translation along the X-axis | [-windowWidth / 2, 0, windowWidth / 2]   |
-| translateYRange | array           | The range for card translation along the Y-axis | [-windowHeight / 2, 0, windowHeight / 2] |
-| cardStyle       | object          | The style properties applied to the card        | {}                                       |
-| scaleValue      | number          | The scale factor for card animation             | 1                                        |
-| children        | React.ReactNode | The scale factor for card animation             | 1                                        |
+| Props      | type                     | description                                                                            | required |
+| :--------- | :----------------------- | :------------------------------------------------------------------------------------- | :------- |
+| data       | array                    | Array of data objects used to render the cards.                                        | Yes      |
+| renderCard | func(cardData,cardIndex) | Function that renders a card based on the provided data and index.                     | Yes      |
+| cardStyle  | object                   | CSS style properties applied to each card. These can be applied inline.                |          |
+| children   | React.ReactNode          | Child components to be displayed inside the component. Used typically for composition. |          |
 
 ## Event callbacks
 
-| Props         | type | description                                       | default  |
-| :------------ | :--- | :------------------------------------------------ | :------- |
-| onSwipedLeft  | func | function to be called when a card is swiped left  | () => {} |
-| onSwipedRight | func | function to be called when a card is swiped right | () => {} |
-| onSwipedTop   | func | function to be called when a card is swiped top   | () => {} |
+| Props         | type | description                                                                                    | default             |
+| :------------ | :--- | :--------------------------------------------------------------------------------------------- | :------------------ |
+| onSwipeLeft   | func | Function called when a card is swiped left. It receives the index of the card as a parameter.  | `(cardIndex) => {}` |
+| onSwipeRight  | func | Function called when a card is swiped right. It receives the index of the card as a parameter. | `(cardIndex) => {}` |
+| onSwipeTop    | func | Function called when a card is swiped top. It receives the index of the card as a parameter.   | `(cardIndex) => {}` |
+| onSwipedAll   | func | Function called when all cards have been swiped.                                               | `() => {}`          |
+| onSwipeStart  | func | Function called when a swipe event starts.                                                     | `() => {}`          |
+| onSwipeEnd    | func | Function called when a swipe event ends.                                                       | `() => {}`          |
+| onSwipeActive | func | Function called when a swipe event is active.                                                  | `() => {}`          |
 
 ## Swipe Animation Props
 
-| props             | type | description         | default |
-| :---------------- | :--- | :------------------ | :------ |
-| disableLeftSwipe  | bool | disable left swipe  | false   |
-| disableRightSwipe | bool | disable right swipe | false   |
-| disableTopSwipe   | bool | disable top swipe   | false   |
+| props             | type | description                                     | default |
+| :---------------- | :--- | :---------------------------------------------- | :------ |
+| disableLeftSwipe  | bool | If true, disables the ability to swipe left.    | `false` |
+| disableRightSwipe | bool | If true, disables the ability to swipe right.   | `false` |
+| disableTopSwipe   | bool | If true, disables the ability to swipe upwards. | `false` |
 
 ## Rotation Animation Props
 
-| props               | type  | description                                            | default            |
-| :------------------ | :---- | :----------------------------------------------------- | :----------------- |
-| inputRotationRange  | array | x values range for the rotation output                 | [-width, 0, width] |
-| outputRotationRange | array | rotation values for the x values in inputRotationRange | [-10, 0, 10]       |
+| props               | type  | description                                                   | default                                    |
+| :------------------ | :---- | :------------------------------------------------------------ | :----------------------------------------- |
+| translateXRange     | array | Translates the card horizontally.                             | `[-windowWidth / 3, 0, windowWidth / 3]`   |
+| translateYRange     | array | Translates the card vertically.                               | `[-windowHeight / 3, 0, windowHeight / 3]` |
+| rotateInputRange    | array | Array specifying the range of x values for rotation mapping.  | `[-windowWidth / 3, 0, windowWidth / 3]`   |
+| outputRotationRange | array | Array of rotation values corresponding to `rotateInputRange`. | `[-Math.PI / 20, 0, Math.PI / 20]`         |
 
 ## Overlay Labels Animation Props
 
-| props                               | type              | description                                                | default                |
-| :---------------------------------- | :---------------- | :--------------------------------------------------------- | :--------------------- |
-| inputOverlayLabelRightOpacityRange  | array             | Input range for the right overlay label opacity animation  | [0, windowWidth / 2]   |
-| outputOverlayLabelRightOpacityRange | array             | Output range for the right overlay label opacity animation | [0, 1]                 |
-| inputOverlayLabelLeftOpacityRange   | array             | Input range for the left overlay label opacity animation   | [0, -windowWidth / 2]  |
-| outputOverlayLabelLeftOpacityRange  | array             | Output range for the left overlay label opacity animation  | [0, 1]                 |
-| inputOverlayLabelTopOpacityRange    | array             | Input range for the top overlay label opacity animation    | [0, -windowHeight / 2] |
-| outputOverlayLabelTopOpacityRange   | array             | Output range for the top overlay label opacity animation   | [0, 1]                 |
-| OverlayRight                        | () => JSX.Element | Component for the right swipe overlay label                |                        |
-| OverlayLeft                         | () => JSX.Element | Component for the left swipe overlay label                 |                        |
-| OverlayTop                          | () => JSX.Element | Component for the top swipe overlay label                  |                        |
+| props                               | type              | description                                                                                             | default                    |
+| :---------------------------------- | :---------------- | :------------------------------------------------------------------------------------------------------ | :------------------------- |
+| inputOverlayLabelRightOpacityRange  | array             | Array defining the input range for animating the opacity of the right overlay label.                    | `[0, windowWidth / 3]`     |
+| outputOverlayLabelRightOpacityRange | array             | Array defining the output opacity values for the right overlay label, corresponding to the input range. | `[0, 1]`                   |
+| inputOverlayLabelLeftOpacityRange   | array             | Array defining the input range for animating the opacity of the left overlay label.                     | `[0, -(windowWidth / 3)]`  |
+| outputOverlayLabelLeftOpacityRange  | array             | Array defining the output opacity values for the left overlay label, corresponding to the input range.  | `[0, 1]`                   |
+| inputOverlayLabelTopOpacityRange    | array             | Array defining the input range for animating the opacity of the top overlay label.                      | `[0, -(windowHeight / 3)]` |
+| outputOverlayLabelTopOpacityRange   | array             | Array defining the output opacity values for the top overlay label, corresponding to the input range.   | `[0, 1]`                   |
+| OverlayLabelRight                   | () => JSX.Element | Component rendered as an overlay label for right swipes.                                                |                            |
+| OverlayLabelLeft                    | () => JSX.Element | Component rendered as an overlay label for left swipes.                                                 |                            |
+| OverlayLabelTop                     | () => JSX.Element | Component rendered as an overlay label for top swipes.                                                  |                            |
 
 ## Swipe methods
 
-| props     | type     | description                                  |
-| :-------- | :------- | :------------------------------------------- |
-| swipeBack | callback | Resets the card position after a swipe event |
+| props      | type     | description                                                    |
+| :--------- | :------- | :------------------------------------------------------------- |
+| swipeBack  | callback | Resets the card position after a swipe event                   |
 | swipeRight | callback | Animates the card to fling to the right and calls onSwipeRight |
-| swipeLeft | callback | Animates the card to fling to the left and calls onSwipeLeft |
-| swipeTop | callback | Animates the card to fling to the top and calls onSwipeTop |
+| swipeLeft  | callback | Animates the card to fling to the left and calls onSwipeLeft   |
+| swipeTop   | callback | Animates the card to fling to the top and calls onSwipeTop     |
 
 ## Usage 🧑‍💻
 
 ```typescript
-import * as React from 'react';
-import { Alert, Image, StyleSheet, Text, View } from 'react-native';
-import { TinderCard } from 'rn-tinder-card';
+/* eslint-disable react-native/no-inline-styles */
+import React, { useCallback, useRef } from 'react';
+import {
+  Image,
+  StyleSheet,
+  View,
+  type ImageSourcePropType,
+} from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { AntDesign } from '@expo/vector-icons';
+import { Swiper, type SwiperCardRefType } from 'rn-tinder-swiper';
 
-const data = [
-  'https://images.unsplash.com/photo-1681896616404-6568bf13b022?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1335&q=80',
-  'https://images.unsplash.com/photo-1681871197336-0250ed2fe23d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80',
-  'https://images.unsplash.com/photo-1681238091934-10fbb34b497a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1282&q=80',
+import { ActionButton } from '../components';
+
+const IMAGES: ImageSourcePropType[] = [
+  require('../assets/images/1.jpg'),
+  require('../assets/images/2.jpg'),
+  require('../assets/images/3.jpg'),
+  require('../assets/images/4.jpg'),
+  require('../assets/images/5.jpg'),
+  require('../assets/images/6.jpg'),
 ];
 
-export default function App() {
-  const OverlayRight = () => {
+const App = () => {
+  const ref = useRef<SwiperCardRefType>();
+
+  const renderCard = useCallback(
+    (image: ImageSourcePropType, index: number) => {
+      console.log('index', index);
+      return (
+        <View style={styles.renderCardContainer}>
+          <Image
+            source={image}
+            style={styles.renderCardImage}
+            resizeMode="cover"
+          />
+        </View>
+      );
+    },
+    []
+  );
+  const OverlayLabelRight = useCallback(() => {
     return (
       <View
         style={[
@@ -114,12 +149,10 @@ export default function App() {
             backgroundColor: 'green',
           },
         ]}
-      >
-        <Text style={styles.overlayLabelText}>Like</Text>
-      </View>
+      />
     );
-  };
-  const OverlayLeft = () => {
+  }, []);
+  const OverlayLabelLeft = useCallback(() => {
     return (
       <View
         style={[
@@ -128,12 +161,10 @@ export default function App() {
             backgroundColor: 'red',
           },
         ]}
-      >
-        <Text style={styles.overlayLabelText}>Nope</Text>
-      </View>
+      />
     );
-  };
-  const OverlayTop = () => {
+  }, []);
+  const OverlayLabelTop = useCallback(() => {
     return (
       <View
         style={[
@@ -142,73 +173,147 @@ export default function App() {
             backgroundColor: 'blue',
           },
         ]}
-      >
-        <Text style={styles.overlayLabelText}>Super Like</Text>
-      </View>
+      />
     );
-  };
+  }, []);
 
   return (
-    <View style={styles.wrapper}>
-      {data.map((item, index) => {
-        return (
-          <View
-            style={styles.cardContainer}
-            pointerEvents="box-none"
-            key={index}
-          >
-            <TinderCard
-              cardWidth={380}
-              cardHeight={730}
-              OverlayLabelRight={OverlayRight}
-              OverlayLabelLeft={OverlayLeft}
-              OverlayLabelTop={OverlayTop}
-              cardStyle={styles.card}
-              onSwipedRight={() => {
-                Alert.alert('Swiped right');
-              }}
-              onSwipedTop={() => {
-                Alert.alert('Swiped Top');
-              }}
-              onSwipedLeft={() => {
-                Alert.alert('Swiped left');
-              }}
-            >
-              <Image source={{ uri: item }} style={styles.image} />
-            </TinderCard>
-          </View>
-        );
-      })}
-    </View>
+    <GestureHandlerRootView style={styles.container}>
+      <View style={styles.subContainer}>
+        <Swiper
+          ref={ref}
+          cardStyle={styles.cardStyle}
+          data={IMAGES}
+          renderCard={renderCard}
+          onSwipeRight={(cardIndex) => {
+            console.log('cardIndex', cardIndex);
+          }}
+          onSwipedAll={() => {
+            console.log('onSwipedAll');
+          }}
+          onSwipeLeft={(cardIndex) => {
+            console.log('onSwipeLeft', cardIndex);
+          }}
+          onSwipeTop={(cardIndex) => {
+            console.log('onSwipeTop', cardIndex);
+          }}
+          OverlayLabelRight={OverlayLabelRight}
+          OverlayLabelLeft={OverlayLabelLeft}
+          OverlayLabelTop={OverlayLabelTop}
+          onSwipeActive={() => {
+            console.log('onSwipeActive');
+          }}
+          onSwipeStart={() => {
+            console.log('onSwipeStart');
+          }}
+          onSwipeEnd={() => {
+            console.log('onSwipeEnd');
+          }}
+        />
+      </View>
+
+      <View style={styles.buttonsContainer}>
+        <ActionButton
+          style={styles.button}
+          onTap={() => {
+            ref.current?.swipeLeft();
+          }}
+        >
+          <AntDesign name="close" size={32} color="white" />
+        </ActionButton>
+        <ActionButton
+          style={[styles.button, { height: 60, marginHorizontal: 10 }]}
+          onTap={() => {
+            ref.current?.swipeBack();
+          }}
+        >
+          <AntDesign name="reload1" size={24} color="white" />
+        </ActionButton>
+        <ActionButton
+          style={styles.button}
+          onTap={() => {
+            ref.current?.swipeTop();
+          }}
+        >
+          <AntDesign name="arrowup" size={32} color="white" />
+        </ActionButton>
+        <ActionButton
+          style={styles.button}
+          onTap={() => {
+            ref.current?.swipeRight();
+          }}
+        >
+          <AntDesign name="heart" size={32} color="white" />
+        </ActionButton>
+      </View>
+    </GestureHandlerRootView>
   );
-}
+};
+
+export default App;
 
 const styles = StyleSheet.create({
-  wrapper: {
+  container: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  cardContainer: {
-    ...StyleSheet.absoluteFillObject,
+  buttonsContainer: {
+    flexDirection: 'row',
+    bottom: 34,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  button: {
+    height: 80,
+    borderRadius: 40,
+    marginHorizontal: 20,
+    aspectRatio: 1,
+    backgroundColor: '#3A3D45',
+    elevation: 4,
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: 'black',
+    shadowOpacity: 0.1,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
   },
-  card: {
-    borderRadius: 48,
+  buttonText: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
-  image: {
+  cardStyle: {
+    width: '95%',
+    height: '75%',
+    borderRadius: 15,
+    marginVertical: 20,
+  },
+  renderCardContainer: {
+    flex: 1,
+    borderRadius: 15,
+    height: '75%',
     width: '100%',
+  },
+  renderCardImage: {
     height: '100%',
-    borderRadius: 48,
+    width: '100%',
+    borderRadius: 15,
+  },
+  subContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   overlayLabelContainer: {
     width: '100%',
     height: '100%',
-    borderRadius: 48,
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderRadius: 15,
   },
-  overlayLabelText: { color: 'white', fontSize: 32, fontWeight: 'bold' },
 });
+
+
 ```
 
 For more examples check out the [example](https://github.com/Skipperlla/rn-tinder-card/blob/main/example/src/App.tsx) folder 📂
@@ -216,80 +321,58 @@ For more examples check out the [example](https://github.com/Skipperlla/rn-tinde
 ## Types 🏷️
 
 ```ts
-export type CardItemHandle = {
-  swipeBack: () => void;
-};
+type SwiperCardRefType =
+  | {
+      swipeRight: () => void;
+      swipeLeft: () => void;
+      swipeBack: () => void;
+      swipeTop: () => void;
+    }
+  | undefined;
 
-export type TinderCardOptions = PropsWithChildren<{
+type SwiperOptions<T> = {
   /*
-  The width of the card.
-  */
-  cardWidth?: number;
-
+   * Card data and render function
+   */
+  data: T[];
+  renderCard: (item: T, index: number) => JSX.Element;
+  cardStyle?: StyleProp<ViewStyle>;
   /*
-  The width of the card.
-  */
-  cardHeight?: number;
-
-  /* 
-  The x coordinate range for card translation.
-  */
-  translateXRange?: number[];
-
+   * Children components
+   */
+  onSwipeLeft?: (cardIndex: number) => void;
+  onSwipeRight?: (cardIndex: number) => void;
+  onSwipeTop?: (cardIndex: number) => void;
+  onSwipedAll?: () => void;
+  onSwipeStart?: () => void;
+  onSwipeEnd?: () => void;
+  onSwipeActive?: () => void;
   /*
-  The y coordinate range for card translation.
-  */
-  translateYRange?: number[];
-
-  /*
-  The input and output ranges for card rotation.
-  */
-  inputRotationRange?: number[];
-  outputRotationRange?: number[];
-
-  /*
-  The input and output ranges for swipe direction overlay label opacity.
-  */
-
-  inputOverlayLabelRightOpacityRange?: number[];
-  outputOverlayLabelRightOpacityRange?: number[];
-
-  inputOverlayLabelLeftOpacityRange?: number[];
-  outputOverlayLabelLeftOpacityRange?: number[];
-
-  inputOverlayLabelTopOpacityRange?: number[];
-  outputOverlayLabelTopOpacityRange?: number[];
-
-  /*
-  Disable right, left, and top swipes.
-  */
+   * Swipe methods
+   */
   disableRightSwipe?: boolean;
   disableLeftSwipe?: boolean;
   disableTopSwipe?: boolean;
-
   /*
-  The style of the card.
-  */
-  cardStyle?: StyleProp<ViewStyle>;
+   * Rotation Animation Props
+   */
+  translateXRange?: number[];
+  translateYRange?: number[];
+  rotateInputRange?: number[];
+  rotateOutputRange?: number[];
   /*
-  Callbacks for swipe events.
-  */
-  onSwipedRight?: () => void;
-  onSwipedLeft?: () => void;
-  onSwipedTop?: () => void;
-
-  /*
-  The scale value for card animation.
-  */
-  scaleValue?: number;
-
-  /*  
-  Swipe direction overlay label components.
-  */
+   * Overlay Labels Animation Props
+   */
+  inputOverlayLabelRightOpacityRange?: number[];
+  outputOverlayLabelRightOpacityRange?: number[];
+  inputOverlayLabelLeftOpacityRange?: number[];
+  outputOverlayLabelLeftOpacityRange?: number[];
+  inputOverlayLabelTopOpacityRange?: number[];
+  outputOverlayLabelTopOpacityRange?: number[];
   OverlayLabelRight?: () => JSX.Element;
   OverlayLabelLeft?: () => JSX.Element;
   OverlayLabelTop?: () => JSX.Element;
-}>;
+};
 ```
 
 ## Contributing 🔖

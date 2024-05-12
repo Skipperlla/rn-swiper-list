@@ -1,5 +1,5 @@
 {
-  "name": "example",
+  "name": "rn-tinder-swiper-example",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -9,22 +9,20 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@types/react": "~18.0.27",
-    "expo": "~48.0.11",
-    "expo-status-bar": "~1.4.4",
+    "expo": "~50.0.17",
+    "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-native": "0.71.6",
-    "react-native-gesture-handler": "^2.9.0",
-    "react-native-reanimated": "~2.14.4",
-    "react-native-web": "~0.18.10",
-    "typescript": "^4.9.4"
+    "react-native": "0.73.6",
+    "react-native-gesture-handler": "~2.14.0",
+    "react-native-reanimated": "~3.6.2",
+    "react-native-web": "~0.19.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@expo/webpack-config": "^18.0.1",
     "babel-loader": "^8.1.0",
-    "babel-plugin-module-resolver": "^4.1.0"
+    "babel-plugin-module-resolver": "^5.0.0"
   },
   "private": true
 }

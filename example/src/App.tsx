@@ -1,19 +1,45 @@
 /* eslint-disable react-native/no-inline-styles */
-/* eslint-disable react/no-unstable-nested-components */
-import * as React from 'react';
-import { Alert, Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { CardItemHandle, TinderCard } from 'rn-tinder-card';
+import React, { useCallback, useRef } from 'react';
+import {
+  Image,
+  StyleSheet,
+  View,
+  type ImageSourcePropType,
+} from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { AntDesign } from '@expo/vector-icons';
+import { Swiper, type SwiperCardRefType } from 'rn-tinder-swiper';
 
-const data = [
-  'https://images.unsplash.com/photo-1681896616404-6568bf13b022?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1335&q=80',
-  'https://images.unsplash.com/photo-1681871197336-0250ed2fe23d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80',
-  'https://images.unsplash.com/photo-1681238091934-10fbb34b497a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1282&q=80',
+import { ActionButton } from '../components';
+
+const IMAGES: ImageSourcePropType[] = [
+  require('../assets/images/1.jpg'),
+  require('../assets/images/2.jpg'),
+  require('../assets/images/3.jpg'),
+  require('../assets/images/4.jpg'),
+  require('../assets/images/5.jpg'),
+  require('../assets/images/6.jpg'),
 ];
 
 const App = () => {
-  const tinderCardsRef = React.useRef<Array<CardItemHandle | null>>([]);
+  const ref = useRef<SwiperCardRefType>();
 
-  const OverlayRight = () => {
+  const renderCard = useCallback(
+    (image: ImageSourcePropType, index: number) => {
+      console.log('index', index);
+      return (
+        <View style={styles.renderCardContainer}>
+          <Image
+            source={image}
+            style={styles.renderCardImage}
+            resizeMode="cover"
+          />
+        </View>
+      );
+    },
+    []
+  );
+  const OverlayLabelRight = useCallback(() => {
     return (
       <View
         style={[
@@ -22,12 +48,10 @@ const App = () => {
             backgroundColor: 'green',
           },
         ]}
-      >
-        <Text style={styles.overlayLabelText}>Like</Text>
-      </View>
+      />
     );
-  };
-  const OverlayLeft = () => {
+  }, []);
+  const OverlayLabelLeft = useCallback(() => {
     return (
       <View
         style={[
@@ -36,12 +60,10 @@ const App = () => {
             backgroundColor: 'red',
           },
         ]}
-      >
-        <Text style={styles.overlayLabelText}>Nope</Text>
-      </View>
+      />
     );
-  };
-  const OverlayTop = () => {
+  }, []);
+  const OverlayLabelTop = useCallback(() => {
     return (
       <View
         style={[
@@ -50,125 +72,142 @@ const App = () => {
             backgroundColor: 'blue',
           },
         ]}
-      >
-        <Text style={styles.overlayLabelText}>Super Like</Text>
-      </View>
+      />
     );
-  };
-
-  const OverlayBottom = () => {
-    return (
-      <View
-        style={[
-          styles.overlayLabelContainer,
-          {
-            backgroundColor: 'red',
-          },
-        ]}
-      >
-        <Text style={styles.overlayLabelText}>Super Dislike</Text>
-      </View>
-    );
-  };
+  }, []);
 
   return (
-    <View style={styles.wrapper}>
-      {data.map((item, index) => {
-        return (
-          <View
-            style={styles.cardContainer}
-            pointerEvents="box-none"
-            key={index}
-          >
-            <TinderCard
-              ref={(el) => (tinderCardsRef.current[index] = el)}
-              cardWidth={380}
-              cardHeight={730}
-              OverlayLabelRight={OverlayRight}
-              OverlayLabelLeft={OverlayLeft}
-              OverlayLabelTop={OverlayTop}
-              OverlayLabelBottom={OverlayBottom}
-              cardStyle={styles.card}
-              onSwipedRight={() => Alert.alert('Swiped right')}
-              onSwipedTop={() => Alert.alert('Swiped Top')}
-              onSwipedLeft={() => Alert.alert('Swiped left')}
-              onSwipedBottom={() => Alert.alert('Swiped bottom')}
-            >
-              <Image source={{ uri: item }} style={styles.image} />
-              <View style={styles.buttonContainer}>
-                <Pressable
-                  onPress={() => {
-                    tinderCardsRef.current?.[index]?.swipeLeft();
-                  }}
-                >
-                  <Text style={styles.buttonLabelText}>Nope</Text>
-                </Pressable>
-                <Pressable
-                  onPress={() => {
-                    tinderCardsRef.current?.[index]?.swipeTop();
-                  }}
-                >
-                  <Text style={styles.buttonLabelText}>Super</Text>
-                </Pressable>
-                <Pressable
-                  onPress={() => {
-                    tinderCardsRef.current?.[index]?.swipeRight();
-                  }}
-                >
-                  <Text style={styles.buttonLabelText}>Yes</Text>
-                </Pressable>
-              </View>
-            </TinderCard>
-          </View>
-        );
-      })}
-    </View>
+    <GestureHandlerRootView style={styles.container}>
+      <View style={styles.subContainer}>
+        <Swiper
+          ref={ref}
+          cardStyle={styles.cardStyle}
+          data={IMAGES}
+          renderCard={renderCard}
+          onSwipeRight={(cardIndex) => {
+            console.log('cardIndex', cardIndex);
+          }}
+          onSwipedAll={() => {
+            console.log('onSwipedAll');
+          }}
+          onSwipeLeft={(cardIndex) => {
+            console.log('onSwipeLeft', cardIndex);
+          }}
+          onSwipeTop={(cardIndex) => {
+            console.log('onSwipeTop', cardIndex);
+          }}
+          OverlayLabelRight={OverlayLabelRight}
+          OverlayLabelLeft={OverlayLabelLeft}
+          OverlayLabelTop={OverlayLabelTop}
+          onSwipeActive={() => {
+            console.log('onSwipeActive');
+          }}
+          onSwipeStart={() => {
+            console.log('onSwipeStart');
+          }}
+          onSwipeEnd={() => {
+            console.log('onSwipeEnd');
+          }}
+        />
+      </View>
+
+      <View style={styles.buttonsContainer}>
+        <ActionButton
+          style={styles.button}
+          onTap={() => {
+            ref.current?.swipeLeft();
+          }}
+        >
+          <AntDesign name="close" size={32} color="white" />
+        </ActionButton>
+        <ActionButton
+          style={[styles.button, { height: 60, marginHorizontal: 10 }]}
+          onTap={() => {
+            ref.current?.swipeBack();
+          }}
+        >
+          <AntDesign name="reload1" size={24} color="white" />
+        </ActionButton>
+        <ActionButton
+          style={styles.button}
+          onTap={() => {
+            ref.current?.swipeTop();
+          }}
+        >
+          <AntDesign name="arrowup" size={32} color="white" />
+        </ActionButton>
+        <ActionButton
+          style={styles.button}
+          onTap={() => {
+            ref.current?.swipeRight();
+          }}
+        >
+          <AntDesign name="heart" size={32} color="white" />
+        </ActionButton>
+      </View>
+    </GestureHandlerRootView>
   );
 };
 
 export default App;
 
 const styles = StyleSheet.create({
-  wrapper: {
+  container: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  cardContainer: {
-    ...StyleSheet.absoluteFillObject,
+  buttonsContainer: {
+    flexDirection: 'row',
+    bottom: 34,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  button: {
+    height: 80,
+    borderRadius: 40,
+    marginHorizontal: 20,
+    aspectRatio: 1,
+    backgroundColor: '#3A3D45',
+    elevation: 4,
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: 'black',
+    shadowOpacity: 0.1,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
   },
-  buttonContainer: {
-    bottom: 64,
-    left: 0,
+  buttonText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  cardStyle: {
+    width: '95%',
+    height: '75%',
+    borderRadius: 15,
+    marginVertical: 20,
+  },
+  renderCardContainer: {
+    flex: 1,
+    borderRadius: 15,
+    height: '75%',
     width: '100%',
-
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-    zIndex: 100,
   },
-  card: {
-    borderRadius: 48,
-    position: 'relative',
-  },
-  image: {
-    width: '100%',
+  renderCardImage: {
     height: '100%',
-    borderRadius: 48,
+    width: '100%',
+    borderRadius: 15,
+  },
+  subContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   overlayLabelContainer: {
     width: '100%',
     height: '100%',
-    borderRadius: 48,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  overlayLabelText: { color: 'white', fontSize: 32, fontWeight: 'bold' },
-  buttonLabelText: { color: 'black', fontSize: 32, fontWeight: 'bold' },
-  button: {
-    borderRadius: 80,
-    backgroundColor: 'red',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderRadius: 15,
   },
 });
