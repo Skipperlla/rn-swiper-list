@@ -1,6 +1,7 @@
 # rn-tinder-card ⚡️
 
-https://user-images.githubusercontent.com/68515357/233647214-47fbf6fc-3c66-478d-8ce8-d4e3ea08ad9a.mp4
+https://github.com/Skipperlla/rn-tinder-swiper/assets/68515357/149b7418-cc2f-489b-9133-e6ba7120b277
+
 
 ⚡ Lightning fast and customizable tinder-like swiper for React Native
 
