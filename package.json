@@ -41,14 +41,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Skipperlla/rn-tinder-swiper.git"
+    "url": "git+https://github.com/Skipperlla/rn-swiper-list.git"
   },
   "author": "Skipperlla <oesmer437@gmail.com> (https://github.com/Skipperlla)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Skipperlla/rn-tinder-swiper/issues"
+    "url": "https://github.com/Skipperlla/rn-swiper-list/issues"
   },
-  "homepage": "https://github.com/Skipperlla/rn-tinder-swiper#readme",
+  "homepage": "https://github.com/Skipperlla/rn-swiper-list#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
