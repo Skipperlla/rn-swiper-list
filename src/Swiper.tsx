@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, type ForwardedRef } from 'react';
+import React, { useEffect, useImperativeHandle, useRef, type ForwardedRef } from 'react';
 import { runOnJS, useAnimatedReaction } from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
 import type { SwiperCardRefType, SwiperOptions } from 'rn-swiper-list';
@@ -36,11 +36,15 @@ const Swiper = <T,>(
     onSwipeStart,
     onSwipeActive,
     onSwipeEnd,
+    chunkSize = 3,
   }: SwiperOptions<T>,
   ref: ForwardedRef<SwiperCardRefType>
 ) => {
   const { activeIndex, refs, swipeRight, swipeLeft, swipeBack, swipeTop } =
     useSwipeControls(data);
+
+  const currentIndexRef = useRef(0);
+  const visibleCardsRef = useRef(data.slice(0, chunkSize));
 
   useImperativeHandle(
     ref,
@@ -55,6 +59,19 @@ const Swiper = <T,>(
     [swipeLeft, swipeRight, swipeBack, swipeTop]
   );
 
+  useEffect(() => {
+    visibleCardsRef.current = data.slice(0, chunkSize);
+  }, [data]);
+
+  const updateVisibleCards = () => {
+    const currentIndex = currentIndexRef.current;
+    if (currentIndex >= data.length - chunkSize) {
+      visibleCardsRef.current = data.slice(currentIndex, data.length);
+    } else {
+      visibleCardsRef.current = data.slice(currentIndex, currentIndex + chunkSize);
+    }
+  };
+
   useAnimatedReaction(
     () => {
       return activeIndex.value >= data.length;
@@ -67,12 +84,14 @@ const Swiper = <T,>(
     [data]
   );
 
-  return data.map((item, index) => {
+  return visibleCardsRef.current.map((item, index) => {
+    const actualIndex = currentIndexRef.current + index;
+
     return (
       <SwiperCard
-        key={index}
+        key={actualIndex}
         cardStyle={cardStyle}
-        index={index}
+        index={actualIndex}
         disableRightSwipe={disableRightSwipe}
         disableLeftSwipe={disableLeftSwipe}
         disableTopSwipe={disableTopSwipe}
@@ -92,12 +111,20 @@ const Swiper = <T,>(
         OverlayLabelRight={OverlayLabelRight}
         OverlayLabelLeft={OverlayLabelLeft}
         OverlayLabelTop={OverlayLabelTop}
-        ref={refs[index]}
+        ref={refs[actualIndex]}
         onSwipeRight={(cardIndex) => {
           onSwipeRight?.(cardIndex);
+          if (currentIndexRef.current + chunkSize < data.length) {
+            currentIndexRef.current += 1;
+            updateVisibleCards();
+          }
         }}
         onSwipeLeft={(cardIndex) => {
           onSwipeLeft?.(cardIndex);
+          if (currentIndexRef.current + chunkSize < data.length) {
+            currentIndexRef.current += 1;
+            updateVisibleCards();
+          }
         }}
         onSwipeTop={(cardIndex) => {
           onSwipeTop?.(cardIndex);
@@ -106,7 +133,7 @@ const Swiper = <T,>(
         onSwipeActive={onSwipeActive}
         onSwipeEnd={onSwipeEnd}
       >
-        {renderCard(item, index)}
+        {renderCard(item, actualIndex)}
       </SwiperCard>
     );
   });

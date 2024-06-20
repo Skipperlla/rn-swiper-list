@@ -44,6 +44,8 @@ export type SwiperOptions<T> = {
   OverlayLabelRight?: () => JSX.Element;
   OverlayLabelLeft?: () => JSX.Element;
   OverlayLabelTop?: () => JSX.Element;
+  //* Misc
+  chunkSize?: number;
 };
 export type SwiperCardOptions = {
   index: number;
