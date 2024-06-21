@@ -94,6 +94,12 @@ yarn add react-native-reanimated react-native-gesture-handler
 | swipeLeft  | callback | Animates the card to fling to the left and calls onSwipeLeft   |
 | swipeTop   | callback | Animates the card to fling to the top and calls onSwipeTop     |
 
+## Misc props
+
+| props      | type    | description                                                   | default                                    |
+| :--------- | :------ | :------------------------------------------------------------ | :----------------------------------------- |
+| chunkSize  | number  | The number of cards rendered at a given time                  | `3`                                        |
+
 ## Usage 🧑‍💻
 
 ```typescript
@@ -369,6 +375,10 @@ type SwiperOptions<T> = {
   OverlayLabelRight?: () => JSX.Element;
   OverlayLabelLeft?: () => JSX.Element;
   OverlayLabelTop?: () => JSX.Element;
+   /*
+   * Misc Props
+   */
+  chunkSize?: number;
 };
 ```
 
