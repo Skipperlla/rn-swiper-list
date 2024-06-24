@@ -33,6 +33,12 @@ const useSwipeControls = <T>(data: T[]) => {
     }
     refs[activeIndex.value]?.current?.swipeLeft();
   }, [activeIndex.value, refs]);
+  const swipeBottom = useCallback(() => {
+    if (!refs[activeIndex.value]) {
+      return;
+    }
+    refs[activeIndex.value]?.current?.swipeBottom();
+  }, [activeIndex.value, refs]);
 
   const swipeBack = useCallback(() => {
     if (!refs[activeIndex.value - 1]) {
@@ -49,6 +55,7 @@ const useSwipeControls = <T>(data: T[]) => {
     swipeLeft,
     swipeBack,
     swipeTop,
+    swipeBottom,
   };
 };
 
