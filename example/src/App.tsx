@@ -21,6 +21,8 @@ const IMAGES: ImageSourcePropType[] = [
   require('../assets/images/6.jpg'),
 ];
 
+const ICON_SIZE = 24;
+
 const App = () => {
   const ref = useRef<SwiperCardRefType>();
 
@@ -71,6 +73,18 @@ const App = () => {
       />
     );
   }, []);
+  const OverlayLabelBottom = useCallback(() => {
+    return (
+      <View
+        style={[
+          styles.overlayLabelContainer,
+          {
+            backgroundColor: 'orange',
+          },
+        ]}
+      />
+    );
+  }, []);
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -92,9 +106,13 @@ const App = () => {
           onSwipeTop={(cardIndex) => {
             console.log('onSwipeTop', cardIndex);
           }}
+          onSwipeBottom={(cardIndex) => {
+            console.log('onSwipeBottom', cardIndex);
+          }}
           OverlayLabelRight={OverlayLabelRight}
           OverlayLabelLeft={OverlayLabelLeft}
           OverlayLabelTop={OverlayLabelTop}
+          OverlayLabelBottom={OverlayLabelBottom}
           onSwipeActive={() => {
             console.log('onSwipeActive');
           }}
@@ -111,18 +129,26 @@ const App = () => {
         <ActionButton
           style={styles.button}
           onTap={() => {
-            ref.current?.swipeLeft();
-          }}
-        >
-          <AntDesign name="close" size={32} color="white" />
-        </ActionButton>
-        <ActionButton
-          style={[styles.button, { height: 60, marginHorizontal: 10 }]}
-          onTap={() => {
             ref.current?.swipeBack();
           }}
         >
-          <AntDesign name="reload1" size={24} color="white" />
+          <AntDesign name="reload1" size={ICON_SIZE} color="white" />
+        </ActionButton>
+        <ActionButton
+          style={styles.button}
+          onTap={() => {
+            ref.current?.swipeLeft();
+          }}
+        >
+          <AntDesign name="close" size={ICON_SIZE} color="white" />
+        </ActionButton>
+        <ActionButton
+          style={styles.button}
+          onTap={() => {
+            ref.current?.swipeBottom();
+          }}
+        >
+          <AntDesign name="arrowdown" size={ICON_SIZE} color="white" />
         </ActionButton>
         <ActionButton
           style={styles.button}
@@ -130,7 +156,7 @@ const App = () => {
             ref.current?.swipeTop();
           }}
         >
-          <AntDesign name="arrowup" size={32} color="white" />
+          <AntDesign name="arrowup" size={ICON_SIZE} color="white" />
         </ActionButton>
         <ActionButton
           style={styles.button}
@@ -138,7 +164,7 @@ const App = () => {
             ref.current?.swipeRight();
           }}
         >
-          <AntDesign name="heart" size={32} color="white" />
+          <AntDesign name="heart" size={ICON_SIZE} color="white" />
         </ActionButton>
       </View>
     </GestureHandlerRootView>
@@ -158,11 +184,11 @@ const styles = StyleSheet.create({
     bottom: 34,
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 24,
   },
   button: {
-    height: 80,
+    height: 50,
     borderRadius: 40,
-    marginHorizontal: 20,
     aspectRatio: 1,
     backgroundColor: '#3A3D45',
     elevation: 4,

@@ -9,6 +9,7 @@ export type SwiperCardRefType =
       swipeLeft: () => void;
       swipeBack: () => void;
       swipeTop: () => void;
+      swipeBottom: () => void;
     }
   | undefined;
 
@@ -21,6 +22,7 @@ export type SwiperOptions<T> = {
   onSwipeLeft?: (cardIndex: number) => void;
   onSwipeRight?: (cardIndex: number) => void;
   onSwipeTop?: (cardIndex: number) => void;
+  onSwipeBottom?: (cardIndex: number) => void;
   onSwipedAll?: () => void;
   onSwipeStart?: () => void;
   onSwipeEnd?: () => void;
@@ -29,6 +31,7 @@ export type SwiperOptions<T> = {
   disableRightSwipe?: boolean;
   disableLeftSwipe?: boolean;
   disableTopSwipe?: boolean;
+  disableBottomSwipe?: boolean;
   //* Rotation Animation Prop
   translateXRange?: number[];
   translateYRange?: number[];
@@ -41,9 +44,12 @@ export type SwiperOptions<T> = {
   outputOverlayLabelLeftOpacityRange?: number[];
   inputOverlayLabelTopOpacityRange?: number[];
   outputOverlayLabelTopOpacityRange?: number[];
+  inputOverlayLabelBottomOpacityRange?: number[];
+  outputOverlayLabelBottomOpacityRange?: number[];
   OverlayLabelRight?: () => JSX.Element;
   OverlayLabelLeft?: () => JSX.Element;
   OverlayLabelTop?: () => JSX.Element;
+  OverlayLabelBottom?: () => JSX.Element;
 };
 export type SwiperCardOptions = {
   index: number;
@@ -51,6 +57,7 @@ export type SwiperCardOptions = {
   onSwipeRight?: (index: number) => void;
   onSwipeLeft?: (index: number) => void;
   onSwipeTop?: (index: number) => void;
+  onSwipeBottom?: (index: number) => void;
   onSwipeStart?: () => void;
   onSwipeActive?: () => void;
   onSwipeEnd?: () => void;
@@ -58,6 +65,7 @@ export type SwiperCardOptions = {
   disableRightSwipe?: boolean;
   disableLeftSwipe?: boolean;
   disableTopSwipe?: boolean;
+  disableBottomSwipe?: boolean;
   translateXRange?: number[];
   rotateOutputRange?: number[];
   rotateInputRange?: number[];
@@ -68,7 +76,10 @@ export type SwiperCardOptions = {
   outputOverlayLabelLeftOpacityRange?: number[];
   inputOverlayLabelTopOpacityRange?: number[];
   outputOverlayLabelTopOpacityRange?: number[];
+  inputOverlayLabelBottomOpacityRange?: number[];
+  outputOverlayLabelBottomOpacityRange?: number[];
   OverlayLabelRight?: () => JSX.Element;
   OverlayLabelLeft?: () => JSX.Element;
   OverlayLabelTop?: () => JSX.Element;
+  OverlayLabelBottom?: () => JSX.Element;
 };

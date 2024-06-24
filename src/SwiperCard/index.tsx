@@ -21,6 +21,15 @@ import type { SwiperCardOptions, SwiperCardRefType } from 'rn-swiper-list';
 
 import OverlayLabel from './OverlayLabel';
 
+const SwipeBackUserConfig = {
+  damping: 15,
+  stiffness: 120,
+  mass: 0.5,
+  overshootClamping: false,
+  restDisplacementThreshold: 0.001,
+  restSpeedThreshold: 0.001,
+};
+
 const SwipeableCard = forwardRef<
   SwiperCardRefType,
   PropsWithChildren<SwiperCardOptions>
@@ -32,11 +41,13 @@ const SwipeableCard = forwardRef<
       onSwipeLeft,
       onSwipeRight,
       onSwipeTop,
+      onSwipeBottom,
       cardStyle,
       children,
       disableRightSwipe,
       disableLeftSwipe,
       disableTopSwipe,
+      disableBottomSwipe,
       translateXRange,
       translateYRange,
       rotateInputRange,
@@ -47,9 +58,12 @@ const SwipeableCard = forwardRef<
       outputOverlayLabelLeftOpacityRange,
       inputOverlayLabelTopOpacityRange,
       outputOverlayLabelTopOpacityRange,
+      inputOverlayLabelBottomOpacityRange,
+      outputOverlayLabelBottomOpacityRange,
       OverlayLabelRight,
       OverlayLabelLeft,
       OverlayLabelTop,
+      OverlayLabelBottom,
       onSwipeStart,
       onSwipeActive,
       onSwipeEnd,
@@ -83,11 +97,17 @@ const SwipeableCard = forwardRef<
       activeIndex.value++;
     }, [index, activeIndex, maxCardTranslationY, onSwipeTop, translateY]);
 
+    const swipeBottom = useCallback(() => {
+      onSwipeBottom?.(index);
+      translateY.value = withSpring(maxCardTranslationY);
+      activeIndex.value++;
+    }, [index, activeIndex, maxCardTranslationY, onSwipeBottom, translateY]);
+
     const swipeBack = useCallback(() => {
       cancelAnimation(translateX);
       cancelAnimation(translateY);
-      translateX.value = withSpring(0);
-      translateY.value = withSpring(0);
+      translateX.value = withSpring(0, SwipeBackUserConfig);
+      translateY.value = withSpring(0, SwipeBackUserConfig);
     }, [translateX, translateY]);
 
     useImperativeHandle(
@@ -98,9 +118,10 @@ const SwipeableCard = forwardRef<
           swipeRight,
           swipeBack,
           swipeTop,
+          swipeBottom,
         };
       },
-      [swipeLeft, swipeRight, swipeBack, swipeTop]
+      [swipeLeft, swipeRight, swipeBack, swipeTop, swipeBottom]
     );
 
     const inputRangeX = React.useMemo(() => {
@@ -129,6 +150,7 @@ const SwipeableCard = forwardRef<
 
         translateX.value = event.translationX;
         translateY.value = event.translationY;
+
         if (height / 3 < Math.abs(event.translationY)) {
           nextActiveIndex.value = interpolate(
             translateY.value,
@@ -159,6 +181,7 @@ const SwipeableCard = forwardRef<
         if (onSwipeEnd) runOnJS(onSwipeEnd)();
         if (nextActiveIndex.value === activeIndex.value + 1) {
           const sign = Math.sign(event.translationX);
+          const signY = Math.sign(event.translationY);
           const signPositionY = Number.isInteger(
             interpolate(
               translateY.value,
@@ -172,9 +195,15 @@ const SwipeableCard = forwardRef<
             )
           );
 
-          if (signPositionY && !disableTopSwipe) {
-            runOnJS(swipeTop)();
-            return;
+          if (signPositionY) {
+            if (signY === -1 && !disableTopSwipe) {
+              runOnJS(swipeTop)();
+              return;
+            }
+            if (signY === 1 && !disableBottomSwipe) {
+              runOnJS(swipeBottom)();
+              return;
+            }
           }
 
           if (!signPositionY) {
@@ -188,8 +217,8 @@ const SwipeableCard = forwardRef<
             }
           }
         }
-        translateX.value = withSpring(0);
-        translateY.value = withSpring(0);
+        translateX.value = withSpring(0, SwipeBackUserConfig);
+        translateY.value = withSpring(0, SwipeBackUserConfig);
       });
 
     const rCardStyle = useAnimatedStyle(() => {
@@ -237,6 +266,14 @@ const SwipeableCard = forwardRef<
               inputRange={inputOverlayLabelTopOpacityRange}
               outputRange={outputOverlayLabelTopOpacityRange}
               Component={OverlayLabelTop}
+              opacityValue={translateY}
+            />
+          )}
+          {OverlayLabelBottom && (
+            <OverlayLabel
+              inputRange={inputOverlayLabelBottomOpacityRange}
+              outputRange={outputOverlayLabelBottomOpacityRange}
+              Component={OverlayLabelBottom}
               opacityValue={translateY}
             />
           )}

@@ -16,10 +16,12 @@ const Swiper = <T,>(
     onSwipeLeft,
     onSwipedAll,
     onSwipeTop,
+    onSwipeBottom,
     cardStyle,
     disableRightSwipe,
     disableLeftSwipe,
     disableTopSwipe,
+    disableBottomSwipe,
     translateXRange = [-windowWidth / 3, 0, windowWidth / 3],
     translateYRange = [-windowHeight / 3, 0, windowHeight / 3],
     rotateInputRange = [-windowWidth / 3, 0, windowWidth / 3],
@@ -30,17 +32,27 @@ const Swiper = <T,>(
     outputOverlayLabelLeftOpacityRange = [0, 1],
     inputOverlayLabelTopOpacityRange = [0, -(windowHeight / 3)],
     outputOverlayLabelTopOpacityRange = [0, 1],
+    inputOverlayLabelBottomOpacityRange = [0, windowHeight / 3],
+    outputOverlayLabelBottomOpacityRange = [0, 1],
     OverlayLabelRight,
     OverlayLabelLeft,
     OverlayLabelTop,
+    OverlayLabelBottom,
     onSwipeStart,
     onSwipeActive,
     onSwipeEnd,
   }: SwiperOptions<T>,
   ref: ForwardedRef<SwiperCardRefType>
 ) => {
-  const { activeIndex, refs, swipeRight, swipeLeft, swipeBack, swipeTop } =
-    useSwipeControls(data);
+  const {
+    activeIndex,
+    refs,
+    swipeRight,
+    swipeLeft,
+    swipeBack,
+    swipeTop,
+    swipeBottom,
+  } = useSwipeControls(data);
 
   useImperativeHandle(
     ref,
@@ -50,9 +62,10 @@ const Swiper = <T,>(
         swipeRight,
         swipeBack,
         swipeTop,
+        swipeBottom,
       };
     },
-    [swipeLeft, swipeRight, swipeBack, swipeTop]
+    [swipeLeft, swipeRight, swipeBack, swipeTop, swipeBottom]
   );
 
   useAnimatedReaction(
@@ -76,6 +89,7 @@ const Swiper = <T,>(
         disableRightSwipe={disableRightSwipe}
         disableLeftSwipe={disableLeftSwipe}
         disableTopSwipe={disableTopSwipe}
+        disableBottomSwipe={disableBottomSwipe}
         translateXRange={translateXRange}
         translateYRange={translateYRange}
         rotateOutputRange={rotateOutputRange}
@@ -88,10 +102,17 @@ const Swiper = <T,>(
         outputOverlayLabelLeftOpacityRange={outputOverlayLabelLeftOpacityRange}
         inputOverlayLabelTopOpacityRange={inputOverlayLabelTopOpacityRange}
         outputOverlayLabelTopOpacityRange={outputOverlayLabelTopOpacityRange}
+        inputOverlayLabelBottomOpacityRange={
+          inputOverlayLabelBottomOpacityRange
+        }
+        outputOverlayLabelBottomOpacityRange={
+          outputOverlayLabelBottomOpacityRange
+        }
         activeIndex={activeIndex}
         OverlayLabelRight={OverlayLabelRight}
         OverlayLabelLeft={OverlayLabelLeft}
         OverlayLabelTop={OverlayLabelTop}
+        OverlayLabelBottom={OverlayLabelBottom}
         ref={refs[index]}
         onSwipeRight={(cardIndex) => {
           onSwipeRight?.(cardIndex);
@@ -101,6 +122,9 @@ const Swiper = <T,>(
         }}
         onSwipeTop={(cardIndex) => {
           onSwipeTop?.(cardIndex);
+        }}
+        onSwipeBottom={(cardIndex) => {
+          onSwipeBottom?.(cardIndex);
         }}
         onSwipeStart={onSwipeStart}
         onSwipeActive={onSwipeActive}
