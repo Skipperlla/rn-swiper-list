@@ -17,6 +17,7 @@ const Swiper = <T,>(
     onSwipedAll,
     onSwipeTop,
     onSwipeBottom,
+    onIndexChange,
     cardStyle,
     disableRightSwipe,
     disableLeftSwipe,
@@ -78,6 +79,19 @@ const Swiper = <T,>(
       }
     },
     [data]
+  );
+
+  //Listen to the activeIndex value
+  useAnimatedReaction(
+    () => {
+      return activeIndex.value;
+    },
+    (currentValue, previousValue) => {
+      if (currentValue !== previousValue && onIndexChange) {
+        runOnJS(onIndexChange)(currentValue);
+      }
+    },
+    []
   );
 
   return data.map((item, index) => {

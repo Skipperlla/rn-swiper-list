@@ -27,6 +27,8 @@ export type SwiperOptions<T> = {
   onSwipeStart?: () => void;
   onSwipeEnd?: () => void;
   onSwipeActive?: () => void;
+  //* Active Index Change Callback
+  onIndexChange?: (index: number) => void;
   //* Swipe Animation Props
   disableRightSwipe?: boolean;
   disableLeftSwipe?: boolean;
