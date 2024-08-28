@@ -94,6 +94,9 @@ const App = () => {
           cardStyle={styles.cardStyle}
           data={IMAGES}
           renderCard={renderCard}
+          onIndexChange={(index) => {
+            console.log('Current Active index', index);
+          }}
           onSwipeRight={(cardIndex) => {
             console.log('cardIndex', cardIndex);
           }}
