@@ -44,15 +44,16 @@ yarn add react-native-reanimated react-native-gesture-handler
 
 ## Event callbacks
 
-| Props         | type | description                                                                                    | default             |
-| :------------ | :--- | :--------------------------------------------------------------------------------------------- | :------------------ |
-| onSwipeLeft   | func | Function called when a card is swiped left. It receives the index of the card as a parameter.  | `(cardIndex) => {}` |
-| onSwipeRight  | func | Function called when a card is swiped right. It receives the index of the card as a parameter. | `(cardIndex) => {}` |
-| onSwipeTop    | func | Function called when a card is swiped top. It receives the index of the card as a parameter.   | `(cardIndex) => {}` |
-| onSwipedAll   | func | Function called when all cards have been swiped.                                               | `() => {}`          |
-| onSwipeStart  | func | Function called when a swipe event starts.                                                     | `() => {}`          |
-| onSwipeEnd    | func | Function called when a swipe event ends.                                                       | `() => {}`          |
-| onSwipeActive | func | Function called when a swipe event is active.                                                  | `() => {}`          |
+| Props         | type | description                                                                                           | default             |
+| :------------ | :--- | :---------------------------------------------------------------------------------------------------- | :------------------ |
+| onSwipeLeft   | func | Function called when a card is swiped left. It receives the index of the card as a parameter.         | `(cardIndex) => {}` |
+| onSwipeRight  | func | Function called when a card is swiped right. It receives the index of the card as a parameter.        | `(cardIndex) => {}` |
+| onSwipeTop    | func | Function called when a card is swiped top. It receives the index of the card as a parameter.          | `(cardIndex) => {}` |
+| onSwipedAll   | func | Function called when all cards have been swiped.                                                      | `() => {}`          |
+| onSwipeStart  | func | Function called when a swipe event starts.                                                            | `() => {}`          |
+| onSwipeEnd    | func | Function called when a swipe event ends.                                                              | `() => {}`          |
+| onSwipeActive | func | Function called when a swipe event is active.                                                         | `() => {}`          |
+| onIndexChange | func | Function called when the index of the card changes. It receives the index of the card as a parameter. | `(cardIndex) => {}` |
 
 ## Swipe Animation Props
 
@@ -182,6 +183,9 @@ const App = () => {
           cardStyle={styles.cardStyle}
           data={IMAGES}
           renderCard={renderCard}
+          onIndexChange={(index) => {
+            console.log('Current Active index', index);
+          }}
           onSwipeRight={(cardIndex) => {
             console.log('cardIndex', cardIndex);
           }}
