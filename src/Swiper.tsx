@@ -147,7 +147,7 @@ const Swiper = <T,>(
         {renderCard(item, index)}
       </SwiperCard>
     );
-  });
+  }).reverse(); // to render cards in same hierarchy as their z-index
 };
 
 function fixedForwardRef<T, P = {}>(
