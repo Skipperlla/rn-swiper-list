@@ -18,6 +18,7 @@ export type SwiperOptions<T> = {
   data: T[];
   renderCard: (item: T, index: number) => JSX.Element;
   cardStyle?: StyleProp<ViewStyle>;
+  chunkSize?: number;
   //* Event callbacks
   onSwipeLeft?: (cardIndex: number) => void;
   onSwipeRight?: (cardIndex: number) => void;
