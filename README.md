@@ -95,6 +95,10 @@ yarn add react-native-reanimated react-native-gesture-handler
 | swipeLeft  | callback | Animates the card to fling to the left and calls onSwipeLeft   |
 | swipeTop   | callback | Animates the card to fling to the top and calls onSwipeTop     |
 
+## Chunk Size
+
+`chunkSize` is the number of cards to display at a time. It's used to optimize the performance of the component by rendering only a few cards at a time. Default chunk size is 3.
+
 ## Usage 🧑‍💻
 
 ```typescript

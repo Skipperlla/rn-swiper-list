@@ -1,36 +1,27 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useCallback, useRef } from 'react';
-import {
-  Image,
-  StyleSheet,
-  View,
-  type ImageSourcePropType,
-} from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
 import { Swiper, type SwiperCardRefType } from 'rn-swiper-list';
 
 import { ActionButton } from '../components';
 
-const IMAGES: ImageSourcePropType[] = [
-  require('../assets/images/1.jpg'),
-  require('../assets/images/2.jpg'),
-  require('../assets/images/3.jpg'),
-  require('../assets/images/4.jpg'),
-  require('../assets/images/5.jpg'),
-  require('../assets/images/6.jpg'),
-];
+const IMAGES: string[] = Array.from(
+  { length: 100 },
+  (_, index) => `https://picsum.photos/408/661?random=${index}`
+);
 
 const ICON_SIZE = 24;
 
 const App = () => {
   const ref = useRef<SwiperCardRefType>();
 
-  const renderCard = useCallback((image: ImageSourcePropType) => {
+  const renderCard = useCallback((image: string) => {
     return (
       <View style={styles.renderCardContainer}>
         <Image
-          source={image}
+          source={{ uri: image }}
           style={styles.renderCardImage}
           resizeMode="cover"
         />

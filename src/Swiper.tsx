@@ -42,6 +42,7 @@ const Swiper = <T,>(
     onSwipeStart,
     onSwipeActive,
     onSwipeEnd,
+    chunkSize = 3,
   }: SwiperOptions<T>,
   ref: ForwardedRef<SwiperCardRefType>
 ) => {
@@ -94,60 +95,86 @@ const Swiper = <T,>(
     []
   );
 
-  return data.map((item, index) => {
-    return (
-      <SwiperCard
-        key={index}
-        cardStyle={cardStyle}
-        index={index}
-        disableRightSwipe={disableRightSwipe}
-        disableLeftSwipe={disableLeftSwipe}
-        disableTopSwipe={disableTopSwipe}
-        disableBottomSwipe={disableBottomSwipe}
-        translateXRange={translateXRange}
-        translateYRange={translateYRange}
-        rotateOutputRange={rotateOutputRange}
-        rotateInputRange={rotateInputRange}
-        inputOverlayLabelRightOpacityRange={inputOverlayLabelRightOpacityRange}
-        outputOverlayLabelRightOpacityRange={
-          outputOverlayLabelRightOpacityRange
-        }
-        inputOverlayLabelLeftOpacityRange={inputOverlayLabelLeftOpacityRange}
-        outputOverlayLabelLeftOpacityRange={outputOverlayLabelLeftOpacityRange}
-        inputOverlayLabelTopOpacityRange={inputOverlayLabelTopOpacityRange}
-        outputOverlayLabelTopOpacityRange={outputOverlayLabelTopOpacityRange}
-        inputOverlayLabelBottomOpacityRange={
-          inputOverlayLabelBottomOpacityRange
-        }
-        outputOverlayLabelBottomOpacityRange={
-          outputOverlayLabelBottomOpacityRange
-        }
-        activeIndex={activeIndex}
-        OverlayLabelRight={OverlayLabelRight}
-        OverlayLabelLeft={OverlayLabelLeft}
-        OverlayLabelTop={OverlayLabelTop}
-        OverlayLabelBottom={OverlayLabelBottom}
-        ref={refs[index]}
-        onSwipeRight={(cardIndex) => {
-          onSwipeRight?.(cardIndex);
-        }}
-        onSwipeLeft={(cardIndex) => {
-          onSwipeLeft?.(cardIndex);
-        }}
-        onSwipeTop={(cardIndex) => {
-          onSwipeTop?.(cardIndex);
-        }}
-        onSwipeBottom={(cardIndex) => {
-          onSwipeBottom?.(cardIndex);
-        }}
-        onSwipeStart={onSwipeStart}
-        onSwipeActive={onSwipeActive}
-        onSwipeEnd={onSwipeEnd}
-      >
-        {renderCard(item, index)}
-      </SwiperCard>
-    );
-  });
+  const getVisibleRange = (currentIndex: number, totalLength: number) => {
+    // Calculate the start of the current chunk
+    const currentChunk = Math.floor(currentIndex / chunkSize);
+    const start = Math.max(0, currentChunk * chunkSize);
+
+    // Calculate how many chunks ahead we should render
+    const remainingItems = totalLength - currentChunk * chunkSize;
+    const chunksAhead = Math.min(2, Math.ceil(remainingItems / chunkSize));
+
+    // Calculate the end index, ensuring we don't exceed the data length
+    const end = Math.min(totalLength, start + chunksAhead * chunkSize);
+
+    return { start, end };
+  };
+
+  return data
+    .slice(
+      getVisibleRange(activeIndex.value, data.length).start,
+      getVisibleRange(activeIndex.value, data.length).end
+    )
+    .map((item, slicedIndex) => {
+      const actualIndex =
+        getVisibleRange(activeIndex.value, data.length).start + slicedIndex;
+      return (
+        <SwiperCard
+          key={actualIndex}
+          cardStyle={cardStyle}
+          index={actualIndex}
+          disableRightSwipe={disableRightSwipe}
+          disableLeftSwipe={disableLeftSwipe}
+          disableTopSwipe={disableTopSwipe}
+          disableBottomSwipe={disableBottomSwipe}
+          translateXRange={translateXRange}
+          translateYRange={translateYRange}
+          rotateOutputRange={rotateOutputRange}
+          rotateInputRange={rotateInputRange}
+          inputOverlayLabelRightOpacityRange={
+            inputOverlayLabelRightOpacityRange
+          }
+          outputOverlayLabelRightOpacityRange={
+            outputOverlayLabelRightOpacityRange
+          }
+          inputOverlayLabelLeftOpacityRange={inputOverlayLabelLeftOpacityRange}
+          outputOverlayLabelLeftOpacityRange={
+            outputOverlayLabelLeftOpacityRange
+          }
+          inputOverlayLabelTopOpacityRange={inputOverlayLabelTopOpacityRange}
+          outputOverlayLabelTopOpacityRange={outputOverlayLabelTopOpacityRange}
+          inputOverlayLabelBottomOpacityRange={
+            inputOverlayLabelBottomOpacityRange
+          }
+          outputOverlayLabelBottomOpacityRange={
+            outputOverlayLabelBottomOpacityRange
+          }
+          activeIndex={activeIndex}
+          OverlayLabelRight={OverlayLabelRight}
+          OverlayLabelLeft={OverlayLabelLeft}
+          OverlayLabelTop={OverlayLabelTop}
+          OverlayLabelBottom={OverlayLabelBottom}
+          ref={refs[actualIndex]}
+          onSwipeRight={(cardIndex) => {
+            onSwipeRight?.(cardIndex);
+          }}
+          onSwipeLeft={(cardIndex) => {
+            onSwipeLeft?.(cardIndex);
+          }}
+          onSwipeTop={(cardIndex) => {
+            onSwipeTop?.(cardIndex);
+          }}
+          onSwipeBottom={(cardIndex) => {
+            onSwipeBottom?.(cardIndex);
+          }}
+          onSwipeStart={onSwipeStart}
+          onSwipeActive={onSwipeActive}
+          onSwipeEnd={onSwipeEnd}
+        >
+          {renderCard(item, actualIndex)}
+        </SwiperCard>
+      );
+    });
 };
 
 function fixedForwardRef<T, P = {}>(
