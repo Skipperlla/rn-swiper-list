@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, type ForwardedRef } from 'react';
+import React, { type ForwardedRef, useImperativeHandle } from 'react';
 import { runOnJS, useAnimatedReaction } from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
 import type { SwiperCardRefType, SwiperOptions } from 'rn-swiper-list';
@@ -54,6 +54,7 @@ const Swiper = <T,>(
     swipeBack,
     swipeTop,
     swipeBottom,
+    updateActiveIndex,
   } = useSwipeControls(data);
 
   useImperativeHandle(
@@ -72,7 +73,7 @@ const Swiper = <T,>(
 
   useAnimatedReaction(
     () => {
-      return activeIndex.value >= data.length;
+      return activeIndex >= data.length;
     },
     (isSwipingFinished: boolean) => {
       if (isSwipingFinished && onSwipedAll) {
@@ -85,7 +86,7 @@ const Swiper = <T,>(
   //Listen to the activeIndex value
   useAnimatedReaction(
     () => {
-      return activeIndex.value;
+      return activeIndex;
     },
     (currentValue, previousValue) => {
       if (currentValue !== previousValue && onIndexChange) {
@@ -112,17 +113,18 @@ const Swiper = <T,>(
 
   return data
     .slice(
-      getVisibleRange(activeIndex.value, data.length).start,
-      getVisibleRange(activeIndex.value, data.length).end
+      getVisibleRange(activeIndex, data.length).start,
+      getVisibleRange(activeIndex, data.length).end
     )
     .map((item, slicedIndex) => {
       const actualIndex =
-        getVisibleRange(activeIndex.value, data.length).start + slicedIndex;
+        getVisibleRange(activeIndex, data.length).start + slicedIndex;
       return (
         <SwiperCard
           key={actualIndex}
           cardStyle={cardStyle}
           index={actualIndex}
+          updateActiveIndex={updateActiveIndex}
           disableRightSwipe={disableRightSwipe}
           disableLeftSwipe={disableLeftSwipe}
           disableTopSwipe={disableTopSwipe}
@@ -180,7 +182,7 @@ const Swiper = <T,>(
 function fixedForwardRef<T, P = {}>(
   render: (props: P, ref: React.Ref<T>) => React.ReactNode
 ): (props: P & React.RefAttributes<T>) => React.ReactNode {
-  return React.forwardRef(render) as any;
+  return React.forwardRef(render as any) as any;
 }
 
 export default fixedForwardRef(Swiper);

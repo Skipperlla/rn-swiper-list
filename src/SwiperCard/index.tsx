@@ -1,9 +1,9 @@
 import React, {
   forwardRef,
   memo,
+  type PropsWithChildren,
   useCallback,
   useImperativeHandle,
-  type PropsWithChildren,
 } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -67,13 +67,14 @@ const SwipeableCard = forwardRef<
       onSwipeStart,
       onSwipeActive,
       onSwipeEnd,
+      updateActiveIndex,
     },
     ref
   ) => {
     const translateX = useSharedValue(0);
     const translateY = useSharedValue(0);
-    const currentActiveIndex = useSharedValue(Math.floor(activeIndex.value));
-    const nextActiveIndex = useSharedValue(Math.floor(activeIndex.value));
+    const currentActiveIndex = useSharedValue(Math.floor(activeIndex));
+    const nextActiveIndex = useSharedValue(Math.floor(activeIndex));
 
     const { width, height } = useWindowDimensions();
     const maxCardTranslation = width * 1.5;
@@ -82,26 +83,38 @@ const SwipeableCard = forwardRef<
     const swipeRight = useCallback(() => {
       onSwipeRight?.(index);
       translateX.value = withSpring(maxCardTranslation);
-      activeIndex.value++;
-    }, [index, activeIndex, maxCardTranslation, onSwipeRight, translateX]);
+      runOnJS(updateActiveIndex)(index + 1);
+    }, [
+      index,
+      maxCardTranslation,
+      onSwipeRight,
+      translateX,
+      updateActiveIndex,
+    ]);
 
     const swipeLeft = useCallback(() => {
       onSwipeLeft?.(index);
       translateX.value = withSpring(-maxCardTranslation);
-      activeIndex.value++;
-    }, [index, activeIndex, maxCardTranslation, onSwipeLeft, translateX]);
+      runOnJS(updateActiveIndex)(index + 1);
+    }, [index, maxCardTranslation, onSwipeLeft, translateX, updateActiveIndex]);
 
     const swipeTop = useCallback(() => {
       onSwipeTop?.(index);
       translateY.value = withSpring(-maxCardTranslationY);
-      activeIndex.value++;
-    }, [index, activeIndex, maxCardTranslationY, onSwipeTop, translateY]);
+      runOnJS(updateActiveIndex)(index + 1);
+    }, [index, maxCardTranslationY, onSwipeTop, translateY, updateActiveIndex]);
 
     const swipeBottom = useCallback(() => {
       onSwipeBottom?.(index);
       translateY.value = withSpring(maxCardTranslationY);
-      activeIndex.value++;
-    }, [index, activeIndex, maxCardTranslationY, onSwipeBottom, translateY]);
+      runOnJS(updateActiveIndex)(index + 1);
+    }, [
+      index,
+      maxCardTranslationY,
+      onSwipeBottom,
+      translateY,
+      updateActiveIndex,
+    ]);
 
     const swipeBack = useCallback(() => {
       cancelAnimation(translateX);
@@ -141,7 +154,7 @@ const SwipeableCard = forwardRef<
 
     const gesture = Gesture.Pan()
       .onBegin(() => {
-        currentActiveIndex.value = Math.floor(activeIndex.value);
+        currentActiveIndex.value = Math.floor(activeIndex);
         if (onSwipeStart) runOnJS(onSwipeStart)();
       })
       .onUpdate((event) => {
@@ -179,7 +192,7 @@ const SwipeableCard = forwardRef<
       .onFinalize((event) => {
         if (currentActiveIndex.value !== index) return;
         if (onSwipeEnd) runOnJS(onSwipeEnd)();
-        if (nextActiveIndex.value === activeIndex.value + 1) {
+        if (nextActiveIndex.value === activeIndex + 1) {
           const sign = Math.sign(event.translationX);
           const signY = Math.sign(event.translationY);
           const signPositionY = Number.isInteger(
@@ -222,8 +235,8 @@ const SwipeableCard = forwardRef<
       });
 
     const rCardStyle = useAnimatedStyle(() => {
-      const opacity = withTiming(index - activeIndex.value < 5 ? 1 : 0);
-      const scale = withTiming(1 - 0.07 * (index - activeIndex.value));
+      const opacity = withTiming(index - activeIndex < 5 ? 1 : 0);
+      const scale = withTiming(1 - 0.07 * (index - activeIndex));
       return {
         opacity,
         position: 'absolute',
