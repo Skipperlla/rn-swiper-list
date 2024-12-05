@@ -1,13 +1,17 @@
-import { createRef, useCallback, useMemo, type RefObject } from 'react';
-import { useSharedValue } from 'react-native-reanimated';
+import {
+  createRef,
+  type RefObject,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 import type { SwiperCardRefType } from 'rn-swiper-list';
 
 const useSwipeControls = <T>(data: T[]) => {
-  const activeIndex = useSharedValue(0);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const refs = useMemo(() => {
-    let cardRefs: RefObject<SwiperCardRefType>[] = [];
-
+    const cardRefs: RefObject<SwiperCardRefType>[] = [];
     for (let i = 0; i < data.length; i++) {
       cardRefs.push(createRef<SwiperCardRefType>());
     }
@@ -15,50 +19,51 @@ const useSwipeControls = <T>(data: T[]) => {
   }, [data]);
 
   const swipeRight = useCallback(() => {
-    if (!refs[activeIndex.value]) {
-      return;
-    }
-    refs[activeIndex.value]?.current?.swipeRight();
-  }, [activeIndex.value, refs]);
-  const swipeTop = useCallback(() => {
-    if (!refs[activeIndex.value]) {
-      return;
-    }
-    refs[activeIndex.value]?.current?.swipeTop();
-  }, [activeIndex.value, refs]);
+    refs[activeIndex]?.current?.swipeRight();
+    setActiveIndex((prev) => Math.min(prev + 1, data.length - 1));
+  }, [activeIndex, refs, data.length]);
 
   const swipeLeft = useCallback(() => {
-    if (!refs[activeIndex.value]) {
-      return;
-    }
-    refs[activeIndex.value]?.current?.swipeLeft();
-  }, [activeIndex.value, refs]);
+    refs[activeIndex]?.current?.swipeLeft();
+    setActiveIndex((prev) => Math.min(prev + 1, data.length - 1));
+  }, [activeIndex, refs, data.length]);
+
+  const swipeTop = useCallback(() => {
+    refs[activeIndex]?.current?.swipeTop();
+    setActiveIndex((prev) => Math.min(prev + 1, data.length - 1));
+  }, [activeIndex, refs, data.length]);
+
   const swipeBottom = useCallback(() => {
-    if (!refs[activeIndex.value]) {
-      return;
-    }
-    refs[activeIndex.value]?.current?.swipeBottom();
-  }, [activeIndex.value, refs]);
+    refs[activeIndex]?.current?.swipeBottom();
+    setActiveIndex((prev) => Math.min(prev + 1, data.length - 1));
+  }, [activeIndex, refs, data.length]);
 
   const swipeBack = useCallback(() => {
-    const previousIndex = activeIndex.value - 1;
-
-    if (previousIndex < 0 || !refs[previousIndex]) {
-      return;
+    if (activeIndex > 0) {
+      const previousIndex = activeIndex - 1;
+      refs[previousIndex]?.current?.swipeBack();
+      setActiveIndex(previousIndex);
     }
-
-    refs[previousIndex]?.current?.swipeBack();
-    activeIndex.value = previousIndex;
   }, [activeIndex, refs]);
+
+  const updateActiveIndex = useCallback(
+    (newIndex: number) => {
+      setActiveIndex((prev) =>
+        newIndex >= 0 && newIndex < data.length ? newIndex : prev
+      );
+    },
+    [data.length]
+  );
 
   return {
     activeIndex,
     refs,
     swipeRight,
     swipeLeft,
-    swipeBack,
     swipeTop,
     swipeBottom,
+    swipeBack,
+    updateActiveIndex,
   };
 };
 

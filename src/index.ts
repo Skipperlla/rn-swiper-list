@@ -1,5 +1,4 @@
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { SharedValue } from 'react-native-reanimated';
 
 export { default as Swiper } from './Swiper';
 
@@ -56,7 +55,8 @@ export type SwiperOptions<T> = {
 };
 export type SwiperCardOptions = {
   index: number;
-  activeIndex: SharedValue<number>;
+  activeIndex: number;
+  updateActiveIndex: (newIndex: number) => void;
   onSwipeRight?: (index: number) => void;
   onSwipeLeft?: (index: number) => void;
   onSwipeTop?: (index: number) => void;
