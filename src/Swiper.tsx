@@ -111,66 +111,72 @@ const Swiper = <T,>(
     []
   );
 
-  return data.map((item, index) => {
-    return (
-      <SwiperCard
-        key={index}
-        cardStyle={cardStyle}
-        index={index}
-        disableRightSwipe={disableRightSwipe}
-        disableLeftSwipe={disableLeftSwipe}
-        disableTopSwipe={disableTopSwipe}
-        disableBottomSwipe={disableBottomSwipe}
-        translateXRange={translateXRange}
-        translateYRange={translateYRange}
-        rotateOutputRange={rotateOutputRange}
-        rotateInputRange={rotateInputRange}
-        inputOverlayLabelRightOpacityRange={inputOverlayLabelRightOpacityRange}
-        outputOverlayLabelRightOpacityRange={
-          outputOverlayLabelRightOpacityRange
-        }
-        inputOverlayLabelLeftOpacityRange={inputOverlayLabelLeftOpacityRange}
-        outputOverlayLabelLeftOpacityRange={outputOverlayLabelLeftOpacityRange}
-        inputOverlayLabelTopOpacityRange={inputOverlayLabelTopOpacityRange}
-        outputOverlayLabelTopOpacityRange={outputOverlayLabelTopOpacityRange}
-        inputOverlayLabelBottomOpacityRange={
-          inputOverlayLabelBottomOpacityRange
-        }
-        outputOverlayLabelBottomOpacityRange={
-          outputOverlayLabelBottomOpacityRange
-        }
-        activeIndex={activeIndex}
-        OverlayLabelRight={OverlayLabelRight}
-        OverlayLabelLeft={OverlayLabelLeft}
-        OverlayLabelTop={OverlayLabelTop}
-        OverlayLabelBottom={OverlayLabelBottom}
-        ref={refs[index]}
-        onSwipeRight={(cardIndex) => {
-          onSwipeRight?.(cardIndex);
-        }}
-        onSwipeLeft={(cardIndex) => {
-          onSwipeLeft?.(cardIndex);
-        }}
-        onSwipeTop={(cardIndex) => {
-          onSwipeTop?.(cardIndex);
-        }}
-        onSwipeBottom={(cardIndex) => {
-          onSwipeBottom?.(cardIndex);
-        }}
-        onSwipeStart={onSwipeStart}
-        onSwipeActive={onSwipeActive}
-        onSwipeEnd={onSwipeEnd}
-        swipeBackXSpringConfig={swipeBackXSpringConfig}
-        swipeBackYSpringConfig={swipeBackYSpringConfig}
-        swipeRightSpringConfig={swipeRightSpringConfig}
-        swipeLeftSpringConfig={swipeLeftSpringConfig}
-        swipeTopSpringConfig={swipeTopSpringConfig}
-        swipeBottomSpringConfig={swipeBottomSpringConfig}
-      >
-        {renderCard(item, index)}
-      </SwiperCard>
-    );
-  }).reverse(); // to render cards in same hierarchy as their z-index
+  return data
+    .map((item, index) => {
+      return (
+        <SwiperCard
+          key={index}
+          cardStyle={cardStyle}
+          index={index}
+          disableRightSwipe={disableRightSwipe}
+          disableLeftSwipe={disableLeftSwipe}
+          disableTopSwipe={disableTopSwipe}
+          disableBottomSwipe={disableBottomSwipe}
+          translateXRange={translateXRange}
+          translateYRange={translateYRange}
+          rotateOutputRange={rotateOutputRange}
+          rotateInputRange={rotateInputRange}
+          inputOverlayLabelRightOpacityRange={
+            inputOverlayLabelRightOpacityRange
+          }
+          outputOverlayLabelRightOpacityRange={
+            outputOverlayLabelRightOpacityRange
+          }
+          inputOverlayLabelLeftOpacityRange={inputOverlayLabelLeftOpacityRange}
+          outputOverlayLabelLeftOpacityRange={
+            outputOverlayLabelLeftOpacityRange
+          }
+          inputOverlayLabelTopOpacityRange={inputOverlayLabelTopOpacityRange}
+          outputOverlayLabelTopOpacityRange={outputOverlayLabelTopOpacityRange}
+          inputOverlayLabelBottomOpacityRange={
+            inputOverlayLabelBottomOpacityRange
+          }
+          outputOverlayLabelBottomOpacityRange={
+            outputOverlayLabelBottomOpacityRange
+          }
+          activeIndex={activeIndex}
+          OverlayLabelRight={OverlayLabelRight}
+          OverlayLabelLeft={OverlayLabelLeft}
+          OverlayLabelTop={OverlayLabelTop}
+          OverlayLabelBottom={OverlayLabelBottom}
+          ref={refs[index]}
+          onSwipeRight={(cardIndex) => {
+            onSwipeRight?.(cardIndex);
+          }}
+          onSwipeLeft={(cardIndex) => {
+            onSwipeLeft?.(cardIndex);
+          }}
+          onSwipeTop={(cardIndex) => {
+            onSwipeTop?.(cardIndex);
+          }}
+          onSwipeBottom={(cardIndex) => {
+            onSwipeBottom?.(cardIndex);
+          }}
+          onSwipeStart={onSwipeStart}
+          onSwipeActive={onSwipeActive}
+          onSwipeEnd={onSwipeEnd}
+          swipeBackXSpringConfig={swipeBackXSpringConfig}
+          swipeBackYSpringConfig={swipeBackYSpringConfig}
+          swipeRightSpringConfig={swipeRightSpringConfig}
+          swipeLeftSpringConfig={swipeLeftSpringConfig}
+          swipeTopSpringConfig={swipeTopSpringConfig}
+          swipeBottomSpringConfig={swipeBottomSpringConfig}
+        >
+          {renderCard(item, index)}
+        </SwiperCard>
+      );
+    })
+    .reverse(); // to render cards in same hierarchy as their z-index
 };
 
 function fixedForwardRef<T, P = {}>(
