@@ -21,15 +21,6 @@ import type { SwiperCardOptions, SwiperCardRefType } from 'rn-swiper-list';
 
 import OverlayLabel from './OverlayLabel';
 
-const SwipeBackUserConfig = {
-  damping: 15,
-  stiffness: 120,
-  mass: 0.5,
-  overshootClamping: false,
-  restDisplacementThreshold: 0.001,
-  restSpeedThreshold: 0.001,
-};
-
 const SwipeableCard = forwardRef<
   SwiperCardRefType,
   PropsWithChildren<SwiperCardOptions>
@@ -67,6 +58,10 @@ const SwipeableCard = forwardRef<
       onSwipeStart,
       onSwipeActive,
       onSwipeEnd,
+      swipeBackXSpringConfig,
+      swipeBackYSpringConfig,
+      swipeXSpringConfig,
+      swipeYSpringConfig,
     },
     ref
   ) => {
@@ -106,9 +101,14 @@ const SwipeableCard = forwardRef<
     const swipeBack = useCallback(() => {
       cancelAnimation(translateX);
       cancelAnimation(translateY);
-      translateX.value = withSpring(0, SwipeBackUserConfig);
-      translateY.value = withSpring(0, SwipeBackUserConfig);
-    }, [translateX, translateY]);
+      translateX.value = withSpring(0, swipeBackXSpringConfig);
+      translateY.value = withSpring(0, swipeBackYSpringConfig);
+    }, [
+      translateX,
+      translateY,
+      swipeBackXSpringConfig,
+      swipeBackYSpringConfig,
+    ]);
 
     useImperativeHandle(
       ref,
@@ -217,8 +217,8 @@ const SwipeableCard = forwardRef<
             }
           }
         }
-        translateX.value = withSpring(0, SwipeBackUserConfig);
-        translateY.value = withSpring(0, SwipeBackUserConfig);
+        translateX.value = withSpring(0, swipeXSpringConfig);
+        translateY.value = withSpring(0, swipeYSpringConfig);
       });
 
     const rCardStyle = useAnimatedStyle(() => {
