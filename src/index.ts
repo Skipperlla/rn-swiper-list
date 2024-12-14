@@ -19,6 +19,7 @@ export type SwiperOptions<T> = {
   data: T[];
   renderCard: (item: T, index: number) => JSX.Element;
   cardStyle?: StyleProp<ViewStyle>;
+  loop?: boolean;
   //* Event callbacks
   onSwipeLeft?: (cardIndex: number) => void;
   onSwipeRight?: (cardIndex: number) => void;
@@ -72,6 +73,7 @@ export type SwiperCardOptions = {
   onSwipeActive?: () => void;
   onSwipeEnd?: () => void;
   cardStyle?: StyleProp<ViewStyle>;
+  loop?: boolean;
   disableRightSwipe?: boolean;
   disableLeftSwipe?: boolean;
   disableTopSwipe?: boolean;

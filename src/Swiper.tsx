@@ -58,6 +58,7 @@ const Swiper = <T,>(
     swipeLeftSpringConfig = SWIPE_SPRING_CONFIG,
     swipeTopSpringConfig = SWIPE_SPRING_CONFIG,
     swipeBottomSpringConfig = SWIPE_SPRING_CONFIG,
+    loop = false,
   }: SwiperOptions<T>,
   ref: ForwardedRef<SwiperCardRefType>
 ) => {
@@ -69,7 +70,7 @@ const Swiper = <T,>(
     swipeBack,
     swipeTop,
     swipeBottom,
-  } = useSwipeControls(data);
+  } = useSwipeControls(data, loop);
 
   useImperativeHandle(
     ref,
