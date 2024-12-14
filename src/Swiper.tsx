@@ -54,6 +54,10 @@ const Swiper = <T,>(
     onSwipeEnd,
     swipeBackXSpringConfig = SWIPE_SPRING_CONFIG,
     swipeBackYSpringConfig = SWIPE_SPRING_CONFIG,
+    swipeRightSpringConfig = SWIPE_SPRING_CONFIG,
+    swipeLeftSpringConfig = SWIPE_SPRING_CONFIG,
+    swipeTopSpringConfig = SWIPE_SPRING_CONFIG,
+    swipeBottomSpringConfig = SWIPE_SPRING_CONFIG,
   }: SwiperOptions<T>,
   ref: ForwardedRef<SwiperCardRefType>
 ) => {
@@ -157,6 +161,10 @@ const Swiper = <T,>(
         onSwipeEnd={onSwipeEnd}
         swipeBackXSpringConfig={swipeBackXSpringConfig}
         swipeBackYSpringConfig={swipeBackYSpringConfig}
+        swipeRightSpringConfig={swipeRightSpringConfig}
+        swipeLeftSpringConfig={swipeLeftSpringConfig}
+        swipeTopSpringConfig={swipeTopSpringConfig}
+        swipeBottomSpringConfig={swipeBottomSpringConfig}
       >
         {renderCard(item, index)}
       </SwiperCard>

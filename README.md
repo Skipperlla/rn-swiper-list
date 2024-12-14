@@ -101,6 +101,10 @@ yarn add react-native-reanimated react-native-gesture-handler
 | :--------------------- | :----------- | :----------------------------------------------------------- |
 | swipeBackXSpringConfig | SpringConfig | Spring configuration for swipe back animation on the X-axis. |
 | swipeBackYSpringConfig | SpringConfig | Spring configuration for swipe back animation on the Y-axis. |
+| swipeRightSpringConfig | SpringConfig | Spring configuration for swipe right animation on the X-axis. |
+| swipeLeftSpringConfig  | SpringConfig | Spring configuration for swipe left animation on the X-axis.  |
+| swipeTopSpringConfig   | SpringConfig | Spring configuration for swipe top animation on the Y-axis. |
+| swipeBottomSpringConfig | SpringConfig | Spring configuration for swipe bottom animation on the Y-axis. |
 
 ### What is Spring Config?
 
@@ -400,6 +404,10 @@ type SwiperOptions<T> = {
    */
   swipeBackXSpringConfig?: SpringConfig;
   swipeBackYSpringConfig?: SpringConfig;
+  swipeRightSpringConfig?: SpringConfig;
+  swipeLeftSpringConfig?: SpringConfig;
+  swipeTopSpringConfig?: SpringConfig;
+  swipeBottomSpringConfig?: SpringConfig;
 };
 ```
 
