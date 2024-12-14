@@ -5,8 +5,18 @@ import type { SwiperCardRefType, SwiperOptions } from 'rn-swiper-list';
 
 import useSwipeControls from './hooks/useSwipeControls';
 import SwiperCard from './SwiperCard';
+import type { SpringConfig } from 'react-native-reanimated/lib/typescript/reanimated2/animation/springUtils';
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get('screen');
+
+const SWIPE_SPRING_CONFIG: SpringConfig = {
+  damping: 20,
+  stiffness: 50,
+  mass: 1,
+  overshootClamping: true,
+  restDisplacementThreshold: 0.0001,
+  restSpeedThreshold: 0.0001,
+};
 
 const Swiper = <T,>(
   {
@@ -42,6 +52,12 @@ const Swiper = <T,>(
     onSwipeStart,
     onSwipeActive,
     onSwipeEnd,
+    swipeBackXSpringConfig = SWIPE_SPRING_CONFIG,
+    swipeBackYSpringConfig = SWIPE_SPRING_CONFIG,
+    swipeRightSpringConfig = SWIPE_SPRING_CONFIG,
+    swipeLeftSpringConfig = SWIPE_SPRING_CONFIG,
+    swipeTopSpringConfig = SWIPE_SPRING_CONFIG,
+    swipeBottomSpringConfig = SWIPE_SPRING_CONFIG,
   }: SwiperOptions<T>,
   ref: ForwardedRef<SwiperCardRefType>
 ) => {
@@ -143,6 +159,12 @@ const Swiper = <T,>(
         onSwipeStart={onSwipeStart}
         onSwipeActive={onSwipeActive}
         onSwipeEnd={onSwipeEnd}
+        swipeBackXSpringConfig={swipeBackXSpringConfig}
+        swipeBackYSpringConfig={swipeBackYSpringConfig}
+        swipeRightSpringConfig={swipeRightSpringConfig}
+        swipeLeftSpringConfig={swipeLeftSpringConfig}
+        swipeTopSpringConfig={swipeTopSpringConfig}
+        swipeBottomSpringConfig={swipeBottomSpringConfig}
       >
         {renderCard(item, index)}
       </SwiperCard>

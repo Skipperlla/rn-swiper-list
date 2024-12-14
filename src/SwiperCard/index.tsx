@@ -21,15 +21,6 @@ import type { SwiperCardOptions, SwiperCardRefType } from 'rn-swiper-list';
 
 import OverlayLabel from './OverlayLabel';
 
-const SwipeBackUserConfig = {
-  damping: 15,
-  stiffness: 120,
-  mass: 0.5,
-  overshootClamping: false,
-  restDisplacementThreshold: 0.001,
-  restSpeedThreshold: 0.001,
-};
-
 const SwipeableCard = forwardRef<
   SwiperCardRefType,
   PropsWithChildren<SwiperCardOptions>
@@ -67,6 +58,12 @@ const SwipeableCard = forwardRef<
       onSwipeStart,
       onSwipeActive,
       onSwipeEnd,
+      swipeBackXSpringConfig,
+      swipeBackYSpringConfig,
+      swipeRightSpringConfig,
+      swipeLeftSpringConfig,
+      swipeTopSpringConfig,
+      swipeBottomSpringConfig,
     },
     ref
   ) => {
@@ -81,34 +78,70 @@ const SwipeableCard = forwardRef<
 
     const swipeRight = useCallback(() => {
       onSwipeRight?.(index);
-      translateX.value = withSpring(maxCardTranslation);
+      translateX.value = withSpring(maxCardTranslation, swipeRightSpringConfig);
       activeIndex.value++;
-    }, [index, activeIndex, maxCardTranslation, onSwipeRight, translateX]);
+    }, [
+      index,
+      activeIndex,
+      maxCardTranslation,
+      onSwipeRight,
+      translateX,
+      swipeRightSpringConfig,
+    ]);
 
     const swipeLeft = useCallback(() => {
       onSwipeLeft?.(index);
-      translateX.value = withSpring(-maxCardTranslation);
+      translateX.value = withSpring(-maxCardTranslation, swipeLeftSpringConfig);
       activeIndex.value++;
-    }, [index, activeIndex, maxCardTranslation, onSwipeLeft, translateX]);
+    }, [
+      index,
+      activeIndex,
+      maxCardTranslation,
+      onSwipeLeft,
+      translateX,
+      swipeLeftSpringConfig,
+    ]);
 
     const swipeTop = useCallback(() => {
       onSwipeTop?.(index);
-      translateY.value = withSpring(-maxCardTranslationY);
+      translateY.value = withSpring(-maxCardTranslationY, swipeTopSpringConfig);
       activeIndex.value++;
-    }, [index, activeIndex, maxCardTranslationY, onSwipeTop, translateY]);
+    }, [
+      index,
+      activeIndex,
+      maxCardTranslationY,
+      onSwipeTop,
+      translateY,
+      swipeTopSpringConfig,
+    ]);
 
     const swipeBottom = useCallback(() => {
       onSwipeBottom?.(index);
-      translateY.value = withSpring(maxCardTranslationY);
+      translateY.value = withSpring(
+        maxCardTranslationY,
+        swipeBottomSpringConfig
+      );
       activeIndex.value++;
-    }, [index, activeIndex, maxCardTranslationY, onSwipeBottom, translateY]);
+    }, [
+      index,
+      activeIndex,
+      maxCardTranslationY,
+      onSwipeBottom,
+      translateY,
+      swipeBottomSpringConfig,
+    ]);
 
     const swipeBack = useCallback(() => {
       cancelAnimation(translateX);
       cancelAnimation(translateY);
-      translateX.value = withSpring(0, SwipeBackUserConfig);
-      translateY.value = withSpring(0, SwipeBackUserConfig);
-    }, [translateX, translateY]);
+      translateX.value = withSpring(0, swipeBackXSpringConfig);
+      translateY.value = withSpring(0, swipeBackYSpringConfig);
+    }, [
+      translateX,
+      translateY,
+      swipeBackXSpringConfig,
+      swipeBackYSpringConfig,
+    ]);
 
     useImperativeHandle(
       ref,
@@ -217,8 +250,8 @@ const SwipeableCard = forwardRef<
             }
           }
         }
-        translateX.value = withSpring(0, SwipeBackUserConfig);
-        translateY.value = withSpring(0, SwipeBackUserConfig);
+        translateX.value = withSpring(0, swipeBackXSpringConfig);
+        translateY.value = withSpring(0, swipeBackYSpringConfig);
       });
 
     const rCardStyle = useAnimatedStyle(() => {

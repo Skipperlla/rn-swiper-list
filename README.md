@@ -95,6 +95,32 @@ yarn add react-native-reanimated react-native-gesture-handler
 | swipeLeft  | callback | Animates the card to fling to the left and calls onSwipeLeft   |
 | swipeTop   | callback | Animates the card to fling to the top and calls onSwipeTop     |
 
+## Swipe Animation Spring Configs (Animation Speed)
+
+| props                  | type         | description                                                  |
+| :--------------------- | :----------- | :----------------------------------------------------------- |
+| swipeBackXSpringConfig | SpringConfig | Spring configuration for swipe back animation on the X-axis. |
+| swipeBackYSpringConfig | SpringConfig | Spring configuration for swipe back animation on the Y-axis. |
+| swipeRightSpringConfig | SpringConfig | Spring configuration for swipe right animation on the X-axis. |
+| swipeLeftSpringConfig  | SpringConfig | Spring configuration for swipe left animation on the X-axis.  |
+| swipeTopSpringConfig   | SpringConfig | Spring configuration for swipe top animation on the Y-axis. |
+| swipeBottomSpringConfig | SpringConfig | Spring configuration for swipe bottom animation on the Y-axis. |
+
+### What is Spring Config?
+
+Spring configuration is used to control the animation behavior of the swipe actions. The spring configuration consists of several parameters that define the physical properties of the spring animation. Here are the details of each parameter:
+
+| Parameter                 | Type   | Description                                                                                                                                                |
+| :------------------------ | :----- | :--------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| damping                   | number | Controls the amount of damping in the spring. Higher values result in more damping, causing the animation to slow down more quickly.                       |
+| stiffness                 | number | Controls the stiffness of the spring. Higher values result in a stiffer spring, causing the animation to be more rigid and faster.                         |
+| mass                      | number | Controls the mass of the object being animated. Higher values result in a heavier object, causing the animation to be slower.                              |
+| overshootClamping         | bool   | If true, the spring animation will not overshoot its target value. This means the animation will stop exactly at the target value without bouncing.        |
+| restDisplacementThreshold | number | The threshold for the displacement of the spring below which the spring is considered to be at rest. Lower values result in a more precise stopping point. |
+| restSpeedThreshold        | number | The threshold for the speed of the spring below which the spring is considered to be at rest. Lower values result in a more precise stopping point.        |
+
+These parameters can be adjusted to achieve the desired animation behavior for the swipe actions. The default values provided in the `SWIPE_SPRING_CONFIG` are:
+
 ## Usage 🧑‍💻
 
 ```typescript
@@ -373,6 +399,15 @@ type SwiperOptions<T> = {
   OverlayLabelRight?: () => JSX.Element;
   OverlayLabelLeft?: () => JSX.Element;
   OverlayLabelTop?: () => JSX.Element;
+  /*
+   * Swipe Animation Spring Configs (Animation Speed)
+   */
+  swipeBackXSpringConfig?: SpringConfig;
+  swipeBackYSpringConfig?: SpringConfig;
+  swipeRightSpringConfig?: SpringConfig;
+  swipeLeftSpringConfig?: SpringConfig;
+  swipeTopSpringConfig?: SpringConfig;
+  swipeBottomSpringConfig?: SpringConfig;
 };
 ```
 
