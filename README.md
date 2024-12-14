@@ -97,27 +97,25 @@ yarn add react-native-reanimated react-native-gesture-handler
 
 ## Swipe Animation Spring Configs (Animation Speed)
 
-| props              | type   | description                                                                 |
-| :----------------- | :----- | :-------------------------------------------------------------------------- |
+| props                  | type         | description                                                  |
+| :--------------------- | :----------- | :----------------------------------------------------------- |
 | swipeBackXSpringConfig | SpringConfig | Spring configuration for swipe back animation on the X-axis. |
 | swipeBackYSpringConfig | SpringConfig | Spring configuration for swipe back animation on the Y-axis. |
-| swipeXSpringConfig | SpringConfig | Spring configuration for swipe animation on the X-axis. |
-| swipeYSpringConfig | SpringConfig | Spring configuration for swipe animation on the Y-axis. |
+
 ### What is Spring Config?
 
 Spring configuration is used to control the animation behavior of the swipe actions. The spring configuration consists of several parameters that define the physical properties of the spring animation. Here are the details of each parameter:
 
-| Parameter                    | Type   | Description                                                                                           |
-| :--------------------------- | :----- | :---------------------------------------------------------------------------------------------------- |
-| damping                      | number | Controls the amount of damping in the spring. Higher values result in more damping, causing the animation to slow down more quickly. |
-| stiffness                    | number | Controls the stiffness of the spring. Higher values result in a stiffer spring, causing the animation to be more rigid and faster. |
-| mass                         | number | Controls the mass of the object being animated. Higher values result in a heavier object, causing the animation to be slower. |
-| overshootClamping            | bool   | If true, the spring animation will not overshoot its target value. This means the animation will stop exactly at the target value without bouncing. |
-| restDisplacementThreshold    | number | The threshold for the displacement of the spring below which the spring is considered to be at rest. Lower values result in a more precise stopping point. |
-| restSpeedThreshold           | number | The threshold for the speed of the spring below which the spring is considered to be at rest. Lower values result in a more precise stopping point. |
+| Parameter                 | Type   | Description                                                                                                                                                |
+| :------------------------ | :----- | :--------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| damping                   | number | Controls the amount of damping in the spring. Higher values result in more damping, causing the animation to slow down more quickly.                       |
+| stiffness                 | number | Controls the stiffness of the spring. Higher values result in a stiffer spring, causing the animation to be more rigid and faster.                         |
+| mass                      | number | Controls the mass of the object being animated. Higher values result in a heavier object, causing the animation to be slower.                              |
+| overshootClamping         | bool   | If true, the spring animation will not overshoot its target value. This means the animation will stop exactly at the target value without bouncing.        |
+| restDisplacementThreshold | number | The threshold for the displacement of the spring below which the spring is considered to be at rest. Lower values result in a more precise stopping point. |
+| restSpeedThreshold        | number | The threshold for the speed of the spring below which the spring is considered to be at rest. Lower values result in a more precise stopping point.        |
 
 These parameters can be adjusted to achieve the desired animation behavior for the swipe actions. The default values provided in the `SWIPE_SPRING_CONFIG` are:
-
 
 ## Usage 🧑‍💻
 
@@ -402,8 +400,6 @@ type SwiperOptions<T> = {
    */
   swipeBackXSpringConfig?: SpringConfig;
   swipeBackYSpringConfig?: SpringConfig;
-  swipeXSpringConfig?: SpringConfig;
-  swipeYSpringConfig?: SpringConfig;
 };
 ```
 

@@ -56,8 +56,6 @@ export type SwiperOptions<T> = {
   //* Swipe Animation Spring Configs (Animation Speed)
   swipeBackXSpringConfig?: SpringConfig;
   swipeBackYSpringConfig?: SpringConfig;
-  swipeXSpringConfig?: SpringConfig;
-  swipeYSpringConfig?: SpringConfig;
 };
 export type SwiperCardOptions = {
   index: number;
@@ -92,6 +90,4 @@ export type SwiperCardOptions = {
   OverlayLabelBottom?: () => JSX.Element;
   swipeBackXSpringConfig?: SpringConfig;
   swipeBackYSpringConfig?: SpringConfig;
-  swipeXSpringConfig?: SpringConfig;
-  swipeYSpringConfig?: SpringConfig;
 };

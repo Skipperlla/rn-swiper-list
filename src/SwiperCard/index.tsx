@@ -60,8 +60,6 @@ const SwipeableCard = forwardRef<
       onSwipeEnd,
       swipeBackXSpringConfig,
       swipeBackYSpringConfig,
-      swipeXSpringConfig,
-      swipeYSpringConfig,
     },
     ref
   ) => {
@@ -217,8 +215,8 @@ const SwipeableCard = forwardRef<
             }
           }
         }
-        translateX.value = withSpring(0, swipeXSpringConfig);
-        translateY.value = withSpring(0, swipeYSpringConfig);
+        translateX.value = withSpring(0, swipeBackXSpringConfig);
+        translateY.value = withSpring(0, swipeBackYSpringConfig);
       });
 
     const rCardStyle = useAnimatedStyle(() => {
