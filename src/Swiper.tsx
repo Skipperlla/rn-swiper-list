@@ -59,6 +59,7 @@ const Swiper = <T,>(
     swipeTopSpringConfig = SWIPE_SPRING_CONFIG,
     swipeBottomSpringConfig = SWIPE_SPRING_CONFIG,
     loop = false,
+    keyExtractor,
   }: SwiperOptions<T>,
   ref: ForwardedRef<SwiperCardRefType>
 ) => {
@@ -115,7 +116,7 @@ const Swiper = <T,>(
     .map((item, index) => {
       return (
         <SwiperCard
-          key={index}
+          key={keyExtractor ? keyExtractor(item, index) : index}
           cardStyle={cardStyle}
           index={index}
           disableRightSwipe={disableRightSwipe}
