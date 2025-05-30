@@ -22,6 +22,7 @@ const Swiper = <T,>(
   {
     data,
     renderCard,
+    prerenderItems = 2,
     onSwipeRight,
     onSwipeLeft,
     onSwipedAll,
@@ -114,6 +115,10 @@ const Swiper = <T,>(
 
   return data
     .map((item, index) => {
+      if (index < activeIndex.value || index > activeIndex.value + prerenderItems) {
+        return null;
+      }
+
       return (
         <SwiperCard
           key={keyExtractor ? keyExtractor(item, index) : index}
