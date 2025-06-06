@@ -35,14 +35,15 @@ yarn add react-native-reanimated react-native-gesture-handler
 
 ## Card Props
 
-| Props      | type                     | description                                                                            | required | default |
-| :--------- | :----------------------- | :------------------------------------------------------------------------------------- | :------- | :------ |
-| data       | array                    | Array of data objects used to render the cards.                                        | Yes      |         |
-| renderCard | func(cardData,cardIndex) | Function that renders a card based on the provided data and index.                     | Yes      |         |
-| cardStyle  | object                   | CSS style properties applied to each card. These can be applied inline.                |          |         |
-| keyExtractor | func                   | Function that returns a unique key for each card based on the provided data.           | No       |         |
-| children   | React.ReactNode          | Child components to be displayed inside the component. Used typically for composition. |          |         |
-| loop       | bool                     | If true, the swiper will loop back to the first card after the last card is swiped.    | No       | false   |
+| Props        | type                     | description                                                                            | required | default        |
+| :----------- | :----------------------- | :------------------------------------------------------------------------------------- | :------- | :------------- |
+| data         | array                    | Array of data objects used to render the cards.                                        | Yes      |                |
+| renderCard   | func(cardData,cardIndex) | Function that renders a card based on the provided data and index.                     | Yes      |                |
+| prerenderItems | number                 | Number of cards to prerender ahead of the active card for better performance.           | No       | data.length - 1|
+| cardStyle    | object                   | CSS style properties applied to each card. These can be applied inline.                |          |                |
+| keyExtractor | func                     | Function that returns a unique key for each card based on the provided data.           | No       |                |
+| children     | React.ReactNode          | Child components to be displayed inside the component. Used typically for composition. |          |                |
+| loop         | bool                     | If true, the swiper will loop back to the first card after the last card is swiped.    | No       | false          |
 
 ## Event callbacks
 
@@ -365,6 +366,7 @@ type SwiperOptions<T> = {
    */
   data: T[];
   renderCard: (item: T, index: number) => JSX.Element;
+  prerenderItems?: number;
   cardStyle?: StyleProp<ViewStyle>;
   /*
    * Children components

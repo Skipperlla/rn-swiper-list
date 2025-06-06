@@ -18,6 +18,7 @@ export type SwiperOptions<T> = {
   //* Card Props
   data: T[];
   renderCard: (item: T, index: number) => JSX.Element;
+  prerenderItems?: number;
   cardStyle?: StyleProp<ViewStyle>;
   loop?: boolean;
   //* Event callbacks
