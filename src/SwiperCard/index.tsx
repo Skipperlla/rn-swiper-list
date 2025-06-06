@@ -29,6 +29,7 @@ const SwipeableCard = forwardRef<
     {
       index,
       activeIndex,
+      prerenderItems = 5,
       onSwipeLeft,
       onSwipeRight,
       onSwipeTop,
@@ -69,8 +70,10 @@ const SwipeableCard = forwardRef<
   ) => {
     const translateX = useSharedValue(0);
     const translateY = useSharedValue(0);
-    const currentActiveIndex = useSharedValue(Math.floor(activeIndex.value));
-    const nextActiveIndex = useSharedValue(Math.floor(activeIndex.value));
+
+    // Don't access activeIndex.value during render - use 0 as initial value
+    // These will be updated in gesture handlers
+    const nextActiveIndex = useSharedValue(0);
 
     const { width, height } = useWindowDimensions();
     const maxCardTranslation = width * 1.5;
@@ -174,11 +177,13 @@ const SwipeableCard = forwardRef<
 
     const gesture = Gesture.Pan()
       .onBegin(() => {
-        currentActiveIndex.value = Math.floor(activeIndex.value);
+        nextActiveIndex.value = Math.floor(activeIndex.value);
         if (onSwipeStart) runOnJS(onSwipeStart)();
       })
       .onUpdate((event) => {
-        if (currentActiveIndex.value !== index) return;
+        // Use activeIndex.value directly in worklet context
+        const currentActive = Math.floor(activeIndex.value);
+        if (currentActive !== index) return;
         if (onSwipeActive) runOnJS(onSwipeActive)();
 
         translateX.value = event.translationX;
@@ -188,11 +193,7 @@ const SwipeableCard = forwardRef<
           nextActiveIndex.value = interpolate(
             translateY.value,
             inputRangeY,
-            [
-              currentActiveIndex.value + 1,
-              currentActiveIndex.value,
-              currentActiveIndex.value + 1,
-            ],
+            [currentActive + 1, currentActive, currentActive + 1],
             'clamp'
           );
           return;
@@ -201,16 +202,13 @@ const SwipeableCard = forwardRef<
         nextActiveIndex.value = interpolate(
           translateX.value,
           inputRangeX,
-          [
-            currentActiveIndex.value + 1,
-            currentActiveIndex.value,
-            currentActiveIndex.value + 1,
-          ],
+          [currentActive + 1, currentActive, currentActive + 1],
           'clamp'
         );
       })
       .onFinalize((event) => {
-        if (currentActiveIndex.value !== index) return;
+        const currentActive = Math.floor(activeIndex.value);
+        if (currentActive !== index) return;
         if (onSwipeEnd) runOnJS(onSwipeEnd)();
         if (nextActiveIndex.value === activeIndex.value + 1) {
           const sign = Math.sign(event.translationX);
@@ -219,11 +217,7 @@ const SwipeableCard = forwardRef<
             interpolate(
               translateY.value,
               inputRangeY,
-              [
-                currentActiveIndex.value + 1,
-                currentActiveIndex.value,
-                currentActiveIndex.value + 1,
-              ],
+              [currentActive + 1, currentActive, currentActive + 1],
               'clamp'
             )
           );
@@ -255,15 +249,24 @@ const SwipeableCard = forwardRef<
       });
 
     const rCardStyle = useAnimatedStyle(() => {
-      const opacity = withTiming(index - activeIndex.value < 5 ? 1 : 0);
-      const scale = withTiming(1 - 0.07 * (index - activeIndex.value));
+      // Handle visibility and rendering based on prerenderItems using animated values
+      // Don't access activeIndex.value directly - use derived values instead
+      const currentActive = Math.floor(activeIndex.value);
+      const shouldRender =
+        index < currentActive + prerenderItems && index >= currentActive - 1;
+      const indexDiff = index - currentActive;
+
+      const opacity = withTiming(
+        shouldRender && indexDiff < prerenderItems ? 1 : 0
+      );
+      const scale = withTiming(1 - 0.07 * indexDiff);
+
       return {
         opacity,
         position: 'absolute',
         zIndex: -index,
         transform: [
           { rotate: `${rotateX.value}rad` },
-
           { scale: scale },
           {
             translateX: translateX.value,

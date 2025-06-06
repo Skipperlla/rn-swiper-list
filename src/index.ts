@@ -67,6 +67,7 @@ export type SwiperOptions<T> = {
 export type SwiperCardOptions = {
   index: number;
   activeIndex: SharedValue<number>;
+  prerenderItems?: number;
   onSwipeRight?: (index: number) => void;
   onSwipeLeft?: (index: number) => void;
   onSwipeTop?: (index: number) => void;
