@@ -100,6 +100,9 @@ const App = () => {
           onSwipeRight={(cardIndex) => {
             console.log('cardIndex', cardIndex);
           }}
+          onPress={() => {
+            console.log('onPress');
+          }}
           onSwipedAll={() => {
             console.log('onSwipedAll');
           }}
