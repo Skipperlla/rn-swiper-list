@@ -22,7 +22,7 @@ const Swiper = <T,>(
   {
     data,
     renderCard,
-    prerenderItems = 2,
+    prerenderItems = data.length - 1,
     onSwipeRight,
     onSwipeLeft,
     onSwipedAll,
@@ -115,7 +115,10 @@ const Swiper = <T,>(
 
   return data
     .map((item, index) => {
-      if (index < activeIndex.value || index > activeIndex.value + prerenderItems) {
+      if (
+        index < activeIndex.value ||
+        index > activeIndex.value + prerenderItems
+      ) {
         return null;
       }
 
