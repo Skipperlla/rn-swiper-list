@@ -14,7 +14,6 @@ const useSwipeControls = <T>(data: T[], loop: boolean = false) => {
   const dataLength = useRef(data.length);
 
   // Update data length ref when data changes
-  // dataLength.current = data.length;
 
   useEffect(() => {
     dataLength.current = data.length;
