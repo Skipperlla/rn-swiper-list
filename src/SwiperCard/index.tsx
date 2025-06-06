@@ -65,6 +65,7 @@ const SwipeableCard = forwardRef<
       swipeLeftSpringConfig,
       swipeTopSpringConfig,
       swipeBottomSpringConfig,
+      onPress,
     },
     ref
   ) => {
@@ -175,7 +176,13 @@ const SwipeableCard = forwardRef<
       );
     }, [inputRangeX]);
 
-    const gesture = Gesture.Pan()
+    const tap = Gesture.Tap().onEnd((_event, success) => {
+      if (success && onPress) {
+        runOnJS(onPress)();
+      }
+    });
+
+    const pan = Gesture.Pan()
       .onBegin(() => {
         nextActiveIndex.value = Math.floor(activeIndex.value);
         if (onSwipeStart) runOnJS(onSwipeStart)();
@@ -278,8 +285,10 @@ const SwipeableCard = forwardRef<
       };
     });
 
+    const composed = Gesture.Race(tap, pan);
+
     return (
-      <GestureDetector gesture={gesture}>
+      <GestureDetector gesture={composed}>
         <Animated.View style={[cardStyle, rCardStyle]}>
           {OverlayLabelLeft && (
             <OverlayLabel

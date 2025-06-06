@@ -52,11 +52,13 @@ yarn add react-native-reanimated react-native-gesture-handler
 | onSwipeLeft   | func | Function called when a card is swiped left. It receives the index of the card as a parameter.         | `(cardIndex) => {}` |
 | onSwipeRight  | func | Function called when a card is swiped right. It receives the index of the card as a parameter.        | `(cardIndex) => {}` |
 | onSwipeTop    | func | Function called when a card is swiped top. It receives the index of the card as a parameter.          | `(cardIndex) => {}` |
+| onSwipeBottom | func | Function called when a card is swiped bottom. It receives the index of the card as a parameter.       | `(cardIndex) => {}` |
 | onSwipedAll   | func | Function called when all cards have been swiped.                                                      | `() => {}`          |
 | onSwipeStart  | func | Function called when a swipe event starts.                                                            | `() => {}`          |
 | onSwipeEnd    | func | Function called when a swipe event ends.                                                              | `() => {}`          |
 | onSwipeActive | func | Function called when a swipe event is active.                                                         | `() => {}`          |
 | onIndexChange | func | Function called when the index of the card changes. It receives the index of the card as a parameter. | `(cardIndex) => {}` |
+| onPress       | func | Function called when the card is pressed (tapped).                                                    | `() => {}`          |
 
 ## Swipe Animation Props
 
@@ -217,6 +219,9 @@ const App = () => {
           }}
           onSwipeRight={(cardIndex) => {
             console.log('cardIndex', cardIndex);
+          }}
+          onPress={() => {
+            console.log('onPress');
           }}
           onSwipedAll={() => {
             console.log('onSwipedAll');
