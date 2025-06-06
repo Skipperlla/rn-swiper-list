@@ -9,7 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "expo": "~50.0.17",
+    "expo": "~50.0.20",
     "expo-crypto": "~12.8.1",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@expo/webpack-config": "^18.0.1",
+    "@expo/webpack-config": "~19.0.1",
     "babel-loader": "^8.1.0",
     "babel-plugin-module-resolver": "^5.0.0"
   },

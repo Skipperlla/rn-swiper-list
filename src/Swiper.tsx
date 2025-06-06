@@ -115,18 +115,12 @@ const Swiper = <T,>(
 
   return data
     .map((item, index) => {
-      if (
-        index < activeIndex.value ||
-        index > activeIndex.value + prerenderItems
-      ) {
-        return null;
-      }
-
       return (
         <SwiperCard
           key={keyExtractor ? keyExtractor(item, index) : index}
           cardStyle={cardStyle}
           index={index}
+          prerenderItems={prerenderItems}
           disableRightSwipe={disableRightSwipe}
           disableLeftSwipe={disableLeftSwipe}
           disableTopSwipe={disableTopSwipe}
