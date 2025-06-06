@@ -1,4 +1,11 @@
-import { createRef, useCallback, useMemo, useRef, type RefObject } from 'react';
+import {
+  createRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  type RefObject,
+} from 'react';
 import { useSharedValue } from 'react-native-reanimated';
 import type { SwiperCardRefType } from 'rn-swiper-list';
 
@@ -7,7 +14,11 @@ const useSwipeControls = <T>(data: T[], loop: boolean = false) => {
   const dataLength = useRef(data.length);
 
   // Update data length ref when data changes
-  dataLength.current = data.length;
+  // dataLength.current = data.length;
+
+  useEffect(() => {
+    dataLength.current = data.length;
+  }, [data]);
 
   const refs = useMemo(() => {
     let cardRefs: RefObject<SwiperCardRefType>[] = [];
@@ -23,10 +34,13 @@ const useSwipeControls = <T>(data: T[], loop: boolean = false) => {
     if (loop && activeIndex.value >= dataLength.current - 1) {
       // Reset all cards to initial position for loop
       activeIndex.value = 0;
+      refs.forEach((ref) => {
+        ref?.current?.swipeBack();
+      });
     } else {
       activeIndex.value++;
     }
-  }, [activeIndex, loop]);
+  }, [activeIndex, loop, refs]);
 
   const swipeRight = useCallback(() => {
     const currentIndex = Math.floor(activeIndex.value);

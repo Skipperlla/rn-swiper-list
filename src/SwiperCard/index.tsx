@@ -256,7 +256,9 @@ const SwipeableCard = forwardRef<
         index < currentActive + prerenderItems && index >= currentActive - 1;
       const indexDiff = index - currentActive;
 
-      const opacity = withTiming(shouldRender && indexDiff < 5 ? 1 : 0);
+      const opacity = withTiming(
+        shouldRender && indexDiff < prerenderItems ? 1 : 0
+      );
       const scale = withTiming(1 - 0.07 * indexDiff);
 
       return {
