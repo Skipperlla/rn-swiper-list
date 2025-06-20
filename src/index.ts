@@ -64,6 +64,7 @@ export type SwiperOptions<T> = {
   swipeTopSpringConfig?: SpringConfig;
   swipeBottomSpringConfig?: SpringConfig;
   keyExtractor?: (item: T, index: number) => string;
+  swipeVelocityThreshold?: number;
 };
 export type SwiperCardOptions = {
   index: number;
@@ -105,4 +106,5 @@ export type SwiperCardOptions = {
   swipeLeftSpringConfig?: SpringConfig;
   swipeTopSpringConfig?: SpringConfig;
   swipeBottomSpringConfig?: SpringConfig;
+  swipeVelocityThreshold?: number;
 };

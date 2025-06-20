@@ -67,6 +67,7 @@ yarn add react-native-reanimated react-native-gesture-handler
 | disableLeftSwipe  | bool | If true, disables the ability to swipe left.    | `false` |
 | disableRightSwipe | bool | If true, disables the ability to swipe right.   | `false` |
 | disableTopSwipe   | bool | If true, disables the ability to swipe upwards. | `false` |
+| swipeVelocityThreshold| number | Sets the minimum velocity (in px/s) required to trigger a swipe regardless of card position. If undefined, velocity-based swiping is disabled. | `undefined` |
 
 ## Rotation Animation Props
 
@@ -417,6 +418,10 @@ type SwiperOptions<T> = {
   swipeLeftSpringConfig?: SpringConfig;
   swipeTopSpringConfig?: SpringConfig;
   swipeBottomSpringConfig?: SpringConfig;
+  /*
+   * Swipe Velocity Threshold
+   */
+  swipeVelocityThreshold?: number;
 };
 ```
 
