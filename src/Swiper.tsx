@@ -1,7 +1,11 @@
 import React, { useImperativeHandle, type ForwardedRef } from 'react';
 import { runOnJS, useAnimatedReaction } from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
-import type { SwiperCardRefType, SwiperOptions } from 'rn-swiper-list';
+import type {
+  SwiperCardRefType,
+  SwiperOptions,
+  SwiperCardOptions,
+} from 'rn-swiper-list';
 
 import useSwipeControls from './hooks/useSwipeControls';
 import SwiperCard from './SwiperCard';
@@ -30,6 +34,8 @@ const Swiper = <T,>(
     onSwipeBottom,
     onIndexChange,
     cardStyle,
+    flippedCardStyle,
+    regularCardStyle,
     disableRightSwipe,
     disableLeftSwipe,
     disableTopSwipe,
@@ -63,6 +69,10 @@ const Swiper = <T,>(
     keyExtractor,
     onPress,
     swipeVelocityThreshold,
+    FlippedContent,
+    direction = 'y',
+    flipDuration = 500,
+    overlayLabelContainerStyle,
   }: SwiperOptions<T>,
   ref: ForwardedRef<SwiperCardRefType>
 ) => {
@@ -74,6 +84,7 @@ const Swiper = <T,>(
     swipeBack,
     swipeTop,
     swipeBottom,
+    flipCard,
   } = useSwipeControls(data, loop);
 
   useImperativeHandle(
@@ -85,9 +96,10 @@ const Swiper = <T,>(
         swipeBack,
         swipeTop,
         swipeBottom,
+        flipCard,
       };
     },
-    [swipeLeft, swipeRight, swipeBack, swipeTop, swipeBottom]
+    [swipeLeft, swipeRight, swipeBack, swipeTop, swipeBottom, flipCard]
   );
 
   useAnimatedReaction(
@@ -115,12 +127,20 @@ const Swiper = <T,>(
     []
   );
 
+  const Card = SwiperCard as unknown as React.ComponentType<
+    React.PropsWithChildren<SwiperCardOptions<T>> & {
+      ref?: React.Ref<SwiperCardRefType>;
+    }
+  >;
+
   return data
     .map((item, index) => {
       return (
-        <SwiperCard
+        <Card
           key={keyExtractor ? keyExtractor(item, index) : index}
           cardStyle={cardStyle}
+          flippedCardStyle={flippedCardStyle}
+          regularCardStyle={regularCardStyle}
           index={index}
           prerenderItems={prerenderItems}
           disableRightSwipe={disableRightSwipe}
@@ -155,18 +175,19 @@ const Swiper = <T,>(
           OverlayLabelTop={OverlayLabelTop}
           OverlayLabelBottom={OverlayLabelBottom}
           ref={refs[index]}
-          onSwipeRight={(cardIndex) => {
+          onSwipeRight={(cardIndex: number) => {
             onSwipeRight?.(cardIndex);
           }}
-          onSwipeLeft={(cardIndex) => {
+          onSwipeLeft={(cardIndex: number) => {
             onSwipeLeft?.(cardIndex);
           }}
-          onSwipeTop={(cardIndex) => {
+          onSwipeTop={(cardIndex: number) => {
             onSwipeTop?.(cardIndex);
           }}
-          onSwipeBottom={(cardIndex) => {
+          onSwipeBottom={(cardIndex: number) => {
             onSwipeBottom?.(cardIndex);
           }}
+          FlippedContent={FlippedContent}
           onSwipeStart={onSwipeStart}
           onSwipeActive={onSwipeActive}
           onSwipeEnd={onSwipeEnd}
@@ -178,9 +199,13 @@ const Swiper = <T,>(
           swipeBottomSpringConfig={swipeBottomSpringConfig}
           onPress={onPress}
           swipeVelocityThreshold={swipeVelocityThreshold}
+          item={item}
+          direction={direction}
+          flipDuration={flipDuration}
+          overlayLabelContainerStyle={overlayLabelContainerStyle}
         >
           {renderCard(item, index)}
-        </SwiperCard>
+        </Card>
       );
     })
     .reverse(); // to render cards in same hierarchy as their z-index

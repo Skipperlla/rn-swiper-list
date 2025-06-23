@@ -35,15 +35,19 @@ yarn add react-native-reanimated react-native-gesture-handler
 
 ## Card Props
 
-| Props        | type                     | description                                                                            | required | default        |
-| :----------- | :----------------------- | :------------------------------------------------------------------------------------- | :------- | :------------- |
-| data         | array                    | Array of data objects used to render the cards.                                        | Yes      |                |
-| renderCard   | func(cardData,cardIndex) | Function that renders a card based on the provided data and index.                     | Yes      |                |
-| prerenderItems | number                 | Number of cards to prerender ahead of the active card for better performance.           | No       | data.length - 1|
-| cardStyle    | object                   | CSS style properties applied to each card. These can be applied inline.                |          |                |
-| keyExtractor | func                     | Function that returns a unique key for each card based on the provided data.           | No       |                |
-| children     | React.ReactNode          | Child components to be displayed inside the component. Used typically for composition. |          |                |
-| loop         | bool                     | If true, the swiper will loop back to the first card after the last card is swiped.    | No       | false          |
+| Props                      | type                     | description                                                                            | required | default         |
+| :------------------------- | :----------------------- | :------------------------------------------------------------------------------------- | :------- | :-------------- |
+| data                       | array                    | Array of data objects used to render the cards.                                        | Yes      |                 |
+| renderCard                 | func(cardData,cardIndex) | Function that renders a card based on the provided data and index.                     | Yes      |                 |
+| prerenderItems             | number                   | Number of cards to prerender ahead of the active card for better performance.          | No       | data.length - 1 |
+| cardStyle                  | object                   | CSS style properties applied to each card. These can be applied inline.                |          |                 |
+| flippedCardStyle           | object                   | CSS style properties for the back of the card.                                         |          |                 |
+| regularCardStyle           | object                   | CSS style properties for the front of the card.                                        |          |                 |
+| overlayLabelContainerStyle | object                   | CSS style properties for the overlay label container.                                  |          |                 |
+| keyExtractor               | func                     | Function that returns a unique key for each card based on the provided data.           | No       |                 |
+| children                   | React.ReactNode          | Child components to be displayed inside the component. Used typically for composition. |          |                 |
+| FlippedContent             | func(item, index)        | Function that renders the content for the back of the card.                            | No       |                 |
+| loop                       | bool                     | If true, the swiper will loop back to the first card after the last card is swiped.    | No       | false           |
 
 ## Event callbacks
 
@@ -92,6 +96,13 @@ yarn add react-native-reanimated react-native-gesture-handler
 | OverlayLabelLeft                    | () => JSX.Element | Component rendered as an overlay label for left swipes.                                                 |                            |
 | OverlayLabelTop                     | () => JSX.Element | Component rendered as an overlay label for top swipes.                                                  |                            |
 
+## Flip Animation Props
+
+| props        | type       | description                               | default |
+| :----------- | :--------- | :---------------------------------------- | :------ |
+| direction    | 'x' \| 'y' | The direction of the flip animation.      | `'y'`   |
+| flipDuration | number     | The duration of the flip animation in ms. | `500`   |
+
 ## Swipe methods
 
 | props      | type     | description                                                    |
@@ -103,13 +114,13 @@ yarn add react-native-reanimated react-native-gesture-handler
 
 ## Swipe Animation Spring Configs (Animation Speed)
 
-| props                  | type         | description                                                  |
-| :--------------------- | :----------- | :----------------------------------------------------------- |
-| swipeBackXSpringConfig | SpringConfig | Spring configuration for swipe back animation on the X-axis. |
-| swipeBackYSpringConfig | SpringConfig | Spring configuration for swipe back animation on the Y-axis. |
-| swipeRightSpringConfig | SpringConfig | Spring configuration for swipe right animation on the X-axis. |
-| swipeLeftSpringConfig  | SpringConfig | Spring configuration for swipe left animation on the X-axis.  |
-| swipeTopSpringConfig   | SpringConfig | Spring configuration for swipe top animation on the Y-axis. |
+| props                   | type         | description                                                    |
+| :---------------------- | :----------- | :------------------------------------------------------------- |
+| swipeBackXSpringConfig  | SpringConfig | Spring configuration for swipe back animation on the X-axis.   |
+| swipeBackYSpringConfig  | SpringConfig | Spring configuration for swipe back animation on the Y-axis.   |
+| swipeRightSpringConfig  | SpringConfig | Spring configuration for swipe right animation on the X-axis.  |
+| swipeLeftSpringConfig   | SpringConfig | Spring configuration for swipe left animation on the X-axis.   |
+| swipeTopSpringConfig    | SpringConfig | Spring configuration for swipe top animation on the Y-axis.    |
 | swipeBottomSpringConfig | SpringConfig | Spring configuration for swipe bottom animation on the Y-axis. |
 
 ### What is Spring Config?

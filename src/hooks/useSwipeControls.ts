@@ -77,6 +77,14 @@ const useSwipeControls = <T>(data: T[], loop: boolean = false) => {
     updateActiveIndex();
   }, [refs, updateActiveIndex, activeIndex]);
 
+  const flipCard = useCallback(() => {
+    const currentIndex = Math.floor(activeIndex.value);
+    if (!refs[currentIndex]) {
+      return;
+    }
+    refs[currentIndex]?.current?.flipCard();
+  }, [activeIndex, refs]);
+
   const swipeBack = useCallback(() => {
     const previousIndex = activeIndex.value - 1;
 
@@ -102,6 +110,7 @@ const useSwipeControls = <T>(data: T[], loop: boolean = false) => {
     swipeBack,
     swipeTop,
     swipeBottom,
+    flipCard,
   };
 };
 

@@ -1,5 +1,5 @@
 import React, { type PropsWithChildren } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -11,6 +11,7 @@ type Props = PropsWithChildren<{
   outputRange?: number[];
   Component: () => JSX.Element;
   opacityValue: SharedValue<number>;
+  overlayLabelContainerStyle?: StyleProp<ViewStyle>;
 }>;
 
 const OverlayLabel = ({
@@ -18,6 +19,7 @@ const OverlayLabel = ({
   outputRange,
   Component,
   opacityValue,
+  overlayLabelContainerStyle,
 }: Props) => {
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -33,7 +35,11 @@ const OverlayLabel = ({
 
   return (
     <Animated.View
-      style={[StyleSheet.absoluteFillObject, animatedStyle]}
+      style={[
+        StyleSheet.absoluteFillObject,
+        animatedStyle,
+        overlayLabelContainerStyle,
+      ]}
       pointerEvents="none"
     >
       <Component />
