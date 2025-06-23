@@ -66,6 +66,7 @@ const SwipeableCard = forwardRef<
       swipeTopSpringConfig,
       swipeBottomSpringConfig,
       onPress,
+      swipeVelocityThreshold,
     },
     ref
   ) => {
@@ -217,6 +218,33 @@ const SwipeableCard = forwardRef<
         const currentActive = Math.floor(activeIndex.value);
         if (currentActive !== index) return;
         if (onSwipeEnd) runOnJS(onSwipeEnd)();
+
+        if (swipeVelocityThreshold !== undefined) {
+          if (Math.abs(event.velocityX) > swipeVelocityThreshold) {
+            const sign = Math.sign(event.velocityX);
+            if (sign === -1 && !disableLeftSwipe) {
+              runOnJS(swipeLeft)();
+              return;
+            }
+            if (sign === 1 && !disableRightSwipe) {
+              runOnJS(swipeRight)();
+              return;
+            }
+          }
+
+          if (Math.abs(event.velocityY) > swipeVelocityThreshold) {
+            const sign = Math.sign(event.velocityY);
+            if (sign === -1 && !disableTopSwipe) {
+              runOnJS(swipeTop)();
+              return;
+            }
+            if (sign === 1 && !disableBottomSwipe) {
+              runOnJS(swipeBottom)();
+              return;
+            }
+          }
+        }
+
         if (nextActiveIndex.value === activeIndex.value + 1) {
           const sign = Math.sign(event.translationX);
           const signY = Math.sign(event.translationY);

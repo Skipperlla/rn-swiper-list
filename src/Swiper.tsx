@@ -62,6 +62,7 @@ const Swiper = <T,>(
     loop = false,
     keyExtractor,
     onPress,
+    swipeVelocityThreshold,
   }: SwiperOptions<T>,
   ref: ForwardedRef<SwiperCardRefType>
 ) => {
@@ -176,6 +177,7 @@ const Swiper = <T,>(
           swipeTopSpringConfig={swipeTopSpringConfig}
           swipeBottomSpringConfig={swipeBottomSpringConfig}
           onPress={onPress}
+          swipeVelocityThreshold={swipeVelocityThreshold}
         >
           {renderCard(item, index)}
         </SwiperCard>
