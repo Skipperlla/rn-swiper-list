@@ -237,6 +237,27 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
             'clamp'
           )
         );
+        if (signPositionY) {
+          if (signY === -1 && !disableTopSwipe) {
+            runOnJS(swipeTop)();
+            return;
+          }
+          if (signY === 1 && !disableBottomSwipe) {
+            runOnJS(swipeBottom)();
+            return;
+          }
+        }
+
+        if (!signPositionY) {
+          if (sign === 1 && !disableRightSwipe) {
+            runOnJS(swipeRight)();
+            return;
+          }
+          if (sign === -1 && !disableLeftSwipe) {
+            runOnJS(swipeLeft)();
+            return;
+          }
+        }
       }
     })
     .onFinalize((event) => {
