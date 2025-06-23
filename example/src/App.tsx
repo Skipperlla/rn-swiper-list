@@ -3,6 +3,7 @@ import React, { useCallback, useRef } from 'react';
 import {
   Image,
   StyleSheet,
+  Text,
   View,
   type ImageSourcePropType,
 } from 'react-native';
@@ -37,6 +38,16 @@ const App = () => {
       </View>
     );
   }, []);
+  const renderFlippedCard = useCallback(
+    (_: ImageSourcePropType, index: number) => {
+      return (
+        <View style={styles.renderFlippedCardContainer}>
+          <Text style={styles.text}>Flipped content 🚀 {index}</Text>
+        </View>
+      );
+    },
+    []
+  );
   const OverlayLabelRight = useCallback(() => {
     return (
       <View
@@ -91,8 +102,9 @@ const App = () => {
       <View style={styles.subContainer}>
         <Swiper
           ref={ref}
-          cardStyle={styles.cardStyle}
           data={IMAGES}
+          cardStyle={styles.cardStyle}
+          overlayLabelContainerStyle={styles.overlayLabelContainerStyle}
           renderCard={renderCard}
           onIndexChange={(index) => {
             console.log('Current Active index', index);
@@ -106,6 +118,7 @@ const App = () => {
           onSwipedAll={() => {
             console.log('onSwipedAll');
           }}
+          FlippedContent={renderFlippedCard}
           onSwipeLeft={(cardIndex) => {
             console.log('onSwipeLeft', cardIndex);
           }}
@@ -132,6 +145,14 @@ const App = () => {
       </View>
 
       <View style={styles.buttonsContainer}>
+        <ActionButton
+          style={styles.button}
+          onTap={() => {
+            ref.current?.flipCard();
+          }}
+        >
+          <AntDesign name="sync" size={ICON_SIZE} color="white" />
+        </ActionButton>
         <ActionButton
           style={styles.button}
           onTap={() => {
@@ -207,21 +228,29 @@ const styles = StyleSheet.create({
       height: 4,
     },
   },
+  renderCardContainer: {
+    borderRadius: 15,
+    width: '100%',
+    height: '100%',
+  },
+  renderFlippedCardContainer: {
+    borderRadius: 15,
+    backgroundColor: '#baeee5',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   buttonText: {
     fontSize: 20,
     fontWeight: 'bold',
   },
   cardStyle: {
-    width: '95%',
-    height: '75%',
+    width: '90%',
+    height: '90%',
     borderRadius: 15,
-    marginVertical: 20,
-  },
-  renderCardContainer: {
-    flex: 1,
-    borderRadius: 15,
-    height: '75%',
-    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   renderCardImage: {
     height: '100%',
@@ -234,8 +263,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   overlayLabelContainer: {
-    width: '100%',
-    height: '100%',
     borderRadius: 15,
+    height: '90%',
+    width: '90%',
+  },
+  text: {
+    color: '#001a72',
+  },
+  overlayLabelContainerStyle: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

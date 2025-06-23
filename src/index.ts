@@ -11,6 +11,7 @@ export type SwiperCardRefType =
       swipeBack: () => void;
       swipeTop: () => void;
       swipeBottom: () => void;
+      flipCard: () => void;
     }
   | undefined;
 
@@ -18,9 +19,13 @@ export type SwiperOptions<T> = {
   //* Card Props
   data: T[];
   renderCard: (item: T, index: number) => JSX.Element;
+  FlippedContent?: (item: T, index: number) => JSX.Element;
   prerenderItems?: number;
   cardStyle?: StyleProp<ViewStyle>;
+  flippedCardStyle?: StyleProp<ViewStyle>;
+  regularCardStyle?: StyleProp<ViewStyle>;
   loop?: boolean;
+  keyExtractor?: (item: T, index: number) => string | number;
   //* Event callbacks
   onSwipeLeft?: (cardIndex: number) => void;
   onSwipeRight?: (cardIndex: number) => void;
@@ -63,10 +68,13 @@ export type SwiperOptions<T> = {
   swipeLeftSpringConfig?: SpringConfig;
   swipeTopSpringConfig?: SpringConfig;
   swipeBottomSpringConfig?: SpringConfig;
-  keyExtractor?: (item: T, index: number) => string;
   swipeVelocityThreshold?: number;
+  direction?: 'x' | 'y';
+  flipDuration?: number;
+  overlayLabelContainerStyle?: StyleProp<ViewStyle>;
 };
-export type SwiperCardOptions = {
+export type SwiperCardOptions<T> = {
+  item: T;
   index: number;
   activeIndex: SharedValue<number>;
   prerenderItems?: number;
@@ -79,6 +87,8 @@ export type SwiperCardOptions = {
   onSwipeEnd?: () => void;
   onPress?: () => void;
   cardStyle?: StyleProp<ViewStyle>;
+  flippedCardStyle?: StyleProp<ViewStyle>;
+  regularCardStyle?: StyleProp<ViewStyle>;
   loop?: boolean;
   disableRightSwipe?: boolean;
   disableLeftSwipe?: boolean;
@@ -100,6 +110,7 @@ export type SwiperCardOptions = {
   OverlayLabelLeft?: () => JSX.Element;
   OverlayLabelTop?: () => JSX.Element;
   OverlayLabelBottom?: () => JSX.Element;
+  FlippedContent?: (item: T, index: number) => JSX.Element;
   swipeBackXSpringConfig?: SpringConfig;
   swipeBackYSpringConfig?: SpringConfig;
   swipeRightSpringConfig?: SpringConfig;
@@ -107,4 +118,7 @@ export type SwiperCardOptions = {
   swipeTopSpringConfig?: SpringConfig;
   swipeBottomSpringConfig?: SpringConfig;
   swipeVelocityThreshold?: number;
+  direction?: 'x' | 'y';
+  flipDuration?: number;
+  overlayLabelContainerStyle?: StyleProp<ViewStyle>;
 };
