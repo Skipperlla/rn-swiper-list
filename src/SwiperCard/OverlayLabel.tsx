@@ -29,7 +29,7 @@ const OverlayLabel = ({
         outputRange ?? [],
         'clamp'
       ),
-      zIndex: 2,
+      zIndex: 3,
     };
   });
 

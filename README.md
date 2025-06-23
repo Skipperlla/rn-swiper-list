@@ -141,11 +141,11 @@ These parameters can be adjusted to achieve the desired animation behavior for t
 ## Usage 🧑‍💻
 
 ```typescript
-/* eslint-disable react-native/no-inline-styles */
 import React, { useCallback, useRef } from 'react';
 import {
   Image,
   StyleSheet,
+  Text,
   View,
   type ImageSourcePropType,
 } from 'react-native';
@@ -164,18 +164,27 @@ const IMAGES: ImageSourcePropType[] = [
   require('../assets/images/6.jpg'),
 ];
 
+const ICON_SIZE = 24;
+
 const App = () => {
   const ref = useRef<SwiperCardRefType>();
 
-  const renderCard = useCallback(
-    (image: ImageSourcePropType) => {
+  const renderCard = useCallback((image: ImageSourcePropType) => {
+    return (
+      <View style={styles.renderCardContainer}>
+        <Image
+          source={image}
+          style={styles.renderCardImage}
+          resizeMode="cover"
+        />
+      </View>
+    );
+  }, []);
+  const renderFlippedCard = useCallback(
+    (_: ImageSourcePropType, index: number) => {
       return (
-        <View style={styles.renderCardContainer}>
-          <Image
-            source={image}
-            style={styles.renderCardImage}
-            resizeMode="cover"
-          />
+        <View style={styles.renderFlippedCardContainer}>
+          <Text style={styles.text}>Flipped content 🚀 {index}</Text>
         </View>
       );
     },
@@ -217,14 +226,27 @@ const App = () => {
       />
     );
   }, []);
+  const OverlayLabelBottom = useCallback(() => {
+    return (
+      <View
+        style={[
+          styles.overlayLabelContainer,
+          {
+            backgroundColor: 'orange',
+          },
+        ]}
+      />
+    );
+  }, []);
 
   return (
     <GestureHandlerRootView style={styles.container}>
       <View style={styles.subContainer}>
         <Swiper
           ref={ref}
-          cardStyle={styles.cardStyle}
           data={IMAGES}
+          cardStyle={styles.cardStyle}
+          overlayLabelContainerStyle={styles.overlayLabelContainerStyle}
           renderCard={renderCard}
           onIndexChange={(index) => {
             console.log('Current Active index', index);
@@ -238,15 +260,20 @@ const App = () => {
           onSwipedAll={() => {
             console.log('onSwipedAll');
           }}
+          FlippedContent={renderFlippedCard}
           onSwipeLeft={(cardIndex) => {
             console.log('onSwipeLeft', cardIndex);
           }}
           onSwipeTop={(cardIndex) => {
             console.log('onSwipeTop', cardIndex);
           }}
+          onSwipeBottom={(cardIndex) => {
+            console.log('onSwipeBottom', cardIndex);
+          }}
           OverlayLabelRight={OverlayLabelRight}
           OverlayLabelLeft={OverlayLabelLeft}
           OverlayLabelTop={OverlayLabelTop}
+          OverlayLabelBottom={OverlayLabelBottom}
           onSwipeActive={() => {
             console.log('onSwipeActive');
           }}
@@ -263,18 +290,34 @@ const App = () => {
         <ActionButton
           style={styles.button}
           onTap={() => {
-            ref.current?.swipeLeft();
+            ref.current?.flipCard();
           }}
         >
-          <AntDesign name="close" size={32} color="white" />
+          <AntDesign name="sync" size={ICON_SIZE} color="white" />
         </ActionButton>
         <ActionButton
-          style={[styles.button, { height: 60, marginHorizontal: 10 }]}
+          style={styles.button}
           onTap={() => {
             ref.current?.swipeBack();
           }}
         >
-          <AntDesign name="reload1" size={24} color="white" />
+          <AntDesign name="reload1" size={ICON_SIZE} color="white" />
+        </ActionButton>
+        <ActionButton
+          style={styles.button}
+          onTap={() => {
+            ref.current?.swipeLeft();
+          }}
+        >
+          <AntDesign name="close" size={ICON_SIZE} color="white" />
+        </ActionButton>
+        <ActionButton
+          style={styles.button}
+          onTap={() => {
+            ref.current?.swipeBottom();
+          }}
+        >
+          <AntDesign name="arrowdown" size={ICON_SIZE} color="white" />
         </ActionButton>
         <ActionButton
           style={styles.button}
@@ -282,7 +325,7 @@ const App = () => {
             ref.current?.swipeTop();
           }}
         >
-          <AntDesign name="arrowup" size={32} color="white" />
+          <AntDesign name="arrowup" size={ICON_SIZE} color="white" />
         </ActionButton>
         <ActionButton
           style={styles.button}
@@ -290,7 +333,7 @@ const App = () => {
             ref.current?.swipeRight();
           }}
         >
-          <AntDesign name="heart" size={32} color="white" />
+          <AntDesign name="heart" size={ICON_SIZE} color="white" />
         </ActionButton>
       </View>
     </GestureHandlerRootView>
@@ -310,11 +353,11 @@ const styles = StyleSheet.create({
     bottom: 34,
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 24,
   },
   button: {
-    height: 80,
+    height: 50,
     borderRadius: 40,
-    marginHorizontal: 20,
     aspectRatio: 1,
     backgroundColor: '#3A3D45',
     elevation: 4,
@@ -327,21 +370,29 @@ const styles = StyleSheet.create({
       height: 4,
     },
   },
+  renderCardContainer: {
+    borderRadius: 15,
+    width: '100%',
+    height: '100%',
+  },
+  renderFlippedCardContainer: {
+    borderRadius: 15,
+    backgroundColor: '#baeee5',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   buttonText: {
     fontSize: 20,
     fontWeight: 'bold',
   },
   cardStyle: {
-    width: '95%',
-    height: '75%',
+    width: '90%',
+    height: '90%',
     borderRadius: 15,
-    marginVertical: 20,
-  },
-  renderCardContainer: {
-    flex: 1,
-    borderRadius: 15,
-    height: '75%',
-    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   renderCardImage: {
     height: '100%',
@@ -354,13 +405,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   overlayLabelContainer: {
-    width: '100%',
-    height: '100%',
     borderRadius: 15,
+    height: '90%',
+    width: '90%',
+  },
+  text: {
+    color: '#001a72',
+  },
+  overlayLabelContainerStyle: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
-
-
 ```
 
 For more examples check out the [example](https://github.com/Skipperlla/rn-swiper-list/blob/main/example/src/App.tsx) folder 📂
