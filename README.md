@@ -40,7 +40,7 @@ yarn add react-native-reanimated react-native-gesture-handler
 | :------------------------- | :----------------------- | :------------------------------------------------------------------------------------- | :------- | :-------------- |
 | data                       | array                    | Array of data objects used to render the cards.                                        | Yes      |                 |
 | renderCard                 | func(cardData,cardIndex) | Function that renders a card based on the provided data and index.                     | Yes      |                 |
-| prerenderItems             | number                   | Number of cards to prerender ahead of the active card for better performance.          | No       | data.length - 1 |
+| prerenderItems             | number                   | Number of cards to prerender ahead of the active card for better performance.          | No       | Math.max(data.length - 1, 1) |
 | cardStyle                  | object                   | CSS style properties applied to each card. These can be applied inline.                |          |                 |
 | flippedCardStyle           | object                   | CSS style properties for the back of the card.                                         |          |                 |
 | regularCardStyle           | object                   | CSS style properties for the front of the card.                                        |          |                 |

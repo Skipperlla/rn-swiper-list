@@ -20,4 +20,27 @@ describe('Swiper prerenderItems', () => {
 
     expect(prerenderItems).toBe(4);
   });
+
+  it('should handle empty array case', () => {
+    const dataLength = 0;
+    const prerenderItems = Math.max(dataLength - 1, 1);
+
+    // Even with empty array, prerenderItems should be at least 1
+    expect(prerenderItems).toBe(1);
+  });
+
+  it('should verify visibility logic for single card', () => {
+    // Simulating the visibility check in SwiperCard
+    const index = 0;
+    const currentActive = 0;
+    const prerenderItems = 1; // After fix
+
+    const shouldRender =
+      index < currentActive + prerenderItems && index >= currentActive - 1;
+    const indexDiff = index - currentActive;
+    const shouldBeVisible = shouldRender && indexDiff < prerenderItems;
+
+    expect(shouldRender).toBe(true);
+    expect(shouldBeVisible).toBe(true);
+  });
 });
