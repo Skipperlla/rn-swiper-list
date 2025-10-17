@@ -333,12 +333,16 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
     // Handle visibility and rendering based on prerenderItems using animated values
     // Don't access activeIndex.value directly - use derived values instead
     const currentActive = Math.floor(activeIndex.value);
-    const shouldRender =
-      index < currentActive + prerenderItems && index >= currentActive - 1;
     const indexDiff = index - currentActive;
 
+    // Ensure we render at least the current card (when prerenderItems is 0)
+    // and up to prerenderItems cards ahead
+    const maxPrerender = Math.max(1, prerenderItems);
+    const shouldRender =
+      index < currentActive + maxPrerender && index >= currentActive - 1;
+
     const opacity = withTiming(
-      shouldRender && indexDiff < prerenderItems ? 1 : 0
+      shouldRender && indexDiff < maxPrerender ? 1 : 0
     );
     const scale = withTiming(1 - 0.07 * indexDiff);
 
