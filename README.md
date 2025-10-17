@@ -36,10 +36,11 @@ yarn add react-native-reanimated react-native-gesture-handler
 
 ## Card Props
 
-| Props                      | type                     | description                                                                            | required | default                      |
-| :------------------------- | :----------------------- | :------------------------------------------------------------------------------------- | :------- | :--------------------------- |
-| data                       | array                    | Array of data objects used to render the cards.                                        | Yes      |                              |
-| renderCard                 | func(cardData,cardIndex) | Function that renders a card based on the provided data and index.                     | Yes      |                              |
+| Props                      | type                     | description                                                                            | required | default         |
+| :------------------------- | :----------------------- | :------------------------------------------------------------------------------------- | :------- | :-------------- |
+| data                       | array                    | Array of data objects used to render the cards.                                        | Yes      |                 |
+| renderCard                 | func(cardData,cardIndex) | Function that renders a card based on the provided data and index.                     | Yes      |                 |
+| initialIndex               | number                   | Initial card index to display when the component mounts. Useful for restoring state or deep linking. | No       | 0               |
 | prerenderItems             | number                   | Number of cards to prerender ahead of the active card for better performance.          | No       | Math.max(data.length - 1, 1) |
 | cardStyle                  | object                   | CSS style properties applied to each card. These can be applied inline.                |          |                              |
 | flippedCardStyle           | object                   | CSS style properties for the back of the card.                                         |          |                              |
@@ -252,6 +253,7 @@ const App = () => {
         <Swiper
           ref={ref}
           data={IMAGES}
+          initialIndex={2}
           cardStyle={styles.cardStyle}
           overlayLabelContainerStyle={styles.overlayLabelContainerStyle}
           renderCard={renderCard}
@@ -448,6 +450,7 @@ type SwiperOptions<T> = {
    */
   data: T[];
   renderCard: (item: T, index: number) => JSX.Element;
+  initialIndex?: number;
   prerenderItems?: number;
   cardStyle?: StyleProp<ViewStyle>;
   flippedCardStyle?: StyleProp<ViewStyle>;
