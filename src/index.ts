@@ -26,6 +26,7 @@ export type SwiperOptions<T> = {
   regularCardStyle?: StyleProp<ViewStyle>;
   loop?: boolean;
   keyExtractor?: (item: T, index: number) => string | number;
+  initialIndex?: number;
   //* Event callbacks
   onSwipeLeft?: (cardIndex: number) => void;
   onSwipeRight?: (cardIndex: number) => void;
