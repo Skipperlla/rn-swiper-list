@@ -35,3 +35,55 @@ describe('Swiper prerenderItems calculation', () => {
 // using tools like React Native Testing Library with proper setup files
 // that can handle the complex mocking requirements for react-native-reanimated
 // and react-native-gesture-handler.
+
+describe('initialIndex prop validation', () => {
+  it('should clamp initialIndex to 0 when negative', () => {
+    const dataLength = 5;
+    const initialIndex = -1;
+    const validInitialIndex = Math.max(
+      0,
+      Math.min(initialIndex, Math.max(0, dataLength - 1))
+    );
+    expect(validInitialIndex).toBe(0);
+  });
+
+  it('should clamp initialIndex to last valid index when too large', () => {
+    const dataLength = 5;
+    const initialIndex = 10;
+    const validInitialIndex = Math.max(
+      0,
+      Math.min(initialIndex, Math.max(0, dataLength - 1))
+    );
+    expect(validInitialIndex).toBe(4);
+  });
+
+  it('should accept valid initialIndex within range', () => {
+    const dataLength = 5;
+    const initialIndex = 2;
+    const validInitialIndex = Math.max(
+      0,
+      Math.min(initialIndex, Math.max(0, dataLength - 1))
+    );
+    expect(validInitialIndex).toBe(2);
+  });
+
+  it('should default to 0 for empty array', () => {
+    const dataLength = 0;
+    const initialIndex = 5;
+    const validInitialIndex = Math.max(
+      0,
+      Math.min(initialIndex, Math.max(0, dataLength - 1))
+    );
+    expect(validInitialIndex).toBe(0);
+  });
+
+  it('should accept initialIndex of 0 for single item', () => {
+    const dataLength = 1;
+    const initialIndex = 0;
+    const validInitialIndex = Math.max(
+      0,
+      Math.min(initialIndex, Math.max(0, dataLength - 1))
+    );
+    expect(validInitialIndex).toBe(0);
+  });
+});

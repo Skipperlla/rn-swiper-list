@@ -71,6 +71,7 @@ const Swiper = <T,>(
     direction = 'y',
     flipDuration = 500,
     overlayLabelContainerStyle,
+    initialIndex = 0,
   }: SwiperOptions<T>,
   ref: ForwardedRef<SwiperCardRefType>
 ) => {
@@ -83,7 +84,7 @@ const Swiper = <T,>(
     swipeTop,
     swipeBottom,
     flipCard,
-  } = useSwipeControls(data, loop);
+  } = useSwipeControls(data, loop, initialIndex);
 
   useImperativeHandle(ref, () => {
     return {

@@ -9,8 +9,17 @@ import {
 import { useSharedValue } from 'react-native-reanimated';
 import type { SwiperCardRefType } from 'rn-swiper-list';
 
-const useSwipeControls = <T>(data: T[], loop: boolean = false) => {
-  const activeIndex = useSharedValue(0);
+const useSwipeControls = <T>(
+  data: T[],
+  loop: boolean = false,
+  initialIndex: number = 0
+) => {
+  // Validate and clamp initialIndex to valid range
+  const validInitialIndex = Math.max(
+    0,
+    Math.min(initialIndex, Math.max(0, data.length - 1))
+  );
+  const activeIndex = useSharedValue(validInitialIndex);
   const dataLength = useRef(data.length);
 
   // Update data length ref when data changes
