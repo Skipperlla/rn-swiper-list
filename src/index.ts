@@ -1,6 +1,5 @@
 import type { StyleProp, ViewStyle } from 'react-native';
-import type { SharedValue } from 'react-native-reanimated';
-import type { SpringConfig } from 'react-native-reanimated/lib/typescript/reanimated2/animation/springUtils';
+import type { SharedValue, WithSpringConfig } from 'react-native-reanimated';
 
 export { default as Swiper } from './Swiper';
 
@@ -62,12 +61,12 @@ export type SwiperOptions<T> = {
   OverlayLabelTop?: () => JSX.Element;
   OverlayLabelBottom?: () => JSX.Element;
   //* Swipe Animation Spring Configs (Animation Speed)
-  swipeBackXSpringConfig?: SpringConfig;
-  swipeBackYSpringConfig?: SpringConfig;
-  swipeRightSpringConfig?: SpringConfig;
-  swipeLeftSpringConfig?: SpringConfig;
-  swipeTopSpringConfig?: SpringConfig;
-  swipeBottomSpringConfig?: SpringConfig;
+  swipeBackXSpringConfig?: WithSpringConfig;
+  swipeBackYSpringConfig?: WithSpringConfig;
+  swipeRightSpringConfig?: WithSpringConfig;
+  swipeLeftSpringConfig?: WithSpringConfig;
+  swipeTopSpringConfig?: WithSpringConfig;
+  swipeBottomSpringConfig?: WithSpringConfig;
   swipeVelocityThreshold?: number;
   direction?: 'x' | 'y';
   flipDuration?: number;
@@ -111,12 +110,12 @@ export type SwiperCardOptions<T> = {
   OverlayLabelTop?: () => JSX.Element;
   OverlayLabelBottom?: () => JSX.Element;
   FlippedContent?: (item: T, index: number) => JSX.Element;
-  swipeBackXSpringConfig?: SpringConfig;
-  swipeBackYSpringConfig?: SpringConfig;
-  swipeRightSpringConfig?: SpringConfig;
-  swipeLeftSpringConfig?: SpringConfig;
-  swipeTopSpringConfig?: SpringConfig;
-  swipeBottomSpringConfig?: SpringConfig;
+  swipeBackXSpringConfig?: WithSpringConfig;
+  swipeBackYSpringConfig?: WithSpringConfig;
+  swipeRightSpringConfig?: WithSpringConfig;
+  swipeLeftSpringConfig?: WithSpringConfig;
+  swipeTopSpringConfig?: WithSpringConfig;
+  swipeBottomSpringConfig?: WithSpringConfig;
   swipeVelocityThreshold?: number;
   direction?: 'x' | 'y';
   flipDuration?: number;
