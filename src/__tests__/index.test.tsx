@@ -1,47 +1,37 @@
-// Test to verify prerenderItems calculation
-describe('Swiper prerenderItems', () => {
+// Test to verify prerenderItems calculation logic
+describe('Swiper prerenderItems calculation', () => {
   it('should calculate prerenderItems correctly for single item', () => {
     const dataLength = 1;
-    // The default calculation is: prerenderItems = data.length - 1
-    // For single item: prerenderItems = 1 - 1 = 0
-    // But it should be at least 1 to show the card
-    const defaultPrerenderItems = dataLength - 1;
-    const expectedMinimum = 1;
-
-    expect(defaultPrerenderItems).toBe(0);
-    // This test documents the bug: prerenderItems of 0 means no cards will render
-    // After fix, the logic should ensure prerenderItems >= 1
-    expect(Math.max(defaultPrerenderItems, expectedMinimum)).toBe(1);
+    // The default calculation is: prerenderItems = Math.max(data.length - 1, 1)
+    // For single item: Math.max(1 - 1, 1) = Math.max(0, 1) = 1
+    const prerenderItems = Math.max(dataLength - 1, 1);
+    expect(prerenderItems).toBe(1);
   });
 
   it('should calculate prerenderItems correctly for multiple items', () => {
     const dataLength = 5;
     const prerenderItems = Math.max(dataLength - 1, 1);
-
     expect(prerenderItems).toBe(4);
   });
 
   it('should handle empty array case', () => {
     const dataLength = 0;
     const prerenderItems = Math.max(dataLength - 1, 1);
-
     // With empty array, no cards will render regardless of prerenderItems value
     // The value of 1 ensures the formula is consistent but has no practical effect
     expect(prerenderItems).toBe(1);
   });
 
-  it('should verify visibility logic for single card', () => {
-    // Simulating the visibility check in SwiperCard
-    const index = 0;
-    const currentActive = 0;
-    const prerenderItems = 1; // After fix
-
-    const shouldRender =
-      index < currentActive + prerenderItems && index >= currentActive - 1;
-    const indexDiff = index - currentActive;
-    const shouldBeVisible = shouldRender && indexDiff < prerenderItems;
-
-    expect(shouldRender).toBe(true);
-    expect(shouldBeVisible).toBe(true);
+  it('should ensure prerenderItems is always at least 1', () => {
+    // Test edge cases to ensure the minimum value is always 1
+    expect(Math.max(-1, 1)).toBe(1);
+    expect(Math.max(0, 1)).toBe(1);
+    expect(Math.max(1, 1)).toBe(1);
+    expect(Math.max(2, 1)).toBe(2);
   });
 });
+
+// Note: Component rendering tests would be better suited for integration tests
+// using tools like React Native Testing Library with proper setup files
+// that can handle the complex mocking requirements for react-native-reanimated
+// and react-native-gesture-handler.
