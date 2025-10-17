@@ -1,5 +1,9 @@
 import React, { useImperativeHandle, type ForwardedRef } from 'react';
-import { runOnJS, useAnimatedReaction } from 'react-native-reanimated';
+import {
+  runOnJS,
+  useAnimatedReaction,
+  type WithSpringConfig,
+} from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
 import type {
   SwiperCardRefType,
@@ -9,17 +13,14 @@ import type {
 
 import useSwipeControls from './hooks/useSwipeControls';
 import SwiperCard from './SwiperCard';
-import type { SpringConfig } from 'react-native-reanimated/lib/typescript/reanimated2/animation/springUtils';
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get('screen');
 
-const SWIPE_SPRING_CONFIG: SpringConfig = {
+const SWIPE_SPRING_CONFIG: WithSpringConfig = {
   damping: 20,
   stiffness: 50,
   mass: 1,
   overshootClamping: true,
-  restDisplacementThreshold: 0.0001,
-  restSpeedThreshold: 0.0001,
 };
 
 const Swiper = <T,>(

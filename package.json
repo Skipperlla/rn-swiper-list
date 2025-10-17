@@ -79,7 +79,7 @@
     "react": "*",
     "react-native": "*",
     "react-native-gesture-handler": "*",
-    "react-native-reanimated": "*"
+    "react-native-reanimated": ">=3.0.0"
   },
   "workspaces": [
     "example"
@@ -160,6 +160,6 @@
   },
   "dependencies": {
     "react-native-gesture-handler": "*",
-    "react-native-reanimated": "*"
+    "react-native-reanimated": ">=3.0.0"
   }
 }
