@@ -46,7 +46,7 @@ describe('Swiper prerenderItems logic', () => {
     indexDiff = index - currentActive;
     expect(shouldRender && indexDiff < maxPrerender).toBe(true);
 
-    // Card 2 should not be visible (index 2 is not < currentActive 0 + maxPrerender 2)
+    // Card 2 should not be visible (2 is not < 2, where 2 = currentActive 0 + maxPrerender 2)
     index = 2;
     shouldRender =
       index < currentActive + maxPrerender && index >= currentActive - 1;
