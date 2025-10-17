@@ -71,7 +71,7 @@ const Swiper = <T,>(
     direction = 'y',
     flipDuration = 500,
     overlayLabelContainerStyle,
-    initialIndex = 0,
+    initialIndex,
   }: SwiperOptions<T>,
   ref: ForwardedRef<SwiperCardRefType>
 ) => {
