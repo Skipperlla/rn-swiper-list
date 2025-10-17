@@ -14,10 +14,11 @@ const useSwipeControls = <T>(
   loop: boolean = false,
   initialIndex: number = 0
 ) => {
-  // Validate and clamp initialIndex to valid range
+  // Normalize initialIndex to integer and clamp to valid range
+  const normalizedInitialIndex = Math.floor(Number.isFinite(initialIndex) ? initialIndex : 0);
   const validInitialIndex = Math.max(
     0,
-    Math.min(initialIndex, Math.max(0, data.length - 1))
+    Math.min(normalizedInitialIndex, Math.max(0, data.length - 1))
   );
   const activeIndex = useSharedValue(validInitialIndex);
   const dataLength = useRef(data.length);
