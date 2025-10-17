@@ -26,7 +26,7 @@ const Swiper = <T,>(
   {
     data,
     renderCard,
-    prerenderItems = data.length - 1,
+    prerenderItems = Math.max(1, data.length - 1),
     onSwipeRight,
     onSwipeLeft,
     onSwipedAll,
