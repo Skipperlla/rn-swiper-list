@@ -25,7 +25,8 @@ describe('Swiper prerenderItems', () => {
     const dataLength = 0;
     const prerenderItems = Math.max(dataLength - 1, 1);
 
-    // Even with empty array, prerenderItems should be at least 1
+    // With empty array, no cards will render regardless of prerenderItems value
+    // The value of 1 ensures the formula is consistent but has no practical effect
     expect(prerenderItems).toBe(1);
   });
 
