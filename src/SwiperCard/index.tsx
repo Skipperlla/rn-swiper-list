@@ -10,7 +10,9 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   cancelAnimation,
   interpolate,
+  ReduceMotion,
   runOnJS,
+  runOnUI,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
@@ -91,8 +93,13 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
 
   const swipeRight = useCallback(() => {
     onSwipeRight?.(index);
-    translateX.value = withSpring(maxCardTranslation, swipeRightSpringConfig);
-    activeIndex.value++;
+    runOnUI(() => {
+      translateX.value = withSpring(maxCardTranslation, {
+        ...swipeRightSpringConfig,
+        reduceMotion: ReduceMotion.Never,
+      });
+      activeIndex.value++;
+    })();
   }, [
     index,
     activeIndex,
@@ -104,8 +111,13 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
 
   const swipeLeft = useCallback(() => {
     onSwipeLeft?.(index);
-    translateX.value = withSpring(-maxCardTranslation, swipeLeftSpringConfig);
-    activeIndex.value++;
+    runOnUI(() => {
+      translateX.value = withSpring(-maxCardTranslation, {
+        ...swipeLeftSpringConfig,
+        reduceMotion: ReduceMotion.Never,
+      });
+      activeIndex.value++;
+    })();
   }, [
     index,
     activeIndex,
@@ -117,8 +129,13 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
 
   const swipeTop = useCallback(() => {
     onSwipeTop?.(index);
-    translateY.value = withSpring(-maxCardTranslationY, swipeTopSpringConfig);
-    activeIndex.value++;
+    runOnUI(() => {
+      translateY.value = withSpring(-maxCardTranslationY, {
+        ...swipeTopSpringConfig,
+        reduceMotion: ReduceMotion.Never,
+      });
+      activeIndex.value++;
+    })();
   }, [
     index,
     activeIndex,
@@ -130,8 +147,13 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
 
   const swipeBottom = useCallback(() => {
     onSwipeBottom?.(index);
-    translateY.value = withSpring(maxCardTranslationY, swipeBottomSpringConfig);
-    activeIndex.value++;
+    runOnUI(() => {
+      translateY.value = withSpring(maxCardTranslationY, {
+        ...swipeBottomSpringConfig,
+        reduceMotion: ReduceMotion.Never,
+      });
+      activeIndex.value++;
+    })();
   }, [
     index,
     activeIndex,
@@ -142,10 +164,18 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
   ]);
 
   const swipeBack = useCallback(() => {
-    cancelAnimation(translateX);
-    cancelAnimation(translateY);
-    translateX.value = withSpring(0, swipeBackXSpringConfig);
-    translateY.value = withSpring(0, swipeBackYSpringConfig);
+    runOnUI(() => {
+      cancelAnimation(translateX);
+      cancelAnimation(translateY);
+      translateX.value = withSpring(0, {
+        ...swipeBackXSpringConfig,
+        reduceMotion: ReduceMotion.Never,
+      });
+      translateY.value = withSpring(0, {
+        ...swipeBackYSpringConfig,
+        reduceMotion: ReduceMotion.Never,
+      });
+    })();
   }, [translateX, translateY, swipeBackXSpringConfig, swipeBackYSpringConfig]);
 
   const flipCard = useCallback(() => {
@@ -321,8 +351,14 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
           }
         }
       }
-      translateX.value = withSpring(0, swipeBackXSpringConfig);
-      translateY.value = withSpring(0, swipeBackYSpringConfig);
+      translateX.value = withSpring(0, {
+        ...swipeBackXSpringConfig,
+        reduceMotion: ReduceMotion.Never,
+      });
+      translateY.value = withSpring(0, {
+        ...swipeBackYSpringConfig,
+        reduceMotion: ReduceMotion.Never,
+      });
     });
 
   const rCardStyle = useAnimatedStyle(() => {
@@ -334,9 +370,12 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
     const indexDiff = index - currentActive;
 
     const opacity = withTiming(
-      shouldRender && indexDiff < prerenderItems ? 1 : 0
+      shouldRender && indexDiff < prerenderItems ? 1 : 0,
+      { reduceMotion: ReduceMotion.Never }
     );
-    const scale = withTiming(1 - 0.07 * indexDiff);
+    const scale = withTiming(1 - 0.07 * indexDiff, {
+      reduceMotion: ReduceMotion.Never,
+    });
 
     return {
       opacity,
@@ -360,6 +399,7 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
     const spinValue = interpolate(Number(isFlipped.value), [0, 1], [0, 180]);
     const rotateValue = withTiming(`${spinValue}deg`, {
       duration: flipDuration,
+      reduceMotion: ReduceMotion.Never,
     });
 
     return {
@@ -376,6 +416,7 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
     const spinValue = interpolate(Number(isFlipped.value), [0, 1], [180, 360]);
     const rotateValue = withTiming(`${spinValue}deg`, {
       duration: flipDuration,
+      reduceMotion: ReduceMotion.Never,
     });
 
     return {
