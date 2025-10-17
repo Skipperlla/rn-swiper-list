@@ -9,8 +9,6 @@ import {
 import { useSharedValue } from 'react-native-reanimated';
 import type { SwiperCardRefType } from 'rn-swiper-list';
 
-const useSwipeControls = <T>(
-// Helper to clamp initialIndex to valid range
 function clampInitialIndex(initialIndex: number, dataLength: number): number {
   return Math.max(0, Math.min(initialIndex, Math.max(0, dataLength - 1)));
 }
