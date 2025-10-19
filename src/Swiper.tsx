@@ -128,7 +128,7 @@ const Swiper = <T,>(
     },
     (currentValue, previousValue) => {
       if (currentValue !== previousValue && onIndexChange) {
-        runOnJS(onIndexChange)(currentValue);
+        runOnJS(onIndexChange)(currentValue + initialIndex);
       }
     },
     []
@@ -186,16 +186,16 @@ const Swiper = <T,>(
           OverlayLabelBottom={OverlayLabelBottom}
           ref={refs[actualIndex]}
           onSwipeRight={(cardIndex: number) => {
-            onSwipeRight?.(cardIndex);
+            onSwipeRight?.(cardIndex + initialIndex);
           }}
           onSwipeLeft={(cardIndex: number) => {
-            onSwipeLeft?.(cardIndex);
+            onSwipeLeft?.(cardIndex + initialIndex);
           }}
           onSwipeTop={(cardIndex: number) => {
-            onSwipeTop?.(cardIndex);
+            onSwipeTop?.(cardIndex + initialIndex);
           }}
           onSwipeBottom={(cardIndex: number) => {
-            onSwipeBottom?.(cardIndex);
+            onSwipeBottom?.(cardIndex + initialIndex);
           }}
           FlippedContent={FlippedContent}
           onSwipeStart={onSwipeStart}
