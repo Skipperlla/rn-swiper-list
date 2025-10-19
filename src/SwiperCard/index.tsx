@@ -155,20 +155,16 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
     }
   }, [isFlipped, hasFlippedContent]);
 
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        swipeLeft,
-        swipeRight,
-        swipeBack,
-        swipeTop,
-        swipeBottom,
-        flipCard,
-      };
-    },
-    [swipeLeft, swipeRight, swipeBack, swipeTop, swipeBottom, flipCard]
-  );
+  useImperativeHandle(ref, () => {
+    return {
+      swipeLeft,
+      swipeRight,
+      swipeBack,
+      swipeTop,
+      swipeBottom,
+      flipCard,
+    };
+  }, [swipeLeft, swipeRight, swipeBack, swipeTop, swipeBottom, flipCard]);
 
   const inputRangeX = React.useMemo(() => {
     return translateXRange ?? [];

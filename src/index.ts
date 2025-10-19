@@ -1,6 +1,7 @@
 import type { StyleProp, ViewStyle } from 'react-native';
+import { type JSX } from 'react';
 import type { SharedValue } from 'react-native-reanimated';
-import type { SpringConfig } from 'react-native-reanimated/lib/typescript/reanimated2/animation/springUtils';
+import type { SpringConfig } from 'react-native-reanimated/lib/typescript/animation/spring';
 
 export { default as Swiper } from './Swiper';
 

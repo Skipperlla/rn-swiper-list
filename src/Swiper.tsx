@@ -9,7 +9,7 @@ import type {
 
 import useSwipeControls from './hooks/useSwipeControls';
 import SwiperCard from './SwiperCard';
-import type { SpringConfig } from 'react-native-reanimated/lib/typescript/reanimated2/animation/springUtils';
+import type { SpringConfig } from 'react-native-reanimated/lib/typescript/animation/spring';
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get('screen');
 
@@ -18,8 +18,6 @@ const SWIPE_SPRING_CONFIG: SpringConfig = {
   stiffness: 50,
   mass: 1,
   overshootClamping: true,
-  restDisplacementThreshold: 0.0001,
-  restSpeedThreshold: 0.0001,
 };
 
 const Swiper = <T,>(
@@ -87,20 +85,16 @@ const Swiper = <T,>(
     flipCard,
   } = useSwipeControls(data, loop);
 
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        swipeLeft,
-        swipeRight,
-        swipeBack,
-        swipeTop,
-        swipeBottom,
-        flipCard,
-      };
-    },
-    [swipeLeft, swipeRight, swipeBack, swipeTop, swipeBottom, flipCard]
-  );
+  useImperativeHandle(ref, () => {
+    return {
+      swipeLeft,
+      swipeRight,
+      swipeBack,
+      swipeTop,
+      swipeBottom,
+      flipCard,
+    };
+  }, [swipeLeft, swipeRight, swipeBack, swipeTop, swipeBottom, flipCard]);
 
   useAnimatedReaction(
     () => {
@@ -214,6 +208,7 @@ const Swiper = <T,>(
 function fixedForwardRef<T, P = {}>(
   render: (props: P, ref: React.Ref<T>) => React.ReactNode
 ): (props: P & React.RefAttributes<T>) => React.ReactNode {
+  //@ts-ignore
   return React.forwardRef(render) as any;
 }
 

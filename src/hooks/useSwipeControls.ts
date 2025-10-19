@@ -20,7 +20,7 @@ const useSwipeControls = <T>(data: T[], loop: boolean = false) => {
   }, [data]);
 
   const refs = useMemo(() => {
-    let cardRefs: RefObject<SwiperCardRefType>[] = [];
+    let cardRefs: RefObject<SwiperCardRefType | null>[] = [];
 
     for (let i = 0; i < data.length; i++) {
       cardRefs.push(createRef<SwiperCardRefType>());

@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import {
   Image,
   StyleSheet,
@@ -10,8 +10,7 @@ import {
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
 import { Swiper, type SwiperCardRefType } from 'rn-swiper-list';
-
-import { ActionButton } from '../components';
+import { ActionButton } from './components';
 
 const IMAGES: ImageSourcePropType[] = [
   require('../assets/images/1.jpg'),
@@ -25,7 +24,7 @@ const IMAGES: ImageSourcePropType[] = [
 const ICON_SIZE = 24;
 
 const App = () => {
-  const ref = useRef<SwiperCardRefType>();
+  const ref = useRef<SwiperCardRefType>(null);
 
   const renderCard = useCallback((image: ImageSourcePropType) => {
     return (
@@ -159,7 +158,7 @@ const App = () => {
             ref.current?.swipeBack();
           }}
         >
-          <AntDesign name="reload1" size={ICON_SIZE} color="white" />
+          <AntDesign name="reload" size={ICON_SIZE} color="white" />
         </ActionButton>
         <ActionButton
           style={styles.button}
@@ -175,7 +174,7 @@ const App = () => {
             ref.current?.swipeBottom();
           }}
         >
-          <AntDesign name="arrowdown" size={ICON_SIZE} color="white" />
+          <AntDesign name="arrow-down" size={ICON_SIZE} color="white" />
         </ActionButton>
         <ActionButton
           style={styles.button}
@@ -183,7 +182,7 @@ const App = () => {
             ref.current?.swipeTop();
           }}
         >
-          <AntDesign name="arrowup" size={ICON_SIZE} color="white" />
+          <AntDesign name="arrow-up" size={ICON_SIZE} color="white" />
         </ActionButton>
         <ActionButton
           style={styles.button}

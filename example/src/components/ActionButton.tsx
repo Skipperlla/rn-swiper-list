@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 
-type ActionButtonProps = TouchableOpacity['props'] & {
+type ActionButtonProps = React.ComponentProps<typeof TouchableOpacity> & {
   onTap?: () => void;
 };
 
