@@ -128,7 +128,7 @@ const Swiper = <T,>(
     },
     (currentValue, previousValue) => {
       if (currentValue !== previousValue && onIndexChange) {
-        runOnJS(onIndexChange)(currentValue + initialIndex);
+        runOnJS(onIndexChange)(currentValue);
       }
     },
     []
