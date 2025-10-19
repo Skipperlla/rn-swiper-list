@@ -1,11 +1,12 @@
 import React, { useImperativeHandle, type ForwardedRef } from 'react';
-import { runOnJS, useAnimatedReaction } from 'react-native-reanimated';
+import { useAnimatedReaction } from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
 import type {
   SwiperCardRefType,
   SwiperOptions,
   SwiperCardOptions,
 } from 'rn-swiper-list';
+import { scheduleOnRN } from 'react-native-worklets';
 
 import useSwipeControls from './hooks/useSwipeControls';
 import SwiperCard from './SwiperCard';
@@ -24,7 +25,7 @@ const Swiper = <T,>(
   {
     data,
     renderCard,
-    prerenderItems = Math.min(Math.max(data.length - 1, 1), 3),
+    prerenderItems = Math.max(data.length - 1, 1),
     onSwipeRight,
     onSwipeLeft,
     onSwipedAll,
@@ -115,7 +116,7 @@ const Swiper = <T,>(
     },
     (isSwipingFinished: boolean) => {
       if (isSwipingFinished && onSwipedAll) {
-        runOnJS(onSwipedAll)();
+        scheduleOnRN(onSwipedAll);
       }
     },
     [data]
@@ -128,7 +129,7 @@ const Swiper = <T,>(
     },
     (currentValue, previousValue) => {
       if (currentValue !== previousValue && onIndexChange) {
-        runOnJS(onIndexChange)(currentValue);
+        scheduleOnRN(onIndexChange, currentValue);
       }
     },
     []
@@ -186,16 +187,16 @@ const Swiper = <T,>(
           OverlayLabelBottom={OverlayLabelBottom}
           ref={refs[actualIndex]}
           onSwipeRight={(cardIndex: number) => {
-            onSwipeRight?.(cardIndex + initialIndex);
+            onSwipeRight?.(cardIndex);
           }}
           onSwipeLeft={(cardIndex: number) => {
-            onSwipeLeft?.(cardIndex + initialIndex);
+            onSwipeLeft?.(cardIndex);
           }}
           onSwipeTop={(cardIndex: number) => {
-            onSwipeTop?.(cardIndex + initialIndex);
+            onSwipeTop?.(cardIndex);
           }}
           onSwipeBottom={(cardIndex: number) => {
-            onSwipeBottom?.(cardIndex + initialIndex);
+            onSwipeBottom?.(cardIndex);
           }}
           FlippedContent={FlippedContent}
           onSwipeStart={onSwipeStart}

@@ -10,7 +10,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   cancelAnimation,
   interpolate,
-  runOnJS,
+  ReduceMotion,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
@@ -18,6 +18,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import type { SwiperCardOptions, SwiperCardRefType } from 'rn-swiper-list';
+import { scheduleOnRN, scheduleOnUI } from 'react-native-worklets';
 
 import OverlayLabel from './OverlayLabel';
 
@@ -91,8 +92,13 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
 
   const swipeRight = useCallback(() => {
     onSwipeRight?.(index);
-    translateX.value = withSpring(maxCardTranslation, swipeRightSpringConfig);
-    activeIndex.value++;
+    scheduleOnUI(() => {
+      translateX.value = withSpring(maxCardTranslation, {
+        ...swipeRightSpringConfig,
+        reduceMotion: ReduceMotion.Never,
+      });
+      activeIndex.value++;
+    });
   }, [
     index,
     activeIndex,
@@ -104,8 +110,13 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
 
   const swipeLeft = useCallback(() => {
     onSwipeLeft?.(index);
-    translateX.value = withSpring(-maxCardTranslation, swipeLeftSpringConfig);
-    activeIndex.value++;
+    scheduleOnUI(() => {
+      translateX.value = withSpring(-maxCardTranslation, {
+        ...swipeLeftSpringConfig,
+        reduceMotion: ReduceMotion.Never,
+      });
+      activeIndex.value++;
+    });
   }, [
     index,
     activeIndex,
@@ -117,8 +128,13 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
 
   const swipeTop = useCallback(() => {
     onSwipeTop?.(index);
-    translateY.value = withSpring(-maxCardTranslationY, swipeTopSpringConfig);
-    activeIndex.value++;
+    scheduleOnUI(() => {
+      translateY.value = withSpring(-maxCardTranslationY, {
+        ...swipeTopSpringConfig,
+        reduceMotion: ReduceMotion.Never,
+      });
+      activeIndex.value++;
+    });
   }, [
     index,
     activeIndex,
@@ -130,8 +146,13 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
 
   const swipeBottom = useCallback(() => {
     onSwipeBottom?.(index);
-    translateY.value = withSpring(maxCardTranslationY, swipeBottomSpringConfig);
-    activeIndex.value++;
+    scheduleOnUI(() => {
+      translateY.value = withSpring(maxCardTranslationY, {
+        ...swipeBottomSpringConfig,
+        reduceMotion: ReduceMotion.Never,
+      });
+      activeIndex.value++;
+    });
   }, [
     index,
     activeIndex,
@@ -142,10 +163,18 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
   ]);
 
   const swipeBack = useCallback(() => {
-    cancelAnimation(translateX);
-    cancelAnimation(translateY);
-    translateX.value = withSpring(0, swipeBackXSpringConfig);
-    translateY.value = withSpring(0, swipeBackYSpringConfig);
+    scheduleOnUI(() => {
+      cancelAnimation(translateX);
+      cancelAnimation(translateY);
+      translateX.value = withSpring(0, {
+        ...swipeBackXSpringConfig,
+        reduceMotion: ReduceMotion.Never,
+      });
+      translateY.value = withSpring(0, {
+        ...swipeBackYSpringConfig,
+        reduceMotion: ReduceMotion.Never,
+      });
+    });
   }, [translateX, translateY, swipeBackXSpringConfig, swipeBackYSpringConfig]);
 
   const flipCard = useCallback(() => {
@@ -183,20 +212,20 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
 
   const tap = Gesture.Tap().onEnd((_event, success) => {
     if (success && onPress) {
-      runOnJS(onPress)();
+      scheduleOnRN(onPress);
     }
   });
 
   const pan = Gesture.Pan()
     .onBegin(() => {
       nextActiveIndex.value = Math.floor(activeIndex.value);
-      if (onSwipeStart) runOnJS(onSwipeStart)();
+      if (onSwipeStart) scheduleOnRN(onSwipeStart);
     })
     .onUpdate((event) => {
       // Use activeIndex.value directly in worklet context
       const currentActive = Math.floor(activeIndex.value);
       if (currentActive !== index) return;
-      if (onSwipeActive) runOnJS(onSwipeActive)();
+      if (onSwipeActive) scheduleOnRN(onSwipeActive);
 
       translateX.value = event.translationX;
       translateY.value = event.translationY;
@@ -221,7 +250,7 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
     .onFinalize((event) => {
       const currentActive = Math.floor(activeIndex.value);
       if (currentActive !== index) return;
-      if (onSwipeEnd) runOnJS(onSwipeEnd)();
+      if (onSwipeEnd) scheduleOnRN(onSwipeEnd);
       if (nextActiveIndex.value === activeIndex.value + 1) {
         const sign = Math.sign(event.translationX);
         const signY = Math.sign(event.translationY);
@@ -235,22 +264,22 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
         );
         if (signPositionY) {
           if (signY === -1 && !disableTopSwipe) {
-            runOnJS(swipeTop)();
+            scheduleOnRN(swipeTop);
             return;
           }
           if (signY === 1 && !disableBottomSwipe) {
-            runOnJS(swipeBottom)();
+            scheduleOnRN(swipeBottom);
             return;
           }
         }
 
         if (!signPositionY) {
           if (sign === 1 && !disableRightSwipe) {
-            runOnJS(swipeRight)();
+            scheduleOnRN(swipeRight);
             return;
           }
           if (sign === -1 && !disableLeftSwipe) {
-            runOnJS(swipeLeft)();
+            scheduleOnRN(swipeLeft);
             return;
           }
         }
@@ -259,17 +288,17 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
     .onFinalize((event) => {
       const currentActive = Math.floor(activeIndex.value);
       if (currentActive !== index) return;
-      if (onSwipeEnd) runOnJS(onSwipeEnd)();
+      if (onSwipeEnd) scheduleOnRN(onSwipeEnd);
 
       if (swipeVelocityThreshold !== undefined) {
         if (Math.abs(event.velocityX) > swipeVelocityThreshold) {
           const sign = Math.sign(event.velocityX);
           if (sign === -1 && !disableLeftSwipe) {
-            runOnJS(swipeLeft)();
+            scheduleOnRN(swipeLeft);
             return;
           }
           if (sign === 1 && !disableRightSwipe) {
-            runOnJS(swipeRight)();
+            scheduleOnRN(swipeRight);
             return;
           }
         }
@@ -277,11 +306,11 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
         if (Math.abs(event.velocityY) > swipeVelocityThreshold) {
           const sign = Math.sign(event.velocityY);
           if (sign === -1 && !disableTopSwipe) {
-            runOnJS(swipeTop)();
+            scheduleOnRN(swipeTop);
             return;
           }
           if (sign === 1 && !disableBottomSwipe) {
-            runOnJS(swipeBottom)();
+            scheduleOnRN(swipeBottom);
             return;
           }
         }
@@ -301,28 +330,34 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
 
         if (signPositionY) {
           if (signY === -1 && !disableTopSwipe) {
-            runOnJS(swipeTop)();
+            scheduleOnRN(swipeTop);
             return;
           }
           if (signY === 1 && !disableBottomSwipe) {
-            runOnJS(swipeBottom)();
+            scheduleOnRN(swipeBottom);
             return;
           }
         }
 
         if (!signPositionY) {
           if (sign === 1 && !disableRightSwipe) {
-            runOnJS(swipeRight)();
+            scheduleOnRN(swipeRight);
             return;
           }
           if (sign === -1 && !disableLeftSwipe) {
-            runOnJS(swipeLeft)();
+            scheduleOnRN(swipeLeft);
             return;
           }
         }
       }
-      translateX.value = withSpring(0, swipeBackXSpringConfig);
-      translateY.value = withSpring(0, swipeBackYSpringConfig);
+      translateX.value = withSpring(0, {
+        ...swipeBackXSpringConfig,
+        reduceMotion: ReduceMotion.Never,
+      });
+      translateY.value = withSpring(0, {
+        ...swipeBackYSpringConfig,
+        reduceMotion: ReduceMotion.Never,
+      });
     });
 
   const rCardStyle = useAnimatedStyle(() => {
@@ -334,9 +369,12 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
     const indexDiff = index - currentActive;
 
     const opacity = withTiming(
-      shouldRender && indexDiff < prerenderItems ? 1 : 0
+      shouldRender && indexDiff < prerenderItems ? 1 : 0,
+      { reduceMotion: ReduceMotion.Never }
     );
-    const scale = withTiming(1 - 0.07 * indexDiff);
+    const scale = withTiming(1 - 0.07 * indexDiff, {
+      reduceMotion: ReduceMotion.Never,
+    });
 
     return {
       opacity,
@@ -360,6 +398,7 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
     const spinValue = interpolate(Number(isFlipped.value), [0, 1], [0, 180]);
     const rotateValue = withTiming(`${spinValue}deg`, {
       duration: flipDuration,
+      reduceMotion: ReduceMotion.Never,
     });
 
     return {
@@ -376,6 +415,7 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
     const spinValue = interpolate(Number(isFlipped.value), [0, 1], [180, 360]);
     const rotateValue = withTiming(`${spinValue}deg`, {
       duration: flipDuration,
+      reduceMotion: ReduceMotion.Never,
     });
 
     return {

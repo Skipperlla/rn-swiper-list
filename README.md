@@ -10,16 +10,17 @@ https://github.com/Skipperlla/rn-tinder-swiper/assets/68515357/149b7418-cc2f-489
 yarn add rn-swiper-list
 ```
 
-`rn-swiper-list` needs `react-native-reanimated` and `react-native-gesture-handler` package 💎
+`rn-swiper-list` needs `react-native-reanimated`, `react-native-gesture-handler`, and `react-native-worklets` packages 💎
 
 ```sh
-yarn add react-native-reanimated react-native-gesture-handler
+yarn add react-native-reanimated react-native-gesture-handler react-native-worklets
 ```
 
 👇 You also need to complete installations of these packages for more information use the links below 👇
 
 - [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation)
 - [react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/docs/installation)
+- [react-native-worklets](https://docs.swmansion.com/react-native-worklets/)
 
 ## Overview
 
@@ -31,40 +32,53 @@ yarn add react-native-reanimated react-native-gesture-handler
 - [x] More swipe events callbacks
 - [x] Integrating and using a single card with flatlist
 - [x] Flip card on press to show more details
+- [x] Optimized UI thread animations for smooth performance
+- [x] Race condition prevention in callback execution
+- [x] Improved Android performance with proper thread handling
+
+## Important Notes ⚠️
+
+### Callback Execution Timing
+
+All swipe callbacks (`onSwipeLeft`, `onSwipeRight`, `onSwipeTop`, `onSwipeBottom`) are executed **after** the animation has been set up on the UI thread. This prevents race conditions where callback state changes could interfere with ongoing animations, ensuring smooth performance especially on Android devices.
+
+### Index Parameter
+
+The `cardIndex` parameter passed to swipe callbacks represents the card's position in the **original data array**, not its position relative to any `initialIndex`. This ensures consistent indexing regardless of where you start in the card stack.
 
 # Props ✏️
 
 ## Card Props
 
-| Props                      | type                     | description                                                                            | required | default         |
-| :------------------------- | :----------------------- | :------------------------------------------------------------------------------------- | :------- | :-------------- |
-| data                       | array                    | Array of data objects used to render the cards.                                        | Yes      |                 |
-| renderCard                 | func(cardData,cardIndex) | Function that renders a card based on the provided data and index.                     | Yes      |                 |
-| initialIndex               | number                   | Initial card index to display when the component first mounts (updates after mount are ignored). Value is clamped to [0, data.length - 1]. | No       | 0               |
-| prerenderItems             | number                   | Number of cards to prerender ahead of the active card for better performance. Value is capped at 3 for optimal performance. | No       | 3 |
-| cardStyle                  | object                   | CSS style properties applied to each card. These can be applied inline.                |          |                              |
-| flippedCardStyle           | object                   | CSS style properties for the back of the card.                                         |          |                              |
-| regularCardStyle           | object                   | CSS style properties for the front of the card.                                        |          |                              |
-| overlayLabelContainerStyle | object                   | CSS style properties for the overlay label container.                                  |          |                              |
-| keyExtractor               | func                     | Function that returns a unique key for each card based on the provided data.           | No       |                              |
-| children                   | React.ReactNode          | Child components to be displayed inside the component. Used typically for composition. |          |                              |
-| FlippedContent             | func(item, index)        | Function that renders the content for the back of the card.                            | No       |                              |
-| loop                       | bool                     | If true, the swiper will loop back to the first card after the last card is swiped.    | No       | false                        |
+| Props                      | type                     | description                                                                                                                                                                        | required | default                        |
+| :------------------------- | :----------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------- | :----------------------------- |
+| data                       | array                    | Array of data objects used to render the cards.                                                                                                                                    | Yes      |                                |
+| renderCard                 | func(cardData,cardIndex) | Function that renders a card based on the provided data and index.                                                                                                                 | Yes      |                                |
+| initialIndex               | number                   | Initial card index to display when the component first mounts (updates after mount are ignored). Value is clamped to [0, data.length - 1].                                         | No       | 0                              |
+| prerenderItems             | number                   | Number of cards to prerender ahead of the active card for better performance. Defaults to `Math.max(data.length - 1, 1)` which ensures optimal rendering for different data sizes. | No       | `Math.max(data.length - 1, 1)` |
+| cardStyle                  | object                   | CSS style properties applied to each card. These can be applied inline.                                                                                                            |          |                                |
+| flippedCardStyle           | object                   | CSS style properties for the back of the card.                                                                                                                                     |          |                                |
+| regularCardStyle           | object                   | CSS style properties for the front of the card.                                                                                                                                    |          |                                |
+| overlayLabelContainerStyle | object                   | CSS style properties for the overlay label container.                                                                                                                              |          |                                |
+| keyExtractor               | func                     | Function that returns a unique key for each card based on the provided data.                                                                                                       | No       |                                |
+| children                   | React.ReactNode          | Child components to be displayed inside the component. Used typically for composition.                                                                                             |          |                                |
+| FlippedContent             | func(item, index)        | Function that renders the content for the back of the card.                                                                                                                        | No       |                                |
+| loop                       | bool                     | If true, the swiper will loop back to the first card after the last card is swiped.                                                                                                | No       | false                          |
 
 ## Event callbacks
 
-| Props         | type | description                                                                                           | default             |
-| :------------ | :--- | :---------------------------------------------------------------------------------------------------- | :------------------ |
-| onSwipeLeft   | func | Function called when a card is swiped left. It receives the index of the card as a parameter.         | `(cardIndex) => {}` |
-| onSwipeRight  | func | Function called when a card is swiped right. It receives the index of the card as a parameter.        | `(cardIndex) => {}` |
-| onSwipeTop    | func | Function called when a card is swiped top. It receives the index of the card as a parameter.          | `(cardIndex) => {}` |
-| onSwipeBottom | func | Function called when a card is swiped bottom. It receives the index of the card as a parameter.       | `(cardIndex) => {}` |
-| onSwipedAll   | func | Function called when all cards have been swiped.                                                      | `() => {}`          |
-| onSwipeStart  | func | Function called when a swipe event starts.                                                            | `() => {}`          |
-| onSwipeEnd    | func | Function called when a swipe event ends.                                                              | `() => {}`          |
-| onSwipeActive | func | Function called when a swipe event is active.                                                         | `() => {}`          |
-| onIndexChange | func | Function called when the index of the card changes. It receives the index of the card as a parameter. | `(cardIndex) => {}` |
-| onPress       | func | Function called when the card is pressed (tapped).                                                    | `() => {}`          |
+| Props         | type | description                                                                                                                                                                       | default             |
+| :------------ | :--- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------ |
+| onSwipeLeft   | func | Function called when a card is swiped left. Receives the card's index in the original data array. **Note**: Callbacks execute after animation setup to prevent race conditions.   | `(cardIndex) => {}` |
+| onSwipeRight  | func | Function called when a card is swiped right. Receives the card's index in the original data array. **Note**: Callbacks execute after animation setup to prevent race conditions.  | `(cardIndex) => {}` |
+| onSwipeTop    | func | Function called when a card is swiped top. Receives the card's index in the original data array. **Note**: Callbacks execute after animation setup to prevent race conditions.    | `(cardIndex) => {}` |
+| onSwipeBottom | func | Function called when a card is swiped bottom. Receives the card's index in the original data array. **Note**: Callbacks execute after animation setup to prevent race conditions. | `(cardIndex) => {}` |
+| onSwipedAll   | func | Function called when all cards have been swiped.                                                                                                                                  | `() => {}`          |
+| onSwipeStart  | func | Function called when a swipe event starts.                                                                                                                                        | `() => {}`          |
+| onSwipeEnd    | func | Function called when a swipe event ends.                                                                                                                                          | `() => {}`          |
+| onSwipeActive | func | Function called when a swipe event is active.                                                                                                                                     | `() => {}`          |
+| onIndexChange | func | Function called when the index of the card changes. It receives the index of the card as a parameter.                                                                             | `(cardIndex) => {}` |
+| onPress       | func | Function called when the card is pressed (tapped).                                                                                                                                | `() => {}`          |
 
 ## Swipe Animation Props
 
@@ -459,7 +473,7 @@ type SwiperOptions<T> = {
   keyExtractor?: (item: T, index: number) => string | number;
   FlippedContent?: (item: T, index: number) => JSX.Element;
   loop?: boolean;
-  keyExtractor?: (item: T, index: number) => string | number;
+  FlippedContent?: (item: T, index: number) => JSX.Element;
   /*
    * Children components
    */
