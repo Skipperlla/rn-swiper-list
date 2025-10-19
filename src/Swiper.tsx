@@ -24,7 +24,7 @@ const Swiper = <T,>(
   {
     data,
     renderCard,
-    prerenderItems = Math.max(data.length - 1, 1),
+    prerenderItems = Math.min(Math.max(data.length - 1, 1), 3),
     onSwipeRight,
     onSwipeLeft,
     onSwipedAll,
@@ -75,6 +75,15 @@ const Swiper = <T,>(
   }: SwiperOptions<T>,
   ref: ForwardedRef<SwiperCardRefType>
 ) => {
+  // Slice data from initialIndex to skip initial items
+  const slicedData = data.slice(initialIndex);
+
+  // Adjust prerenderItems based on sliced data length
+  const adjustedPrerenderItems = Math.min(
+    prerenderItems,
+    Math.max(slicedData.length - 1, 1)
+  );
+
   const {
     activeIndex,
     refs,
@@ -84,7 +93,7 @@ const Swiper = <T,>(
     swipeTop,
     swipeBottom,
     flipCard,
-  } = useSwipeControls(data, loop, initialIndex);
+  } = useSwipeControls(slicedData, loop); // Always start from 0 with sliced data
 
   useImperativeHandle(ref, () => {
     return {
@@ -99,14 +108,14 @@ const Swiper = <T,>(
 
   useAnimatedReaction(
     () => {
-      return activeIndex.value >= data.length;
+      return activeIndex.value >= slicedData.length;
     },
     (isSwipingFinished: boolean) => {
       if (isSwipingFinished && onSwipedAll) {
         runOnJS(onSwipedAll)();
       }
     },
-    [data]
+    [slicedData]
   );
 
   //Listen to the activeIndex value
@@ -116,7 +125,7 @@ const Swiper = <T,>(
     },
     (currentValue, previousValue) => {
       if (currentValue !== previousValue && onIndexChange) {
-        runOnJS(onIndexChange)(currentValue);
+        runOnJS(onIndexChange)(currentValue + initialIndex);
       }
     },
     []
@@ -128,16 +137,18 @@ const Swiper = <T,>(
     }
   >;
 
-  return data
+  return slicedData
     .map((item, index) => {
+      // Calculate the original index for keyExtractor
+      const originalIndex = index + initialIndex;
       return (
         <Card
-          key={keyExtractor ? keyExtractor(item, index) : index}
+          key={keyExtractor ? keyExtractor(item, originalIndex) : originalIndex}
           cardStyle={cardStyle}
           flippedCardStyle={flippedCardStyle}
           regularCardStyle={regularCardStyle}
           index={index}
-          prerenderItems={prerenderItems}
+          prerenderItems={adjustedPrerenderItems}
           disableRightSwipe={disableRightSwipe}
           disableLeftSwipe={disableLeftSwipe}
           disableTopSwipe={disableTopSwipe}
@@ -171,16 +182,16 @@ const Swiper = <T,>(
           OverlayLabelBottom={OverlayLabelBottom}
           ref={refs[index]}
           onSwipeRight={(cardIndex: number) => {
-            onSwipeRight?.(cardIndex);
+            onSwipeRight?.(cardIndex + initialIndex);
           }}
           onSwipeLeft={(cardIndex: number) => {
-            onSwipeLeft?.(cardIndex);
+            onSwipeLeft?.(cardIndex + initialIndex);
           }}
           onSwipeTop={(cardIndex: number) => {
-            onSwipeTop?.(cardIndex);
+            onSwipeTop?.(cardIndex + initialIndex);
           }}
           onSwipeBottom={(cardIndex: number) => {
-            onSwipeBottom?.(cardIndex);
+            onSwipeBottom?.(cardIndex + initialIndex);
           }}
           FlippedContent={FlippedContent}
           onSwipeStart={onSwipeStart}
