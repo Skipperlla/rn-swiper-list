@@ -1,7 +1,7 @@
 {
   "name": "rn-swiper-list-example",
   "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
+  "main": "index.js",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -9,21 +9,17 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "expo": "~50.0.20",
-    "expo-crypto": "~12.8.1",
-    "expo-status-bar": "~1.11.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-native": "0.73.6",
-    "react-native-gesture-handler": "~2.14.0",
-    "react-native-reanimated": "~4.1.3",
-    "react-native-web": "~0.19.6"
+    "@expo/metro-runtime": "~6.1.2",
+    "expo": "~54.0.13",
+    "expo-status-bar": "~3.0.8",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-native": "0.81.4",
+    "react-native-web": "~0.21.0"
   },
+  "private": true,
   "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "@expo/webpack-config": "~19.0.1",
-    "babel-loader": "^8.1.0",
-    "babel-plugin-module-resolver": "^5.0.0"
-  },
-  "private": true
+    "react-native-builder-bob": "^0.40.13",
+    "react-native-monorepo-config": "^0.1.9"
+  }
 }
