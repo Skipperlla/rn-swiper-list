@@ -116,6 +116,7 @@
     "github": {
       "release": true
     },
+    "increment": false,
     "plugins": {
       "@release-it/conventional-changelog": {
         "preset": {
