@@ -1,6 +1,6 @@
 {
   "name": "rn-swiper-list",
-  "version": "2.5.0",
+  "version": "3.0.0",
   "description": "⚡ Lightning fast and customizable tinder-like swiper for React Native",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",

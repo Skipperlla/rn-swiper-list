@@ -1,6 +1,6 @@
 {
   "name": "rn-swiper-list-example",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "main": "index.js",
   "scripts": {
     "start": "expo start --clear",
