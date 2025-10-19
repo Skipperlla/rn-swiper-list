@@ -1,11 +1,12 @@
 import React, { useImperativeHandle, type ForwardedRef } from 'react';
-import { runOnJS, useAnimatedReaction } from 'react-native-reanimated';
+import { useAnimatedReaction } from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
 import type {
   SwiperCardRefType,
   SwiperOptions,
   SwiperCardOptions,
 } from 'rn-swiper-list';
+import { scheduleOnRN } from 'react-native-worklets';
 
 import useSwipeControls from './hooks/useSwipeControls';
 import SwiperCard from './SwiperCard';
@@ -115,7 +116,7 @@ const Swiper = <T,>(
     },
     (isSwipingFinished: boolean) => {
       if (isSwipingFinished && onSwipedAll) {
-        runOnJS(onSwipedAll)();
+        scheduleOnRN(onSwipedAll);
       }
     },
     [data]
@@ -128,7 +129,7 @@ const Swiper = <T,>(
     },
     (currentValue, previousValue) => {
       if (currentValue !== previousValue && onIndexChange) {
-        runOnJS(onIndexChange)(currentValue);
+        scheduleOnRN(onIndexChange, currentValue);
       }
     },
     []
