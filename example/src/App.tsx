@@ -102,7 +102,6 @@ const App = () => {
         <Swiper
           ref={ref}
           data={IMAGES}
-          initialIndex={2}
           cardStyle={styles.cardStyle}
           overlayLabelContainerStyle={styles.overlayLabelContainerStyle}
           renderCard={renderCard}

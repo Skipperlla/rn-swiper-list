@@ -9,9 +9,17 @@ import {
 import { useSharedValue } from 'react-native-reanimated';
 import type { SwiperCardRefType } from 'rn-swiper-list';
 
-const useSwipeControls = <T>(data: T[], loop: boolean = false) => {
+const useSwipeControls = <T>(
+  data: T[],
+  loop: boolean = false,
+  initialIndex: number = 0
+) => {
   // Validate and clamp initialIndex to valid range
-  const activeIndex = useSharedValue(0);
+  const clampedInitialIndex = Math.max(
+    0,
+    Math.min(initialIndex, data.length - 1)
+  );
+  const activeIndex = useSharedValue(clampedInitialIndex);
   const dataLength = useRef(data.length);
 
   // Update data length ref when data changes
@@ -33,14 +41,14 @@ const useSwipeControls = <T>(data: T[], loop: boolean = false) => {
     'worklet';
     if (loop && activeIndex.value >= dataLength.current - 1) {
       // Reset all cards to initial position for loop
-      activeIndex.value = 0;
+      activeIndex.value = clampedInitialIndex;
       refs.forEach((ref) => {
         ref?.current?.swipeBack();
       });
     } else {
       activeIndex.value++;
     }
-  }, [activeIndex, loop, refs]);
+  }, [activeIndex, loop, refs, clampedInitialIndex]);
 
   const swipeRight = useCallback(() => {
     const currentIndex = Math.floor(activeIndex.value);
@@ -89,19 +97,24 @@ const useSwipeControls = <T>(data: T[], loop: boolean = false) => {
   const swipeBack = useCallback(() => {
     const previousIndex = activeIndex.value - 1;
 
-    if (!loop && (previousIndex < 0 || !refs[previousIndex])) {
+    if (
+      !loop &&
+      (previousIndex < clampedInitialIndex || !refs[previousIndex])
+    ) {
       return;
     }
 
     // Handle looping for swipe back
     const targetIndex =
-      previousIndex < 0 ? dataLength.current - 1 : previousIndex;
+      previousIndex < clampedInitialIndex
+        ? dataLength.current - 1
+        : previousIndex;
 
     if (refs[targetIndex]) {
       refs[targetIndex]?.current?.swipeBack();
       activeIndex.value = targetIndex;
     }
-  }, [activeIndex, refs, loop]);
+  }, [activeIndex, refs, loop, clampedInitialIndex]);
 
   return {
     activeIndex,
