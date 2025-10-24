@@ -30,7 +30,11 @@ describe('workletCompat', () => {
     });
 
     // Mock react-native-reanimated
-    const mockRunOnJS = jest.fn((fn) => (...args: any[]) => fn(...args));
+    const mockRunOnJS = jest.fn(
+      (fn) =>
+        (...args: any[]) =>
+          fn(...args)
+    );
     const mockRunOnUI = jest.fn((fn) => () => fn());
 
     jest.doMock('react-native-reanimated', () => ({
