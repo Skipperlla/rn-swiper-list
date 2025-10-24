@@ -18,7 +18,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import type { SwiperCardOptions, SwiperCardRefType } from 'rn-swiper-list';
-import { scheduleOnRN, scheduleOnUI } from 'react-native-worklets';
+import { scheduleOnRN, scheduleOnUI } from '../utils/workletCompat';
 
 import OverlayLabel from './OverlayLabel';
 
