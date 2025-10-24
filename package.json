@@ -86,8 +86,12 @@
     "react": "*",
     "react-native": "*",
     "react-native-gesture-handler": "*",
-    "react-native-reanimated": "*",
-    "react-native-worklets": "*"
+    "react-native-reanimated": "*"
+  },
+  "peerDependenciesMeta": {
+    "react-native-worklets": {
+      "optional": true
+    }
   },
   "workspaces": [
     "example"
@@ -157,7 +161,6 @@
   },
   "dependencies": {
     "react-native-gesture-handler": "*",
-    "react-native-reanimated": "*",
-    "react-native-worklets": "*"
+    "react-native-reanimated": "*"
   }
 }

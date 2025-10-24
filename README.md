@@ -10,17 +10,26 @@ https://github.com/Skipperlla/rn-tinder-swiper/assets/68515357/149b7418-cc2f-489
 yarn add rn-swiper-list
 ```
 
-`rn-swiper-list` needs `react-native-reanimated`, `react-native-gesture-handler`, and `react-native-worklets` packages 💎
+`rn-swiper-list` requires `react-native-reanimated` and `react-native-gesture-handler` packages 💎
 
 ```sh
-yarn add react-native-reanimated react-native-gesture-handler react-native-worklets
+yarn add react-native-reanimated react-native-gesture-handler
 ```
 
 👇 You also need to complete installations of these packages for more information use the links below 👇
 
 - [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation)
 - [react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/docs/installation)
+
+**Note for React Native 0.78+:** If you're using React Native 0.78 or later, you also need to install `react-native-worklets`:
+
+```sh
+yarn add react-native-worklets
+```
+
 - [react-native-worklets](https://docs.swmansion.com/react-native-worklets/)
+
+For React Native versions prior to 0.78, the library will automatically use the worklet functions from `react-native-reanimated`.
 
 ## Overview
 

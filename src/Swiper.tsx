@@ -6,7 +6,7 @@ import type {
   SwiperOptions,
   SwiperCardOptions,
 } from 'rn-swiper-list';
-import { scheduleOnRN } from 'react-native-worklets';
+import { scheduleOnRN } from './utils/workletCompat';
 
 import useSwipeControls from './hooks/useSwipeControls';
 import SwiperCard from './SwiperCard';
