@@ -97,11 +97,9 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
         ...swipeRightSpringConfig,
         reduceMotion: ReduceMotion.Never,
       });
-      activeIndex.value++;
     });
   }, [
     index,
-    activeIndex,
     maxCardTranslation,
     onSwipeRight,
     translateX,
@@ -115,11 +113,9 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
         ...swipeLeftSpringConfig,
         reduceMotion: ReduceMotion.Never,
       });
-      activeIndex.value++;
     });
   }, [
     index,
-    activeIndex,
     maxCardTranslation,
     onSwipeLeft,
     translateX,
@@ -133,11 +129,9 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
         ...swipeTopSpringConfig,
         reduceMotion: ReduceMotion.Never,
       });
-      activeIndex.value++;
     });
   }, [
     index,
-    activeIndex,
     maxCardTranslationY,
     onSwipeTop,
     translateY,
@@ -151,11 +145,9 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
         ...swipeBottomSpringConfig,
         reduceMotion: ReduceMotion.Never,
       });
-      activeIndex.value++;
     });
   }, [
     index,
-    activeIndex,
     maxCardTranslationY,
     onSwipeBottom,
     translateY,
