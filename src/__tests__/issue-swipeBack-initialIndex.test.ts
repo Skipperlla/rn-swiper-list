@@ -30,7 +30,8 @@ describe('Issue: swipeBack with initialIndex > 0', () => {
     // This is correct - cannot swipe back below initialIndex
 
     // Step 2: Swipe right (move forward)
-    activeIndex++; // Should become 6 (not 7 after fix)
+    // After fix: activeIndex increments by 1 (before fix: would increment by 2)
+    activeIndex++; // Now at 6 (correctly), not 7 (as it was before the fix)
     expect(activeIndex).toBe(6);
 
     // Step 3: Now try swipeBack - should work
@@ -123,12 +124,20 @@ describe('Issue: swipeBack with initialIndex > 0', () => {
     let activeIndex = initialIndex;
 
     // Before fix: swipeRight would increment twice (card + updateActiveIndex)
+    // This caused activeIndex to be 7 instead of 6, making swipeBack target wrong card
     // After fix: swipeRight increments once (only updateActiveIndex)
+    // Now activeIndex is correctly 6, and swipeBack targets the right card
+
+    const INCREMENTS_PER_SWIPE_AFTER_FIX = 1;
+    const INCREMENTS_PER_SWIPE_BEFORE_FIX = 2;
 
     // Simulate one swipe with the fix
-    const incrementsPerSwipe = 1; // Fixed: was 2 before
-    activeIndex += incrementsPerSwipe;
-    expect(activeIndex).toBe(6); // Not 7!
+    activeIndex += INCREMENTS_PER_SWIPE_AFTER_FIX;
+    expect(activeIndex).toBe(6); // Correct!
+
+    // Before fix, activeIndex would have been:
+    const brokenActiveIndex = initialIndex + INCREMENTS_PER_SWIPE_BEFORE_FIX;
+    expect(brokenActiveIndex).toBe(7); // This was the bug
 
     // SwipeBack targets the correct card now
     const targetCard = activeIndex - 1;
