@@ -91,12 +91,17 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
   const maxCardTranslationY = height * 1.5;
 
   const swipeRight = useCallback(() => {
-    onSwipeRight?.(index);
     scheduleOnUI(() => {
-      translateX.value = withSpring(maxCardTranslation, {
-        ...swipeRightSpringConfig,
-        reduceMotion: ReduceMotion.Never,
-      });
+      translateX.value = withSpring(
+        maxCardTranslation,
+        {
+          ...swipeRightSpringConfig,
+          reduceMotion: ReduceMotion.Never,
+        },
+        () => {
+          if (onSwipeRight) scheduleOnRN(onSwipeRight, index);
+        }
+      );
       activeIndex.value++;
     });
   }, [
@@ -109,12 +114,17 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
   ]);
 
   const swipeLeft = useCallback(() => {
-    onSwipeLeft?.(index);
     scheduleOnUI(() => {
-      translateX.value = withSpring(-maxCardTranslation, {
-        ...swipeLeftSpringConfig,
-        reduceMotion: ReduceMotion.Never,
-      });
+      translateX.value = withSpring(
+        -maxCardTranslation,
+        {
+          ...swipeLeftSpringConfig,
+          reduceMotion: ReduceMotion.Never,
+        },
+        () => {
+          if (onSwipeLeft) scheduleOnRN(onSwipeLeft, index);
+        }
+      );
       activeIndex.value++;
     });
   }, [
@@ -127,12 +137,17 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
   ]);
 
   const swipeTop = useCallback(() => {
-    onSwipeTop?.(index);
     scheduleOnUI(() => {
-      translateY.value = withSpring(-maxCardTranslationY, {
-        ...swipeTopSpringConfig,
-        reduceMotion: ReduceMotion.Never,
-      });
+      translateY.value = withSpring(
+        -maxCardTranslationY,
+        {
+          ...swipeTopSpringConfig,
+          reduceMotion: ReduceMotion.Never,
+        },
+        () => {
+          if (onSwipeTop) scheduleOnRN(onSwipeTop, index);
+        }
+      );
       activeIndex.value++;
     });
   }, [
@@ -145,12 +160,17 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
   ]);
 
   const swipeBottom = useCallback(() => {
-    onSwipeBottom?.(index);
     scheduleOnUI(() => {
-      translateY.value = withSpring(maxCardTranslationY, {
-        ...swipeBottomSpringConfig,
-        reduceMotion: ReduceMotion.Never,
-      });
+      translateY.value = withSpring(
+        maxCardTranslationY,
+        {
+          ...swipeBottomSpringConfig,
+          reduceMotion: ReduceMotion.Never,
+        },
+        () => {
+          if (onSwipeBottom) scheduleOnRN(onSwipeBottom, index);
+        }
+      );
       activeIndex.value++;
     });
   }, [
