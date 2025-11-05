@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, type ForwardedRef } from 'react';
+import React, { useImperativeHandle, useState, type ForwardedRef } from 'react';
 import { useAnimatedReaction } from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
 import type {
@@ -99,6 +99,19 @@ const Swiper = <T,>(
     flipCard,
   } = useSwipeControls(data, loop, clampedInitialIndex);
 
+  // Track the range of cards to render based on activeIndex
+  // This state updates when activeIndex changes, allowing dynamic rendering
+  const [renderRange, setRenderRange] = useState<{
+    start: number;
+    end: number;
+  }>({
+    start: clampedInitialIndex,
+    end: Math.min(
+      clampedInitialIndex + adjustedPrerenderItems + 1,
+      data.length
+    ),
+  });
+
   useImperativeHandle(ref, () => {
     return {
       swipeLeft,
@@ -109,6 +122,24 @@ const Swiper = <T,>(
       flipCard,
     };
   }, [swipeLeft, swipeRight, swipeBack, swipeTop, swipeBottom, flipCard]);
+
+  // Update render range when activeIndex changes
+  useAnimatedReaction(
+    () => {
+      return Math.floor(activeIndex.value);
+    },
+    (currentActive) => {
+      const newStart = Math.max(currentActive - 1, 0);
+      const newEnd = Math.min(
+        currentActive + adjustedPrerenderItems + 1,
+        data.length
+      );
+      scheduleOnRN(() => {
+        setRenderRange({ start: newStart, end: newEnd });
+      });
+    },
+    [adjustedPrerenderItems, data.length]
+  );
 
   useAnimatedReaction(
     () => {
@@ -141,11 +172,13 @@ const Swiper = <T,>(
     }
   >;
 
+  // Only render the cards within the current render range
+  // This dramatically improves performance with large datasets
   return data
-    .slice(clampedInitialIndex) // Only slice for rendering, not for processing
+    .slice(renderRange.start, renderRange.end)
     .map((item, index) => {
       // Calculate the actual index in the original data array
-      const actualIndex = index + clampedInitialIndex;
+      const actualIndex = index + renderRange.start;
       return (
         <Card
           key={keyExtractor ? keyExtractor(item, actualIndex) : actualIndex}

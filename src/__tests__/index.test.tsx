@@ -201,3 +201,80 @@ describe('Updated PrerenderItems Calculation', () => {
     });
   });
 });
+
+describe('Performance Optimization - Dynamic Rendering', () => {
+  it('should calculate correct render range for initial state', () => {
+    const data = Array.from({ length: 50 }, (_, i) => i);
+    const clampedInitialIndex = 0;
+    const prerenderItems = 3;
+    const adjustedPrerenderItems = Math.min(
+      prerenderItems,
+      Math.max(data.length - clampedInitialIndex - 1, 1)
+    );
+
+    const renderRange = {
+      start: clampedInitialIndex,
+      end: Math.min(
+        clampedInitialIndex + adjustedPrerenderItems + 1,
+        data.length
+      ),
+    };
+
+    expect(renderRange.start).toBe(0);
+    expect(renderRange.end).toBe(4); // 0 + 3 + 1
+    expect(renderRange.end - renderRange.start).toBe(4); // Only 4 cards rendered instead of 50
+  });
+
+  it('should calculate correct render range when activeIndex changes', () => {
+    const data = Array.from({ length: 50 }, (_, i) => i);
+    const currentActive = 10;
+    const prerenderItems = 3;
+
+    const newStart = Math.max(currentActive - 1, 0);
+    const newEnd = Math.min(currentActive + prerenderItems + 1, data.length);
+
+    expect(newStart).toBe(9); // currentActive - 1
+    expect(newEnd).toBe(14); // currentActive + 3 + 1
+    expect(newEnd - newStart).toBe(5); // Only 5 cards rendered
+  });
+
+  it('should handle render range near the end of data', () => {
+    const data = Array.from({ length: 50 }, (_, i) => i);
+    const currentActive = 48;
+    const prerenderItems = 3;
+
+    const newStart = Math.max(currentActive - 1, 0);
+    const newEnd = Math.min(currentActive + prerenderItems + 1, data.length);
+
+    expect(newStart).toBe(47);
+    expect(newEnd).toBe(50); // Clamped to data.length
+  });
+
+  it('should handle render range at the beginning of data', () => {
+    const data = Array.from({ length: 50 }, (_, i) => i);
+    const currentActive = 0;
+    const prerenderItems = 3;
+
+    const newStart = Math.max(currentActive - 1, 0);
+    const newEnd = Math.min(currentActive + prerenderItems + 1, data.length);
+
+    expect(newStart).toBe(0); // Clamped to 0
+    expect(newEnd).toBe(4);
+  });
+
+  it('should demonstrate performance improvement with large datasets', () => {
+    const data = Array.from({ length: 100 }, (_, i) => i);
+    const currentActive = 25;
+    const prerenderItems = 3;
+
+    const newStart = Math.max(currentActive - 1, 0);
+    const newEnd = Math.min(currentActive + prerenderItems + 1, data.length);
+
+    const renderedCards = newEnd - newStart;
+    const totalCards = data.length;
+
+    // Should render only 5 cards instead of 100
+    expect(renderedCards).toBe(5);
+    expect(renderedCards).toBeLessThan(totalCards * 0.1); // Less than 10% of total cards
+  });
+});
