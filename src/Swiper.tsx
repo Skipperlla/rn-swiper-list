@@ -82,12 +82,6 @@ const Swiper = <T,>(
     Math.min(initialIndex, data.length - 1)
   );
 
-  // Calculate prerenderItems based on data length from initialIndex
-  const adjustedPrerenderItems = Math.min(
-    prerenderItems,
-    Math.max(data.length - clampedInitialIndex - 1, 1)
-  );
-
   const {
     activeIndex,
     refs,
@@ -101,15 +95,19 @@ const Swiper = <T,>(
 
   // Track the range of cards to render based on activeIndex
   // This state updates when activeIndex changes, allowing dynamic rendering
-  const [renderRange, setRenderRange] = useState<{
-    start: number;
-    end: number;
-  }>({
-    start: clampedInitialIndex,
-    end: Math.min(
-      clampedInitialIndex + adjustedPrerenderItems + 1,
-      data.length
-    ),
+  const [renderRange, setRenderRange] = useState(() => {
+    // Calculate initial prerenderItems based on data length from initialIndex
+    const adjustedPrerenderItems = Math.min(
+      prerenderItems,
+      Math.max(data.length - clampedInitialIndex - 1, 1)
+    );
+    return {
+      start: clampedInitialIndex,
+      end: Math.min(
+        clampedInitialIndex + adjustedPrerenderItems + 1,
+        data.length
+      ),
+    };
   });
 
   useImperativeHandle(ref, () => {
@@ -129,6 +127,11 @@ const Swiper = <T,>(
       return Math.floor(activeIndex.value);
     },
     (currentActive) => {
+      // Recalculate adjustedPrerenderItems based on current position
+      const adjustedPrerenderItems = Math.min(
+        prerenderItems,
+        Math.max(data.length - currentActive - 1, 1)
+      );
       const newStart = Math.max(currentActive - 1, 0);
       const newEnd = Math.min(
         currentActive + adjustedPrerenderItems + 1,
@@ -138,7 +141,7 @@ const Swiper = <T,>(
         setRenderRange({ start: newStart, end: newEnd });
       });
     },
-    [adjustedPrerenderItems, data.length]
+    [prerenderItems, data.length]
   );
 
   useAnimatedReaction(
@@ -186,7 +189,7 @@ const Swiper = <T,>(
           flippedCardStyle={flippedCardStyle}
           regularCardStyle={regularCardStyle}
           index={actualIndex}
-          prerenderItems={adjustedPrerenderItems}
+          prerenderItems={prerenderItems}
           disableRightSwipe={disableRightSwipe}
           disableLeftSwipe={disableLeftSwipe}
           disableTopSwipe={disableTopSwipe}
