@@ -63,6 +63,11 @@ export type SwiperOptions<T> = {
   OverlayLabelLeft?: () => JSX.Element;
   OverlayLabelTop?: () => JSX.Element;
   OverlayLabelBottom?: () => JSX.Element;
+
+  onOverlayLeftVisible?: () => void;
+  onOverlayRightVisible?: () => void;
+  onOverlayTopVisible?: () => void;
+  onOverlayBottomVisible?: () => void;
   //* Swipe Animation Spring Configs (Animation Speed)
   swipeBackXSpringConfig?: SpringConfig;
   swipeBackYSpringConfig?: SpringConfig;
@@ -112,6 +117,12 @@ export type SwiperCardOptions<T> = {
   OverlayLabelLeft?: () => JSX.Element;
   OverlayLabelTop?: () => JSX.Element;
   OverlayLabelBottom?: () => JSX.Element;
+
+  onOverlayLeftVisible?: () => void;
+  onOverlayRightVisible?: () => void;
+  onOverlayTopVisible?: () => void;
+  onOverlayBottomVisible?: () => void;
+
   FlippedContent?: (item: T, index: number) => JSX.Element;
   swipeBackXSpringConfig?: SpringConfig;
   swipeBackYSpringConfig?: SpringConfig;

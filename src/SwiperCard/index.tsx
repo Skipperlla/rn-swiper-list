@@ -59,6 +59,10 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
     OverlayLabelLeft,
     OverlayLabelTop,
     OverlayLabelBottom,
+    onOverlayLeftVisible,
+    onOverlayRightVisible,
+    onOverlayTopVisible,
+    onOverlayBottomVisible,
     onSwipeStart,
     onSwipeActive,
     onSwipeEnd,
@@ -439,6 +443,7 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
             outputRange={outputOverlayLabelLeftOpacityRange}
             Component={OverlayLabelLeft}
             opacityValue={translateX}
+            onVisible={onOverlayLeftVisible} // 🆕 Nouveau
           />
         )}
         {OverlayLabelRight && (
@@ -448,6 +453,7 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
             outputRange={outputOverlayLabelRightOpacityRange}
             Component={OverlayLabelRight}
             opacityValue={translateX}
+            onVisible={onOverlayRightVisible} // 🆕 Nouveau
           />
         )}
         {OverlayLabelTop && (
@@ -457,6 +463,7 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
             outputRange={outputOverlayLabelTopOpacityRange}
             Component={OverlayLabelTop}
             opacityValue={translateY}
+            onVisible={onOverlayTopVisible} // 🆕 Nouveau
           />
         )}
         {OverlayLabelBottom && (
@@ -466,6 +473,7 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
             outputRange={outputOverlayLabelBottomOpacityRange}
             Component={OverlayLabelBottom}
             opacityValue={translateY}
+            onVisible={onOverlayBottomVisible} // 🆕 Nouveau
           />
         )}
         <Animated.View

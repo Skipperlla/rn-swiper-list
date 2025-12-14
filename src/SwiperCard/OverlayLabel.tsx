@@ -3,8 +3,10 @@ import { StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 import Animated, {
   interpolate,
   useAnimatedStyle,
+  useAnimatedReaction,
   type SharedValue,
 } from 'react-native-reanimated';
+import { scheduleOnRN } from 'react-native-worklets';
 
 type Props = PropsWithChildren<{
   inputRange?: number[];
@@ -12,6 +14,7 @@ type Props = PropsWithChildren<{
   Component: () => JSX.Element;
   opacityValue: SharedValue<number>;
   overlayLabelContainerStyle?: StyleProp<ViewStyle>;
+  onVisible?: () => void; // 🆕 Nouveau
 }>;
 
 const OverlayLabel = ({
@@ -20,7 +23,27 @@ const OverlayLabel = ({
   Component,
   opacityValue,
   overlayLabelContainerStyle,
+  onVisible, // 🆕 Nouveau
 }: Props) => {
+  // 🆕 Détecte quand l'overlay devient visible
+  useAnimatedReaction(
+    () => {
+      const opacity = interpolate(
+        opacityValue.value,
+        inputRange ?? [],
+        outputRange ?? [],
+        'clamp'
+      );
+      return opacity;
+    },
+    (currentOpacity, previousOpacity) => {
+      // Trigger callback when opacity crosses threshold (0.3 = ~30% visible)
+      if (onVisible && previousOpacity !== null && previousOpacity <= 0.3 && currentOpacity > 0.3) {
+        scheduleOnRN(onVisible);
+      }
+    }
+  );
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       opacity: interpolate(

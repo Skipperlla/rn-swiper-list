@@ -55,6 +55,10 @@ const Swiper = <T,>(
     OverlayLabelLeft,
     OverlayLabelTop,
     OverlayLabelBottom,
+    onOverlayLeftVisible,
+    onOverlayRightVisible,
+    onOverlayTopVisible,
+    onOverlayBottomVisible,
     onSwipeStart,
     onSwipeActive,
     onSwipeEnd,
@@ -202,6 +206,10 @@ const Swiper = <T,>(
           onSwipeStart={onSwipeStart}
           onSwipeActive={onSwipeActive}
           onSwipeEnd={onSwipeEnd}
+          onOverlayLeftVisible={onOverlayLeftVisible}
+          onOverlayRightVisible={onOverlayRightVisible}
+          onOverlayTopVisible={onOverlayTopVisible}
+          onOverlayBottomVisible={onOverlayBottomVisible}
           swipeBackXSpringConfig={swipeBackXSpringConfig}
           swipeBackYSpringConfig={swipeBackYSpringConfig}
           swipeRightSpringConfig={swipeRightSpringConfig}
