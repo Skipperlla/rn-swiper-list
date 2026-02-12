@@ -16,6 +16,13 @@ export type SwiperCardRefType =
     }
   | undefined;
 
+export type SwipeActivePayload = {
+  x: number;
+  y: number;
+  translationX: number;
+  translationY: number;
+};
+
 export type SwiperOptions<T> = {
   //* Card Props
   data: T[];
@@ -36,7 +43,7 @@ export type SwiperOptions<T> = {
   onSwipedAll?: () => void;
   onSwipeStart?: () => void;
   onSwipeEnd?: () => void;
-  onSwipeActive?: () => void;
+  onSwipeActive?: (payload: SwipeActivePayload) => void;
   onPress?: () => void;
   //* Active Index Change Callback
   onIndexChange?: (index: number) => void;
@@ -85,7 +92,7 @@ export type SwiperCardOptions<T> = {
   onSwipeTop?: (index: number) => void;
   onSwipeBottom?: (index: number) => void;
   onSwipeStart?: () => void;
-  onSwipeActive?: () => void;
+  onSwipeActive?: (payload: SwipeActivePayload) => void;
   onSwipeEnd?: () => void;
   onPress?: () => void;
   cardStyle?: StyleProp<ViewStyle>;

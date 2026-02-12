@@ -76,7 +76,7 @@ The `cardIndex` parameter passed to swipe callbacks represents the card's positi
 | onSwipedAll   | func | Function called when all cards have been swiped.                                                                                                                                  | `() => {}`          |
 | onSwipeStart  | func | Function called when a swipe event starts.                                                                                                                                        | `() => {}`          |
 | onSwipeEnd    | func | Function called when a swipe event ends.                                                                                                                                          | `() => {}`          |
-| onSwipeActive | func | Function called when a swipe event is active.                                                                                                                                     | `() => {}`          |
+| onSwipeActive | func | Function called when a swipe event is active.                                                                                                                                     | `({ x, y, translationX, translationY }) => {}`          |
 | onIndexChange | func | Function called when the index of the card changes. It receives the index of the card as a parameter.                                                                             | `(cardIndex) => {}` |
 | onPress       | func | Function called when the card is pressed (tapped).                                                                                                                                | `() => {}`          |
 
@@ -297,8 +297,8 @@ const App = () => {
           OverlayLabelLeft={OverlayLabelLeft}
           OverlayLabelTop={OverlayLabelTop}
           OverlayLabelBottom={OverlayLabelBottom}
-          onSwipeActive={() => {
-            console.log('onSwipeActive');
+          onSwipeActive={(playload) => {
+            console.log('onSwipeActive', payload);
           }}
           onSwipeStart={() => {
             console.log('onSwipeStart');
@@ -458,6 +458,13 @@ type SwiperCardRefType =
     }
   | undefined;
 
+type SwipeActivePayload = {
+  x: number;
+  y: number;
+  translationX: number;
+  translationY: number;
+};
+
 type SwiperOptions<T> = {
   /*
    * Card data and render function
@@ -484,7 +491,7 @@ type SwiperOptions<T> = {
   onSwipedAll?: () => void;
   onSwipeStart?: () => void;
   onSwipeEnd?: () => void;
-  onSwipeActive?: () => void;
+  onSwipeActive?: (payload: SwipeActivePayload) => void;
   onPress?: () => void;
   onIndexChange?: (index: number) => void;
   /*
