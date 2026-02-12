@@ -17,7 +17,11 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import type { SwiperCardOptions, SwiperCardRefType } from 'rn-swiper-list';
+import type {
+  SwipeActivePayload,
+  SwiperCardOptions,
+  SwiperCardRefType,
+} from 'rn-swiper-list';
 import { scheduleOnRN, scheduleOnUI } from 'react-native-worklets';
 
 import OverlayLabel from './OverlayLabel';
@@ -225,7 +229,15 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
       // Use activeIndex.value directly in worklet context
       const currentActive = Math.floor(activeIndex.value);
       if (currentActive !== index) return;
-      if (onSwipeActive) scheduleOnRN(onSwipeActive);
+      if (onSwipeActive) {
+        const payload: SwipeActivePayload = {
+          x: event.x,
+          y: event.y,
+          translationX: event.translationX,
+          translationY: event.translationY,
+        };
+        scheduleOnRN(onSwipeActive, payload);
+      }
 
       translateX.value = event.translationX;
       translateY.value = event.translationY;
