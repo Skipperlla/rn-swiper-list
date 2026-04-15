@@ -11290,29 +11290,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-worklets@npm:*":
-  version: 0.6.1
-  resolution: "react-native-worklets@npm:0.6.1"
-  dependencies:
-    "@babel/plugin-transform-arrow-functions": ^7.0.0-0
-    "@babel/plugin-transform-class-properties": ^7.0.0-0
-    "@babel/plugin-transform-classes": ^7.0.0-0
-    "@babel/plugin-transform-nullish-coalescing-operator": ^7.0.0-0
-    "@babel/plugin-transform-optional-chaining": ^7.0.0-0
-    "@babel/plugin-transform-shorthand-properties": ^7.0.0-0
-    "@babel/plugin-transform-template-literals": ^7.0.0-0
-    "@babel/plugin-transform-unicode-regex": ^7.0.0-0
-    "@babel/preset-typescript": ^7.16.7
-    convert-source-map: ^2.0.0
-    semver: 7.7.2
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-    react: "*"
-    react-native: "*"
-  checksum: fee8de844ef2286dee9f81a53f9cf309424d26251953c8524204342c8531fef403c625a23632a6bb65ea57409d6f8522a60e02de772322bebb5ff4aa4cccf569
-  languageName: node
-  linkType: hard
-
 "react-native-worklets@npm:0.5.1":
   version: 0.5.1
   resolution: "react-native-worklets@npm:0.5.1"
@@ -11805,7 +11782,6 @@ __metadata:
     react-native-builder-bob: ^0.40.13
     react-native-gesture-handler: "*"
     react-native-reanimated: "*"
-    react-native-worklets: "*"
     release-it: ^19.0.4
     typescript: ^5.9.2
   peerDependencies:
@@ -11814,6 +11790,9 @@ __metadata:
     react-native-gesture-handler: "*"
     react-native-reanimated: "*"
     react-native-worklets: "*"
+  peerDependenciesMeta:
+    react-native-worklets:
+      optional: true
   languageName: unknown
   linkType: soft
 

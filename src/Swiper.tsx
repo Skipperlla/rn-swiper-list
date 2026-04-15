@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, type ForwardedRef } from 'react';
+import React, { useImperativeHandle, useState, type ForwardedRef } from 'react';
 import { useAnimatedReaction } from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
 import type {
@@ -6,7 +6,7 @@ import type {
   SwiperOptions,
   SwiperCardOptions,
 } from 'rn-swiper-list';
-import { scheduleOnRN } from 'react-native-worklets';
+import { scheduleOnRN } from './utils/workletCompat';
 
 import useSwipeControls from './hooks/useSwipeControls';
 import SwiperCard from './SwiperCard';
@@ -99,6 +99,19 @@ const Swiper = <T,>(
     flipCard,
   } = useSwipeControls(data, loop, clampedInitialIndex);
 
+  // Track the slice of `data` that is currently mounted. Mounting every card
+  // up-front becomes prohibitively expensive for large datasets (see #74),
+  // so we only render a window around the active card. The window expands
+  // backwards by 1 (so swipeBack remains visually correct) and forward by
+  // `adjustedPrerenderItems + 1` (so the next card is always pre-mounted).
+  const [renderRange, setRenderRange] = useState(() => ({
+    start: clampedInitialIndex,
+    end: Math.min(
+      clampedInitialIndex + adjustedPrerenderItems + 1,
+      data.length
+    ),
+  }));
+
   useImperativeHandle(ref, () => {
     return {
       swipeLeft,
@@ -109,6 +122,25 @@ const Swiper = <T,>(
       flipCard,
     };
   }, [swipeLeft, swipeRight, swipeBack, swipeTop, swipeBottom, flipCard]);
+
+  // Slide the render window as the active card changes. Recompute the
+  // window from the current position so the upper bound shrinks toward the
+  // end of the dataset.
+  useAnimatedReaction(
+    () => {
+      return Math.floor(activeIndex.value);
+    },
+    (currentActive) => {
+      const windowSize = Math.min(
+        prerenderItems,
+        Math.max(data.length - currentActive - 1, 1)
+      );
+      const newStart = Math.max(currentActive - 1, 0);
+      const newEnd = Math.min(currentActive + windowSize + 1, data.length);
+      scheduleOnRN(setRenderRange, { start: newStart, end: newEnd });
+    },
+    [prerenderItems, data.length]
+  );
 
   useAnimatedReaction(
     () => {
@@ -142,10 +174,10 @@ const Swiper = <T,>(
   >;
 
   return data
-    .slice(clampedInitialIndex) // Only slice for rendering, not for processing
+    .slice(renderRange.start, renderRange.end)
     .map((item, index) => {
       // Calculate the actual index in the original data array
-      const actualIndex = index + clampedInitialIndex;
+      const actualIndex = index + renderRange.start;
       return (
         <Card
           key={keyExtractor ? keyExtractor(item, actualIndex) : actualIndex}

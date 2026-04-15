@@ -23,7 +23,6 @@ const useSwipeControls = <T>(
   const dataLength = useRef(data.length);
 
   // Update data length ref when data changes
-
   useEffect(() => {
     dataLength.current = data.length;
   }, [data]);
@@ -37,27 +36,17 @@ const useSwipeControls = <T>(
     return cardRefs;
   }, [data]);
 
-  const updateActiveIndex = useCallback(() => {
-    'worklet';
-    if (loop && activeIndex.value >= dataLength.current - 1) {
-      // Reset all cards to initial position for loop
-      activeIndex.value = clampedInitialIndex;
-      refs.forEach((ref) => {
-        ref?.current?.swipeBack();
-      });
-    } else {
-      activeIndex.value++;
-    }
-  }, [activeIndex, loop, refs, clampedInitialIndex]);
-
+  // NOTE: Each card's swipeRight/Left/Top/Bottom already increments
+  // `activeIndex` on the UI thread inside its own `scheduleOnUI` block.
+  // The programmatic methods below must therefore NOT increment again,
+  // otherwise `activeIndex` advances by 2 per call (see issue #67).
   const swipeRight = useCallback(() => {
     const currentIndex = Math.floor(activeIndex.value);
     if (!refs[currentIndex]) {
       return;
     }
     refs[currentIndex]?.current?.swipeRight();
-    updateActiveIndex();
-  }, [refs, updateActiveIndex, activeIndex]);
+  }, [refs, activeIndex]);
 
   const swipeTop = useCallback(() => {
     const currentIndex = Math.floor(activeIndex.value);
@@ -65,8 +54,7 @@ const useSwipeControls = <T>(
       return;
     }
     refs[currentIndex]?.current?.swipeTop();
-    updateActiveIndex();
-  }, [refs, updateActiveIndex, activeIndex]);
+  }, [refs, activeIndex]);
 
   const swipeLeft = useCallback(() => {
     const currentIndex = Math.floor(activeIndex.value);
@@ -74,8 +62,7 @@ const useSwipeControls = <T>(
       return;
     }
     refs[currentIndex]?.current?.swipeLeft();
-    updateActiveIndex();
-  }, [refs, updateActiveIndex, activeIndex]);
+  }, [refs, activeIndex]);
 
   const swipeBottom = useCallback(() => {
     const currentIndex = Math.floor(activeIndex.value);
@@ -83,8 +70,7 @@ const useSwipeControls = <T>(
       return;
     }
     refs[currentIndex]?.current?.swipeBottom();
-    updateActiveIndex();
-  }, [refs, updateActiveIndex, activeIndex]);
+  }, [refs, activeIndex]);
 
   const flipCard = useCallback(() => {
     const currentIndex = Math.floor(activeIndex.value);

@@ -18,7 +18,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import type { SwiperCardOptions, SwiperCardRefType } from 'rn-swiper-list';
-import { scheduleOnRN, scheduleOnUI } from 'react-native-worklets';
+import { scheduleOnRN, scheduleOnUI } from '../utils/workletCompat';
 
 import OverlayLabel from './OverlayLabel';
 
@@ -91,13 +91,15 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
   const maxCardTranslationY = height * 1.5;
 
   const swipeRight = useCallback(() => {
-    onSwipeRight?.(index);
     scheduleOnUI(() => {
       translateX.value = withSpring(maxCardTranslation, {
         ...swipeRightSpringConfig,
         reduceMotion: ReduceMotion.Never,
       });
       activeIndex.value++;
+      if (onSwipeRight) {
+        scheduleOnRN(onSwipeRight, index);
+      }
     });
   }, [
     index,
@@ -109,13 +111,15 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
   ]);
 
   const swipeLeft = useCallback(() => {
-    onSwipeLeft?.(index);
     scheduleOnUI(() => {
       translateX.value = withSpring(-maxCardTranslation, {
         ...swipeLeftSpringConfig,
         reduceMotion: ReduceMotion.Never,
       });
       activeIndex.value++;
+      if (onSwipeLeft) {
+        scheduleOnRN(onSwipeLeft, index);
+      }
     });
   }, [
     index,
@@ -127,13 +131,15 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
   ]);
 
   const swipeTop = useCallback(() => {
-    onSwipeTop?.(index);
     scheduleOnUI(() => {
       translateY.value = withSpring(-maxCardTranslationY, {
         ...swipeTopSpringConfig,
         reduceMotion: ReduceMotion.Never,
       });
       activeIndex.value++;
+      if (onSwipeTop) {
+        scheduleOnRN(onSwipeTop, index);
+      }
     });
   }, [
     index,
@@ -145,13 +151,15 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
   ]);
 
   const swipeBottom = useCallback(() => {
-    onSwipeBottom?.(index);
     scheduleOnUI(() => {
       translateY.value = withSpring(maxCardTranslationY, {
         ...swipeBottomSpringConfig,
         reduceMotion: ReduceMotion.Never,
       });
       activeIndex.value++;
+      if (onSwipeBottom) {
+        scheduleOnRN(onSwipeBottom, index);
+      }
     });
   }, [
     index,
