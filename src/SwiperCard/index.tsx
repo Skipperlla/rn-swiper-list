@@ -91,17 +91,17 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
   const maxCardTranslationY = height * 1.5;
 
   const swipeRight = useCallback(() => {
-    onSwipeRight?.(index);
     scheduleOnUI(() => {
       translateX.value = withSpring(maxCardTranslation, {
         ...swipeRightSpringConfig,
         reduceMotion: ReduceMotion.Never,
       });
-      activeIndex.value++;
+      if (onSwipeRight) {
+        scheduleOnRN(onSwipeRight, index);
+      }
     });
   }, [
     index,
-    activeIndex,
     maxCardTranslation,
     onSwipeRight,
     translateX,
@@ -109,17 +109,17 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
   ]);
 
   const swipeLeft = useCallback(() => {
-    onSwipeLeft?.(index);
     scheduleOnUI(() => {
       translateX.value = withSpring(-maxCardTranslation, {
         ...swipeLeftSpringConfig,
         reduceMotion: ReduceMotion.Never,
       });
-      activeIndex.value++;
+      if (onSwipeLeft) {
+        scheduleOnRN(onSwipeLeft, index);
+      }
     });
   }, [
     index,
-    activeIndex,
     maxCardTranslation,
     onSwipeLeft,
     translateX,
@@ -127,17 +127,17 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
   ]);
 
   const swipeTop = useCallback(() => {
-    onSwipeTop?.(index);
     scheduleOnUI(() => {
       translateY.value = withSpring(-maxCardTranslationY, {
         ...swipeTopSpringConfig,
         reduceMotion: ReduceMotion.Never,
       });
-      activeIndex.value++;
+      if (onSwipeTop) {
+        scheduleOnRN(onSwipeTop, index);
+      }
     });
   }, [
     index,
-    activeIndex,
     maxCardTranslationY,
     onSwipeTop,
     translateY,
@@ -145,17 +145,17 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
   ]);
 
   const swipeBottom = useCallback(() => {
-    onSwipeBottom?.(index);
     scheduleOnUI(() => {
       translateY.value = withSpring(maxCardTranslationY, {
         ...swipeBottomSpringConfig,
         reduceMotion: ReduceMotion.Never,
       });
-      activeIndex.value++;
+      if (onSwipeBottom) {
+        scheduleOnRN(onSwipeBottom, index);
+      }
     });
   }, [
     index,
-    activeIndex,
     maxCardTranslationY,
     onSwipeBottom,
     translateY,
@@ -294,10 +294,12 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
         if (Math.abs(event.velocityX) > swipeVelocityThreshold) {
           const sign = Math.sign(event.velocityX);
           if (sign === -1 && !disableLeftSwipe) {
+            activeIndex.value++;
             scheduleOnRN(swipeLeft);
             return;
           }
           if (sign === 1 && !disableRightSwipe) {
+            activeIndex.value++;
             scheduleOnRN(swipeRight);
             return;
           }
@@ -306,10 +308,12 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
         if (Math.abs(event.velocityY) > swipeVelocityThreshold) {
           const sign = Math.sign(event.velocityY);
           if (sign === -1 && !disableTopSwipe) {
+            activeIndex.value++;
             scheduleOnRN(swipeTop);
             return;
           }
           if (sign === 1 && !disableBottomSwipe) {
+            activeIndex.value++;
             scheduleOnRN(swipeBottom);
             return;
           }
@@ -330,10 +334,12 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
 
         if (signPositionY) {
           if (signY === -1 && !disableTopSwipe) {
+            activeIndex.value++;
             scheduleOnRN(swipeTop);
             return;
           }
           if (signY === 1 && !disableBottomSwipe) {
+            activeIndex.value++;
             scheduleOnRN(swipeBottom);
             return;
           }
@@ -341,10 +347,12 @@ const SwipeableCard = forwardRef(function SwipeableCard<T>(
 
         if (!signPositionY) {
           if (sign === 1 && !disableRightSwipe) {
+            activeIndex.value++;
             scheduleOnRN(swipeRight);
             return;
           }
           if (sign === -1 && !disableLeftSwipe) {
+            activeIndex.value++;
             scheduleOnRN(swipeLeft);
             return;
           }
