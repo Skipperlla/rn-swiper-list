@@ -2,7 +2,6 @@ import {
   createRef,
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   type RefObject,
 } from 'react';
@@ -14,7 +13,6 @@ const useSwipeControls = <T>(
   loop: boolean = false,
   initialIndex: number = 0
 ) => {
-  // Validate and clamp initialIndex to valid range
   const clampedInitialIndex = Math.max(
     0,
     Math.min(initialIndex, data.length - 1)
@@ -22,25 +20,29 @@ const useSwipeControls = <T>(
   const activeIndex = useSharedValue(clampedInitialIndex);
   const dataLength = useRef(data.length);
 
-  // Update data length ref when data changes
+  const refsRef = useRef<RefObject<SwiperCardRefType | null>[]>([]);
+  if (refsRef.current.length === 0) {
+    for (let i = 0; i < data.length; i++) {
+      refsRef.current.push(createRef<SwiperCardRefType>());
+    }
+  }
 
   useEffect(() => {
     dataLength.current = data.length;
-  }, [data]);
-
-  const refs = useMemo(() => {
-    let cardRefs: RefObject<SwiperCardRefType | null>[] = [];
-
-    for (let i = 0; i < data.length; i++) {
-      cardRefs.push(createRef<SwiperCardRefType>());
+    const currentRefs = refsRef.current;
+    if (data.length > currentRefs.length) {
+      for (let i = currentRefs.length; i < data.length; i++) {
+        currentRefs.push(createRef<SwiperCardRefType>());
+      }
+    } else if (data.length < currentRefs.length) {
+      currentRefs.length = data.length;
     }
-    return cardRefs;
   }, [data]);
+
+  const refs = refsRef.current;
 
   const updateActiveIndex = useCallback(() => {
-    'worklet';
     if (loop && activeIndex.value >= dataLength.current - 1) {
-      // Reset all cards to initial position for loop
       activeIndex.value = clampedInitialIndex;
       refs.forEach((ref) => {
         ref?.current?.swipeBack();
