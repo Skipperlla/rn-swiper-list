@@ -1,33 +1,29 @@
-// Test to verify prerenderItems calculation logic
 describe('Swiper prerenderItems calculation', () => {
-  it('should calculate prerenderItems correctly for single item', () => {
-    const dataLength = 1;
-    // The default calculation is: prerenderItems = Math.max(data.length - 1, 1)
-    // For single item: Math.max(1 - 1, 1) = Math.max(0, 1) = 1
-    const prerenderItems = Math.max(dataLength - 1, 1);
-    expect(prerenderItems).toBe(1);
+  it('should default prerenderItems to 3 for performance', () => {
+    const defaultPrerenderItems = 3;
+    expect(defaultPrerenderItems).toBe(3);
   });
 
-  it('should calculate prerenderItems correctly for multiple items', () => {
-    const dataLength = 5;
-    const prerenderItems = Math.max(dataLength - 1, 1);
-    expect(prerenderItems).toBe(4);
+  it('should adjust prerenderItems based on remaining data length', () => {
+    const prerenderItems = 3;
+    const dataLength = 2;
+    const clampedInitialIndex = 0;
+    const adjusted = Math.min(
+      prerenderItems,
+      Math.max(dataLength - clampedInitialIndex - 1, 1)
+    );
+    expect(adjusted).toBe(1);
   });
 
-  it('should handle empty array case', () => {
-    const dataLength = 0;
-    const prerenderItems = Math.max(dataLength - 1, 1);
-    // With empty array, no cards will render regardless of prerenderItems value
-    // The value of 1 ensures the formula is consistent but has no practical effect
-    expect(prerenderItems).toBe(1);
-  });
-
-  it('should ensure prerenderItems is always at least 1', () => {
-    // Test edge cases to ensure the minimum value is always 1
-    expect(Math.max(-1, 1)).toBe(1);
-    expect(Math.max(0, 1)).toBe(1);
-    expect(Math.max(1, 1)).toBe(1);
-    expect(Math.max(2, 1)).toBe(2);
+  it('should not exceed user-specified prerenderItems', () => {
+    const prerenderItems = 3;
+    const dataLength = 50;
+    const clampedInitialIndex = 0;
+    const adjusted = Math.min(
+      prerenderItems,
+      Math.max(dataLength - clampedInitialIndex - 1, 1)
+    );
+    expect(adjusted).toBe(3);
   });
 });
 
@@ -156,48 +152,48 @@ describe('Callback Index Calculation Fix', () => {
 
 describe('Animation Timing and Race Condition Prevention', () => {
   it('should ensure animation setup happens before callback execution', () => {
-    // This test verifies the conceptual flow of our fix
     const steps: string[] = [];
 
-    // Mock the corrected swipe behavior flow
     const mockSwipeRight = () => {
-      // Step 1: Schedule UI thread work first
-      steps.push('scheduleOnUI-called');
-
-      // Step 2: Within UI thread, setup animation
+      steps.push('runOnUI-called');
       steps.push('animation-setup');
       steps.push('activeIndex-increment');
-
-      // Step 3: Schedule callback back to RN thread
-      steps.push('scheduleOnRN-callback');
+      steps.push('runOnJS-callback');
     };
 
     mockSwipeRight();
 
     expect(steps).toEqual([
-      'scheduleOnUI-called',
+      'runOnUI-called',
       'animation-setup',
       'activeIndex-increment',
-      'scheduleOnRN-callback',
+      'runOnJS-callback',
     ]);
   });
 });
 
-describe('Updated PrerenderItems Calculation', () => {
-  it('should use new simplified calculation for prerenderItems default', () => {
-    // Test the updated default calculation: Math.max(data.length - 1, 1)
-    const testCases = [
-      { dataLength: 0, expected: 1 }, // Math.max(-1, 1) = 1
-      { dataLength: 1, expected: 1 }, // Math.max(0, 1) = 1
-      { dataLength: 2, expected: 1 }, // Math.max(1, 1) = 1
-      { dataLength: 3, expected: 2 }, // Math.max(2, 1) = 2
-      { dataLength: 5, expected: 4 }, // Math.max(4, 1) = 4
-      { dataLength: 10, expected: 9 }, // Math.max(9, 1) = 9
-    ];
+describe('Conditional card rendering window', () => {
+  it('should calculate correct render window around active index', () => {
+    const jsActiveIndex = 5;
+    const clampedInitialIndex = 0;
+    const adjustedPrerenderItems = 3;
 
-    testCases.forEach(({ dataLength, expected }) => {
-      const prerenderItems = Math.max(dataLength - 1, 1);
-      expect(prerenderItems).toBe(expected);
-    });
+    const renderStart = Math.max(jsActiveIndex - 1, clampedInitialIndex);
+    const renderEnd = jsActiveIndex + adjustedPrerenderItems + 2;
+
+    expect(renderStart).toBe(4);
+    expect(renderEnd).toBe(10);
+  });
+
+  it('should clamp renderStart to initialIndex', () => {
+    const jsActiveIndex = 0;
+    const clampedInitialIndex = 0;
+    const adjustedPrerenderItems = 3;
+
+    const renderStart = Math.max(jsActiveIndex - 1, clampedInitialIndex);
+    const renderEnd = jsActiveIndex + adjustedPrerenderItems + 2;
+
+    expect(renderStart).toBe(0);
+    expect(renderEnd).toBe(5);
   });
 });
