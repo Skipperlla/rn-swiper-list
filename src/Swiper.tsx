@@ -1,12 +1,11 @@
-import React, { useImperativeHandle, type ForwardedRef } from 'react';
-import { useAnimatedReaction } from 'react-native-reanimated';
+import React, { useImperativeHandle, useState, type ForwardedRef } from 'react';
+import { runOnJS, useAnimatedReaction } from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
 import type {
   SwiperCardRefType,
   SwiperOptions,
   SwiperCardOptions,
 } from 'rn-swiper-list';
-import { scheduleOnRN } from 'react-native-worklets';
 
 import useSwipeControls from './hooks/useSwipeControls';
 import SwiperCard from './SwiperCard';
@@ -25,7 +24,7 @@ const Swiper = <T,>(
   {
     data,
     renderCard,
-    prerenderItems = Math.max(data.length - 1, 1),
+    prerenderItems = 3,
     onSwipeRight,
     onSwipeLeft,
     onSwipedAll,
@@ -99,6 +98,8 @@ const Swiper = <T,>(
     flipCard,
   } = useSwipeControls(data, loop, clampedInitialIndex);
 
+  const [jsActiveIndex, setJsActiveIndex] = useState(clampedInitialIndex);
+
   useImperativeHandle(ref, () => {
     return {
       swipeLeft,
@@ -116,20 +117,22 @@ const Swiper = <T,>(
     },
     (isSwipingFinished: boolean) => {
       if (isSwipingFinished && onSwipedAll) {
-        scheduleOnRN(onSwipedAll);
+        runOnJS(onSwipedAll)();
       }
     },
     [data]
   );
 
-  //Listen to the activeIndex value
   useAnimatedReaction(
     () => {
-      return activeIndex.value;
+      return Math.floor(activeIndex.value);
     },
     (currentValue, previousValue) => {
-      if (currentValue !== previousValue && onIndexChange) {
-        scheduleOnRN(onIndexChange, currentValue);
+      if (currentValue !== previousValue) {
+        runOnJS(setJsActiveIndex)(currentValue);
+        if (onIndexChange) {
+          runOnJS(onIndexChange)(currentValue);
+        }
       }
     },
     []
@@ -141,11 +144,16 @@ const Swiper = <T,>(
     }
   >;
 
+  const renderStart = Math.max(jsActiveIndex - 1, clampedInitialIndex);
+  const renderEnd = jsActiveIndex + adjustedPrerenderItems + 2;
+
   return data
-    .slice(clampedInitialIndex) // Only slice for rendering, not for processing
+    .slice(clampedInitialIndex)
     .map((item, index) => {
-      // Calculate the actual index in the original data array
       const actualIndex = index + clampedInitialIndex;
+      if (actualIndex < renderStart || actualIndex > renderEnd) {
+        return null;
+      }
       return (
         <Card
           key={keyExtractor ? keyExtractor(item, actualIndex) : actualIndex}
