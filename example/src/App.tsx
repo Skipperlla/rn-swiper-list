@@ -102,6 +102,12 @@ const App = () => {
         <Swiper
           ref={ref}
           data={IMAGES}
+          initialIndex={3}
+          restoredSwipes={[
+            { index: 0, direction: 'right' },
+            { index: 1, direction: 'left' },
+            { index: 2, direction: 'top' },
+          ]}
           cardStyle={styles.cardStyle}
           overlayLabelContainerStyle={styles.overlayLabelContainerStyle}
           renderCard={renderCard}

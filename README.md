@@ -55,6 +55,7 @@ The `cardIndex` parameter passed to swipe callbacks represents the card's positi
 | data                       | array                    | Array of data objects used to render the cards.                                                                                                                                    | Yes      |                                |
 | renderCard                 | func(cardData,cardIndex) | Function that renders a card based on the provided data and index.                                                                                                                 | Yes      |                                |
 | initialIndex               | number                   | Initial card index to display when the component first mounts (updates after mount are ignored). Value is clamped to [0, data.length - 1].                                         | No       | 0                              |
+| restoredSwipes             | array                    | Previously swiped card indexes and directions to restore on mount. The continuous restored sequence before `initialIndex` is positioned offscreen without firing swipe callbacks, so `swipeBack()` can rewind through it. | No       |                                |
 | prerenderItems             | number                   | Number of cards to prerender ahead of the active card for better performance. Defaults to `Math.max(data.length - 1, 1)` which ensures optimal rendering for different data sizes. | No       | `Math.max(data.length - 1, 1)` |
 | cardStyle                  | object                   | CSS style properties applied to each card. These can be applied inline.                                                                                                            |          |                                |
 | flippedCardStyle           | object                   | CSS style properties for the back of the card.                                                                                                                                     |          |                                |
@@ -133,6 +134,28 @@ The `cardIndex` parameter passed to swipe callbacks represents the card's positi
 | swipeTop    | callback | Animates the card to fling to the top and calls onSwipeTop       |
 | swipeBottom | callback | Animates the card to fling to the bottom and calls onSwipeBottom |
 | flipCard    | callback | Flips the card to show the back content                          |
+
+## Restoring a swipe session
+
+Use `initialIndex` for the active card and `restoredSwipes` for the cards that were already swiped before the component mounted. Each restored swipe uses the original data index and one of the generic directions: `'left'`, `'right'`, `'top'`, or `'bottom'`. `swipeBack()` can rewind through the continuous restored sequence immediately before `initialIndex`.
+
+`restoredSwipes` is intended to seed the swiper when it mounts, like `initialIndex`. Live controlled updates to `restoredSwipes` after mount are not supported. Load any persisted swipe choices before rendering the swiper, pass the matching `initialIndex` and continuous `restoredSwipes` sequence, then let the swiper manage runtime swipes and `swipeBack()` internally. To apply a different restored session, remount the swiper with the new restore props.
+
+Restoration is silent: `onSwipeLeft`, `onSwipeRight`, `onSwipeTop`, and `onSwipeBottom` are not called for restored entries. When you call `swipeBack()`, restored cards animate back with the same swipe-back spring configuration used for cards swiped during the current runtime session.
+
+```tsx
+<Swiper
+  ref={ref}
+  data={data}
+  initialIndex={3}
+  restoredSwipes={[
+    { index: 0, direction: 'right' },
+    { index: 1, direction: 'left' },
+    { index: 2, direction: 'top' },
+  ]}
+  renderCard={(item) => <Card item={item} />}
+/>
+```
 
 ## Swipe Animation Spring Configs (Animation Speed)
 
@@ -458,6 +481,13 @@ type SwiperCardRefType =
     }
   | undefined;
 
+type SwiperSwipeDirection = 'left' | 'right' | 'top' | 'bottom';
+
+type SwiperRestoredSwipe = {
+  index: number;
+  direction: SwiperSwipeDirection;
+};
+
 type SwiperOptions<T> = {
   /*
    * Card data and render function
@@ -465,6 +495,7 @@ type SwiperOptions<T> = {
   data: T[];
   renderCard: (item: T, index: number) => JSX.Element;
   initialIndex?: number;
+  restoredSwipes?: SwiperRestoredSwipe[];
   prerenderItems?: number;
   cardStyle?: StyleProp<ViewStyle>;
   flippedCardStyle?: StyleProp<ViewStyle>;
