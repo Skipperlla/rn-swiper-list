@@ -183,6 +183,61 @@ describe('Animation Timing and Race Condition Prevention', () => {
   });
 });
 
+describe('Imperative swipe index updates', () => {
+  it('should advance active index once for controller-driven swipes', () => {
+    const steps: string[] = [];
+    let activeIndex = 0;
+
+    const mockCardSwipeRight = (shouldUpdateActiveIndex = true) => {
+      steps.push(`card-swipe:${shouldUpdateActiveIndex}`);
+
+      if (shouldUpdateActiveIndex) {
+        activeIndex += 1;
+      }
+    };
+
+    const mockControllerSwipeRight = () => {
+      mockCardSwipeRight(false);
+      activeIndex += 1;
+      steps.push('controller-update');
+    };
+
+    mockControllerSwipeRight();
+
+    expect(activeIndex).toBe(1);
+    expect(steps).toEqual(['card-swipe:false', 'controller-update']);
+  });
+
+  it('should keep gesture-driven card swipes advancing active index', () => {
+    let activeIndex = 0;
+
+    const mockCardSwipeRight = (shouldUpdateActiveIndex = true) => {
+      if (shouldUpdateActiveIndex) {
+        activeIndex += 1;
+      }
+    };
+
+    mockCardSwipeRight();
+
+    expect(activeIndex).toBe(1);
+  });
+
+  it('should use loop reset without centering restored cards', () => {
+    const calls: string[] = [];
+    const refs = [
+      { current: { resetAfterLoop: () => calls.push('restore:0') } },
+      { current: { resetAfterLoop: () => calls.push('restore:1') } },
+      { current: { resetAfterLoop: () => calls.push('center:2') } },
+    ];
+
+    refs.forEach((ref) => {
+      ref.current.resetAfterLoop();
+    });
+
+    expect(calls).toEqual(['restore:0', 'restore:1', 'center:2']);
+  });
+});
+
 describe('Updated PrerenderItems Calculation', () => {
   it('should use new simplified calculation for prerenderItems default', () => {
     // Test the updated default calculation: Math.max(data.length - 1, 1)
@@ -199,5 +254,128 @@ describe('Updated PrerenderItems Calculation', () => {
       const prerenderItems = Math.max(dataLength - 1, 1);
       expect(prerenderItems).toBe(expected);
     });
+  });
+});
+
+describe('Restored swipe session calculations', () => {
+  const getRestoredSwipeDirections = (
+    restoredSwipes: Array<{
+      index: number;
+      direction: 'left' | 'right' | 'top' | 'bottom';
+    }>,
+    clampedInitialIndex: number,
+    dataLength: number
+  ) => {
+    const directions = new Map<number, 'left' | 'right' | 'top' | 'bottom'>();
+
+    restoredSwipes.forEach(({ index, direction }) => {
+      if (
+        Number.isInteger(index) &&
+        index >= 0 &&
+        index < clampedInitialIndex &&
+        index < dataLength
+      ) {
+        directions.set(index, direction);
+      }
+    });
+
+    return directions;
+  };
+
+  const getFirstRenderedIndex = (
+    restoredSwipeDirections: Map<number, 'left' | 'right' | 'top' | 'bottom'>,
+    clampedInitialIndex: number
+  ) => {
+    let restoredIndex = clampedInitialIndex - 1;
+
+    while (restoredIndex >= 0 && restoredSwipeDirections.has(restoredIndex)) {
+      restoredIndex--;
+    }
+
+    return restoredIndex + 1;
+  };
+
+  it('should render from the earliest restored swipe while keeping initialIndex active', () => {
+    const data = ['item1', 'item2', 'item3', 'item4', 'item5'];
+    const initialIndex = 3;
+    const restoredSwipeDirections = getRestoredSwipeDirections(
+      [
+        { index: 0, direction: 'right' },
+        { index: 1, direction: 'left' },
+        { index: 2, direction: 'top' },
+      ],
+      initialIndex,
+      data.length
+    );
+
+    const firstRenderedIndex = getFirstRenderedIndex(
+      restoredSwipeDirections,
+      initialIndex
+    );
+    const renderedData = data.slice(firstRenderedIndex);
+
+    expect(firstRenderedIndex).toBe(0);
+    expect(renderedData).toEqual(data);
+  });
+
+  it('should ignore restored swipes for the active card and future cards', () => {
+    const dataLength = 5;
+    const initialIndex = 2;
+    const restoredSwipeDirections = getRestoredSwipeDirections(
+      [
+        { index: 0, direction: 'right' },
+        { index: 2, direction: 'left' },
+        { index: 3, direction: 'bottom' },
+      ],
+      initialIndex,
+      dataLength
+    );
+
+    expect(Array.from(restoredSwipeDirections.entries())).toEqual([
+      [0, 'right'],
+    ]);
+  });
+
+  it('should allow swipeBack down to the earliest restored index', () => {
+    const initialIndex = 3;
+    const restoredSwipeDirections = getRestoredSwipeDirections(
+      [
+        { index: 1, direction: 'left' },
+        { index: 2, direction: 'top' },
+      ],
+      initialIndex,
+      5
+    );
+    const swipeBackStartIndex = getFirstRenderedIndex(
+      restoredSwipeDirections,
+      initialIndex
+    );
+
+    const rewindTargets: number[] = [];
+    let activeIndex = initialIndex;
+
+    while (activeIndex - 1 >= swipeBackStartIndex) {
+      activeIndex -= 1;
+      rewindTargets.push(activeIndex);
+    }
+
+    expect(rewindTargets).toEqual([2, 1]);
+  });
+
+  it('should not rewind through gaps in restored swipe indexes', () => {
+    const initialIndex = 4;
+    const restoredSwipeDirections = getRestoredSwipeDirections(
+      [
+        { index: 0, direction: 'right' },
+        { index: 2, direction: 'left' },
+        { index: 3, direction: 'top' },
+      ],
+      initialIndex,
+      5
+    );
+
+    expect(getFirstRenderedIndex(restoredSwipeDirections, initialIndex)).toBe(
+      2
+    );
   });
 });

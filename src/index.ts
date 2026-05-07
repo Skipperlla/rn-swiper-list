@@ -5,6 +5,13 @@ import type { SpringConfig } from 'react-native-reanimated/lib/typescript/animat
 
 export { default as Swiper } from './Swiper';
 
+export type SwiperSwipeDirection = 'left' | 'right' | 'top' | 'bottom';
+
+export type SwiperRestoredSwipe = {
+  index: number;
+  direction: SwiperSwipeDirection;
+};
+
 export type SwiperCardRefType =
   | {
       swipeRight: () => void;
@@ -28,6 +35,7 @@ export type SwiperOptions<T> = {
   loop?: boolean;
   keyExtractor?: (item: T, index: number) => string | number;
   initialIndex?: number;
+  restoredSwipes?: SwiperRestoredSwipe[];
   //* Event callbacks
   onSwipeLeft?: (cardIndex: number) => void;
   onSwipeRight?: (cardIndex: number) => void;
@@ -123,4 +131,5 @@ export type SwiperCardOptions<T> = {
   direction?: 'x' | 'y';
   flipDuration?: number;
   overlayLabelContainerStyle?: StyleProp<ViewStyle>;
+  restoredSwipeDirection?: SwiperSwipeDirection;
 };

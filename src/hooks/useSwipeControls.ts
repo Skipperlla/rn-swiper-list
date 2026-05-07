@@ -7,17 +7,23 @@ import {
   type RefObject,
 } from 'react';
 import { useSharedValue } from 'react-native-reanimated';
-import type { SwiperCardRefType } from 'rn-swiper-list';
+
+import type { SwiperCardInternalRefType } from '../internalTypes';
 
 const useSwipeControls = <T>(
   data: T[],
   loop: boolean = false,
-  initialIndex: number = 0
+  initialIndex: number = 0,
+  swipeBackStartIndex: number = initialIndex
 ) => {
   // Validate and clamp initialIndex to valid range
   const clampedInitialIndex = Math.max(
     0,
     Math.min(initialIndex, data.length - 1)
+  );
+  const clampedSwipeBackStartIndex = Math.max(
+    0,
+    Math.min(swipeBackStartIndex, clampedInitialIndex)
   );
   const activeIndex = useSharedValue(clampedInitialIndex);
   const dataLength = useRef(data.length);
@@ -29,10 +35,10 @@ const useSwipeControls = <T>(
   }, [data]);
 
   const refs = useMemo(() => {
-    let cardRefs: RefObject<SwiperCardRefType | null>[] = [];
+    let cardRefs: RefObject<SwiperCardInternalRefType | null>[] = [];
 
     for (let i = 0; i < data.length; i++) {
-      cardRefs.push(createRef<SwiperCardRefType>());
+      cardRefs.push(createRef<SwiperCardInternalRefType>());
     }
     return cardRefs;
   }, [data]);
@@ -43,7 +49,7 @@ const useSwipeControls = <T>(
       // Reset all cards to initial position for loop
       activeIndex.value = clampedInitialIndex;
       refs.forEach((ref) => {
-        ref?.current?.swipeBack();
+        ref?.current?.resetAfterLoop();
       });
     } else {
       activeIndex.value++;
@@ -55,7 +61,7 @@ const useSwipeControls = <T>(
     if (!refs[currentIndex]) {
       return;
     }
-    refs[currentIndex]?.current?.swipeRight();
+    refs[currentIndex]?.current?.swipeRight(false);
     updateActiveIndex();
   }, [refs, updateActiveIndex, activeIndex]);
 
@@ -64,7 +70,7 @@ const useSwipeControls = <T>(
     if (!refs[currentIndex]) {
       return;
     }
-    refs[currentIndex]?.current?.swipeTop();
+    refs[currentIndex]?.current?.swipeTop(false);
     updateActiveIndex();
   }, [refs, updateActiveIndex, activeIndex]);
 
@@ -73,7 +79,7 @@ const useSwipeControls = <T>(
     if (!refs[currentIndex]) {
       return;
     }
-    refs[currentIndex]?.current?.swipeLeft();
+    refs[currentIndex]?.current?.swipeLeft(false);
     updateActiveIndex();
   }, [refs, updateActiveIndex, activeIndex]);
 
@@ -82,7 +88,7 @@ const useSwipeControls = <T>(
     if (!refs[currentIndex]) {
       return;
     }
-    refs[currentIndex]?.current?.swipeBottom();
+    refs[currentIndex]?.current?.swipeBottom(false);
     updateActiveIndex();
   }, [refs, updateActiveIndex, activeIndex]);
 
@@ -99,14 +105,14 @@ const useSwipeControls = <T>(
 
     if (
       !loop &&
-      (previousIndex < clampedInitialIndex || !refs[previousIndex])
+      (previousIndex < clampedSwipeBackStartIndex || !refs[previousIndex])
     ) {
       return;
     }
 
     // Handle looping for swipe back
     const targetIndex =
-      previousIndex < clampedInitialIndex
+      previousIndex < clampedSwipeBackStartIndex
         ? dataLength.current - 1
         : previousIndex;
 
@@ -114,7 +120,7 @@ const useSwipeControls = <T>(
       refs[targetIndex]?.current?.swipeBack();
       activeIndex.value = targetIndex;
     }
-  }, [activeIndex, refs, loop, clampedInitialIndex]);
+  }, [activeIndex, refs, loop, clampedSwipeBackStartIndex]);
 
   return {
     activeIndex,

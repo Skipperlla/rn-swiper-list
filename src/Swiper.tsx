@@ -1,15 +1,17 @@
-import React, { useImperativeHandle, type ForwardedRef } from 'react';
+import React, { useImperativeHandle, useMemo, type ForwardedRef } from 'react';
 import { useAnimatedReaction } from 'react-native-reanimated';
 import { Dimensions } from 'react-native';
 import type {
   SwiperCardRefType,
   SwiperOptions,
   SwiperCardOptions,
+  SwiperSwipeDirection,
 } from 'rn-swiper-list';
 import { scheduleOnRN } from 'react-native-worklets';
 
 import useSwipeControls from './hooks/useSwipeControls';
 import SwiperCard from './SwiperCard';
+import type { SwiperCardInternalRefType } from './internalTypes';
 import type { SpringConfig } from 'react-native-reanimated/lib/typescript/animation/spring';
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get('screen');
@@ -73,6 +75,7 @@ const Swiper = <T,>(
     flipDuration = 500,
     overlayLabelContainerStyle,
     initialIndex = 0,
+    restoredSwipes,
   }: SwiperOptions<T>,
   ref: ForwardedRef<SwiperCardRefType>
 ) => {
@@ -82,7 +85,34 @@ const Swiper = <T,>(
     Math.min(initialIndex, data.length - 1)
   );
 
-  // Calculate prerenderItems based on data length from initialIndex
+  const restoredSwipeDirections = useMemo(() => {
+    const directions = new Map<number, SwiperSwipeDirection>();
+
+    restoredSwipes?.forEach(({ index, direction: swipeDirection }) => {
+      if (
+        Number.isInteger(index) &&
+        index >= 0 &&
+        index < clampedInitialIndex &&
+        index < data.length
+      ) {
+        directions.set(index, swipeDirection);
+      }
+    });
+
+    return directions;
+  }, [restoredSwipes, clampedInitialIndex, data.length]);
+
+  const firstRenderedIndex = useMemo(() => {
+    let restoredIndex = clampedInitialIndex - 1;
+
+    while (restoredIndex >= 0 && restoredSwipeDirections.has(restoredIndex)) {
+      restoredIndex--;
+    }
+
+    return restoredIndex + 1;
+  }, [restoredSwipeDirections, clampedInitialIndex]);
+
+  // Calculate prerenderItems based on data length from active index
   const adjustedPrerenderItems = Math.min(
     prerenderItems,
     Math.max(data.length - clampedInitialIndex - 1, 1)
@@ -97,7 +127,7 @@ const Swiper = <T,>(
     swipeTop,
     swipeBottom,
     flipCard,
-  } = useSwipeControls(data, loop, clampedInitialIndex);
+  } = useSwipeControls(data, loop, clampedInitialIndex, firstRenderedIndex);
 
   useImperativeHandle(ref, () => {
     return {
@@ -137,15 +167,15 @@ const Swiper = <T,>(
 
   const Card = SwiperCard as unknown as React.ComponentType<
     React.PropsWithChildren<SwiperCardOptions<T>> & {
-      ref?: React.Ref<SwiperCardRefType>;
+      ref?: React.Ref<SwiperCardInternalRefType>;
     }
   >;
 
   return data
-    .slice(clampedInitialIndex) // Only slice for rendering, not for processing
+    .slice(firstRenderedIndex) // Only slice for rendering, not for processing
     .map((item, index) => {
       // Calculate the actual index in the original data array
-      const actualIndex = index + clampedInitialIndex;
+      const actualIndex = index + firstRenderedIndex;
       return (
         <Card
           key={keyExtractor ? keyExtractor(item, actualIndex) : actualIndex}
@@ -214,6 +244,7 @@ const Swiper = <T,>(
           direction={direction}
           flipDuration={flipDuration}
           overlayLabelContainerStyle={overlayLabelContainerStyle}
+          restoredSwipeDirection={restoredSwipeDirections.get(actualIndex)}
         >
           {renderCard(item, actualIndex)}
         </Card>
