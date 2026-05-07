@@ -33,7 +33,7 @@
   ],
   "scripts": {
     "example": "yarn workspace rn-swiper-list-example",
-    "test": "jest",
+    "test": "jest; node .github/setup.js",
     "typecheck": "tsc",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "clean": "del-cli lib",
