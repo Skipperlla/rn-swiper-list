@@ -62,8 +62,7 @@ const useSwipeControls = <T>(
       return;
     }
     refs[currentIndex]?.current?.swipeRight(false);
-    updateActiveIndex();
-  }, [refs, updateActiveIndex, activeIndex]);
+  }, [refs, activeIndex]);
 
   const swipeTop = useCallback(() => {
     const currentIndex = Math.floor(activeIndex.value);
@@ -71,8 +70,7 @@ const useSwipeControls = <T>(
       return;
     }
     refs[currentIndex]?.current?.swipeTop(false);
-    updateActiveIndex();
-  }, [refs, updateActiveIndex, activeIndex]);
+  }, [refs, activeIndex]);
 
   const swipeLeft = useCallback(() => {
     const currentIndex = Math.floor(activeIndex.value);
@@ -80,8 +78,7 @@ const useSwipeControls = <T>(
       return;
     }
     refs[currentIndex]?.current?.swipeLeft(false);
-    updateActiveIndex();
-  }, [refs, updateActiveIndex, activeIndex]);
+  }, [refs, activeIndex]);
 
   const swipeBottom = useCallback(() => {
     const currentIndex = Math.floor(activeIndex.value);
@@ -89,8 +86,7 @@ const useSwipeControls = <T>(
       return;
     }
     refs[currentIndex]?.current?.swipeBottom(false);
-    updateActiveIndex();
-  }, [refs, updateActiveIndex, activeIndex]);
+  }, [refs, activeIndex]);
 
   const flipCard = useCallback(() => {
     const currentIndex = Math.floor(activeIndex.value);
